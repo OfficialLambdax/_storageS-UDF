@@ -11,24 +11,24 @@ The Assign/Eval Method
 Functions that begin with _storageG are tied to this method.
 	
 Pros
-	- Very fast when writing or reading small and large Data sets.
-	- The functions cannot by itself crash the script.
+- Very fast when writing or reading small and large Data sets.
+- The functions cannot by itself crash the script.
 
 Cons
-	- Global variables cannot be removed but rather just be Overwritten with Null to make them as small as possible. Creating multiple milliards(Ger) / billions(US) of variables will fill the RAM and sooner or later crash the script. There can nothing be done about it yet.
-	- Doesnt provide the ability for a long runtime because of the previous mentioned con.
+- Global variables cannot be removed but rather just be Overwritten with Null to make them as small as possible. Creating multiple milliards(Ger) / billions(US) of variables will fill the RAM and sooner or later crash the script. There can nothing be done about it yet.
+- Doesnt provide the ability for a long runtime because of the previous mentioned con.
 
 
 The Dictionary Object Method
 Functions that begin with _storageO are tied to this method.
 
 Pros
-	- Very fast when writing or reading small Data sets.
-	- Variables can be fully removed.
+- Very fast when writing or reading small Data sets.
+- Variables can be fully removed.
 	
 Cons
-	- Very slow when writing or reading large Data sets. Everything above 100 KBytes should be avoided if performance is the focus.
-	- The functions can lead to a crash if misused or duo to a bug where i or you deal with the DictObj in the wrong way.
+- Very slow when writing or reading large Data sets. Everything above 100 KBytes should be avoided if performance is the focus.
+- The functions can lead to a crash if misused or duo to a bug where i or you deal with the DictObj in the wrong way.
 
 
 
