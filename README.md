@@ -7,8 +7,7 @@ Support for X32/64 Autoit Stable/Beta. Windows XP to 10. Wine not tested.
 
 As of Version 0.1 there are two methods
 
-The Assign/Eval Method
-Functions that begin with _storageG are tied to this method.
+The Assign/Eval Method. Functions that begin with _storageG are tied to this method.
 	
 Pros
 - Very fast when writing or reading small and large Data sets.
@@ -19,8 +18,7 @@ Cons
 - Doesnt provide the ability for a long runtime because of the previous mentioned con.
 
 
-The Dictionary Object Method
-Functions that begin with _storageO are tied to this method.
+The Dictionary Object Method. Functions that begin with _storageO are tied to this method.
 
 Pros
 - Very fast when writing or reading small Data sets.
