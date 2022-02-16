@@ -1,2 +1,31 @@
+16.02.2022 (DD/MM/YYYY) 0.1.1
+
+	Added
+		- _storageG_Calc() which can be used to calculate the stored data with the given Operator and the given $vElementData.
+		Aka 1 + 2. Will save and/or return the result.
+		X operator Y - Where X is the store element, operator the given $Operator and Y the $vElementData.
+		The X can be Switched to Y by setting $bSwitch to True.
+		
+		- _storageG_Math() which can be used to run math at the stored data with the given Algorhytmn or Function.
+		Aka Cos(5) Or _MyMathAlgo(5). Will save and/or return the result.
+		
+		- _storageG_DestroyGroup(). _storageG_TidyGroupVars() only overwrites the known variables with Null as they cannot be destroyed.
+		Each variable is stored in a Object and that Object stays. _storageG_DestroyGroup() can be used to also remove the object.
+		However _storageG_Overwrite() only adds variables to the Object if the are not declared yet. So if you destroy a group and later then
+		store data in a previously declared variable then the variable will not be readded to the group, because the function only checks
+		if a variable is yet declared, if not so then adds it. The function _storageG_GetGroupVars() would then give a invalid return.
+		And _storageG_TidyGroupVars() would not be able to tidy the reused variables. Thats why both functions are seperated.
+		
+		So make sure you only use said function when you are sure that you are not going to reuse the same variables after the Group got destroyed.
+			
+	
+	Remarks
+		_storageG_Calc() and _storageG_Math() where added for when you want to just add or calculate something quickly.
+		Using these functions is just faster then using eg.
+		
+		from	_storageG_Overwrite(123, 'int', _storageG_Read(123, 'int') + 1)
+		to		_storageG_Calc(123, 'int', 1, '+')
+
+
 13.02.2022 (DD/MM/YYYY) 0.1
 	- Release date
