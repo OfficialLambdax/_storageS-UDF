@@ -61,7 +61,8 @@ EndFunc   ;==>_storageS_Append
 ;                  $bSwitch             - True / False. Switches X with Y if True.
 ;                  $bSave				- True / False. If True will store the result.
 ; Return values .: The Result of the Operation
-;                : Or "" if the operation failed
+;                : ""					= if the operation failed
+;                : False				= If the Element is unknown
 ; Modified ......:
 ; Remarks .......:
 ; Example .......: _storageG_Overwrite(123, 'testinteger', 1)
@@ -70,7 +71,8 @@ EndFunc   ;==>_storageS_Append
 Func _storageG_Calc($vElementGroup, $sElementName, $vElementData, $Operator, $bSwitch = False, $bSave = True)
 	Local $sVarName = "__storageS_" & $vElementGroup & $sElementName
 
-	If Not IsDeclared($sVarName) Then Return _storageG_Overwrite($vElementGroup, $sElementName, $vElementData)
+;~ 	If Not IsDeclared($sVarName) Then Return _storageG_Overwrite($vElementGroup, $sElementName, $vElementData)
+	If Not IsDeclared($sVarName) Then Return False
 
 	if $bSwitch Then
 		Local $vCalc = Execute("$vElementData" & $Operator & Eval($sVarName))
