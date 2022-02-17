@@ -1,7 +1,11 @@
 ;~ #include <Array.au3>
 
-Global $__storageS_sVersion = "0.1.2"
+Global $__storageS_sVersion = "0.1.2.1"
 Global $__storageS_oDictionaries = ObjCreate("Scripting.Dictionary")
+Global $__storageS_GO_PosObject = ObjCreate("Scripting.Dictionary")
+Global $__storageS_GO_IndexObject = ObjCreate("Scripting.Dictionary")
+Global $__storageS_GO_Index = 0
+Global $__storageS_GO_Size = 0
 
 __storageGO_Startup()
 
@@ -218,6 +222,8 @@ EndFunc
 #EndRegion
 
 
+
+
 #Region Reuse Assign / Eval Method
 ; ===============================================================================================================================
 ; ===============================================================================================================================
@@ -239,8 +245,7 @@ Func _storageGO_Overwrite($vElementGroup, $sElementName, $vElementData)
 	Local $sVarName = '__storageGO_' & $vElementGroup & $sElementName
 
 	; check if the storage already exists
-	Local $oPosObject = Eval('__storageGO_PosObject')
-	Local $nPos = $oPosObject($sVarName)
+	Local $nPos = $__storageS_GO_PosObject($sVarName)
 
 	; if the storage is unknown
 	if $nPos == "" Then
@@ -249,19 +254,17 @@ Func _storageGO_Overwrite($vElementGroup, $sElementName, $vElementData)
 		If $vElementData == False Then Return True
 
 		; get index object, storage size and the latest index
-		Local $oIndexObject = Eval('__storageGO_IndexObject')
-		Local $nSize = Eval('__storageGO_Size')
-		Local $nIndex = Eval('__storageGO_Index')
+		Local $nIndex = $__storageS_GO_Index
 
 		; iterate through the index map to find a free storage
 		Local $bRepeat = False
 		While True
 
 			; found a free spot then exitloop
-			If $oIndexObject($nIndex) == "" Then ExitLoop
+			If $__storageS_GO_IndexObject($nIndex) == "" Then ExitLoop
 
 			$nIndex += 1
-			If $nIndex = $nSize Then
+			If $nIndex = $__storageS_GO_Size Then
 
 				; if we iterated through the entire map and found no free spot then exitloop
 				If $bRepeat Then
@@ -285,29 +288,25 @@ Func _storageGO_Overwrite($vElementGroup, $sElementName, $vElementData)
 			; create a new storage
 
 			; claim it
-			$oIndexObject($nSize + 1) = $sVarName
-			$oPosObject($sVarName) = $nSize + 1
+			$__storageS_GO_IndexObject($__storageS_GO_Size + 1) = $sVarName
+			$__storageS_GO_PosObject($sVarName) = $__storageS_GO_Size + 1
 
 			; save data
-			Assign('__storageGO_IndexObject', $oIndexObject, 2)
-			Assign('__storageGO_PosObject', $oPosObject, 2)
-			Assign('__storageGO_Size', $nSize + 1, 2)
-			Assign('__storageGO_Index', $nSize + 1, 2)
+			$__storageS_GO_Size += 1
+			$__storageS_GO_Index += 1
 
 			; assign the data and return
-			Return Assign('__storageGO_' & $nSize + 1, $vElementData, 2)
+			Return Assign('__storageGO_' & $__storageS_GO_Size, $vElementData, 2)
 
 
 		Else ; if we found a free spot
 
 			; claim the spot
-			$oIndexObject($nIndex) = $sVarName
-			$oPosObject($sVarName) = $nIndex
+			$__storageS_GO_IndexObject($nIndex) = $sVarName
+			$__storageS_GO_PosObject($sVarName) = $nIndex
 
 			; save data
-			Assign('__storageGO_IndexObject', $oIndexObject, 2)
-			Assign('__storageGO_PosObject', $oPosObject, 2)
-			Assign('__storageGO_Index', $nIndex + 1, 2)
+			$__storageS_GO_Index += 1
 
 			; assign the data and return
 			Return Assign('__storageGO_' & $nIndex, $vElementData, 2)
@@ -343,8 +342,7 @@ Func _storageGO_Append($vElementGroup, $sElementName, $vElementData)
 
 	Local $sVarName = '__storageGO_' & $vElementGroup & $sElementName
 
-	Local $oPosObject = Eval('__storageGO_PosObject')
-	Local $nPos = $oPosObject($sVarName)
+	Local $nPos = $__storageS_GO_PosObject($sVarName)
 
 	If $nPos == "" Then Return _storageGO_Overwrite($vElementGroup, $sElementName, $vElementData)
 
@@ -369,8 +367,7 @@ Func _storageGO_Read($vElementGroup, $sElementName)
 	Local $sVarName = '__storageGO_' & $vElementGroup & $sElementName
 
 	; check if the storage exists
-	Local $oPosObject = Eval('__storageGO_PosObject')
-	Local $nPos = $oPosObject($sVarName)
+	Local $nPos = $__storageS_GO_PosObject($sVarName)
 
 	If $nPos == Null Then Return SetError(1, 0, False)
 
@@ -400,14 +397,11 @@ Func _storageGO_GetGroupVars($vElementGroup)
 	Local $oElementGroup = Eval($vElementGroup)
 	If Not IsObj($oElementGroup) Then Return False
 
-
-	Local $oPosObject = Eval('__storageGO_PosObject')
-
 	Local $arGroupVars2D[$oElementGroup.Count][3], $nCount = 0, $nPos = 0
 	For $i In $oElementGroup
 		$arGroupVars2D[$nCount][0] = $i
 
-		$nPos = $oPosObject($vElementGroup & $i)
+		$nPos = $__storageS_GO_PosObject($vElementGroup & $i)
 
 		$arGroupVars2D[$nCount][1] = VarGetType(Eval('__storageGO_' & $nPos))
 		$arGroupVars2D[$nCount][2] = Eval('__storageGO_' & $nPos)
@@ -437,10 +431,10 @@ Func _storageGO_TidyGroupVars($vElementGroup)
 	Local $oElementGroup = Eval($vElementGroup)
 	If Not IsObj($oElementGroup) Then Return False
 
-	Local $oPosObject = Eval('__storageGO_PosObject'), $nPos = 0
+	Local $nPos = 0
 	For $i In $oElementGroup
 
-		$nPos = $oPosObject($vElementGroup & $i)
+		$nPos = $__storageS_GO_PosObject($vElementGroup & $i)
 
 		Assign('__storageGO_' & $nPos, Null, 2)
 	Next
@@ -466,31 +460,29 @@ Func _storageGO_DestroyGroup($vElementGroup)
 	If Not IsObj($oElementGroup) Then Return False
 
 
-	Local $oPosObject = Eval('__storageGO_PosObject'), $oIndexObject = Eval('__storageGO_IndexObject'), $nPos = 0
+	Local $nPos = 0
 	For $i In $oElementGroup
 
 		; get pos
-		$nPos = $oPosObject($vElementGroup & $i)
+		$nPos = $__storageS_GO_PosObject($vElementGroup & $i)
 
 		; tidy storage
 		Assign('__storageGO_' & $nPos, Null, 2)
 
 		; free storage
-		$oIndexObject($nPos) = ""
+		$__storageS_GO_IndexObject($nPos) = ""
 
 		; remove element from group
 		$oElementGroup.Remove($i)
 
 		; remove element from pos object
-		$oPosObject.Remove($vElementGroup & $i)
+		$__storageS_GO_PosObject.Remove($vElementGroup & $i)
 	Next
 
 	; remove group
 	Assign($vElementGroup, Null, 2)
 
 	; save changes
-	Assign('__storageGO_PosObject', $oPosObject, 2)
-	Assign('__storageGO_IndexObject', $oIndexObject, 2)
 
 EndFunc
 #EndRegion
@@ -734,20 +726,12 @@ Func __storageGO_Startup()
 	; assign a single storage
 	Assign($sVarName & "1", Null, 2)
 
-	; define size and current index
-	Assign($sVarName & 'Size', 1, 2)
-	Assign($sVarName & 'Index', 1, 2)
+	; set size and current index
+	$__storageS_GO_Size = 1
+	$__storageS_GO_Index = 1
 
-	; create index and pos object
-	Local $oIndexObject = ObjCreate("Scripting.Dictionary")
-	Local $oPosObject = ObjCreate("Scripting.Dictionary")
-
-	; add a single storage to the index object
-	$oIndexObject(1) = ""
-
-	; store the objects
-	Assign($sVarName & 'IndexObject', $oIndexObject, 2)
-	Assign($sVarName & 'PosObject', $oPosObject, 2)
+	; add single storage to the index object
+	$__storageS_GO_IndexObject(1) = ""
 
 EndFunc
 

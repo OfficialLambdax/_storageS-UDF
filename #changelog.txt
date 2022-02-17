@@ -1,3 +1,8 @@
+17.02.2022 (DD/MM/YYYY) 0.1.2.1
+
+	Optimized _storageGO
+
+
 17.02.2022 (DD/MM/YYYY) 0.1.2
 
 	Added
