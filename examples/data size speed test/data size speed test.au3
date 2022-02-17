@@ -1,6 +1,6 @@
 #NoTrayIcon
 #Region ;**** Directives created by AutoIt3Wrapper_GUI ****
-;~ #AutoIt3Wrapper_Version=Beta
+#AutoIt3Wrapper_Version=Beta
 #AutoIt3Wrapper_UseX64=y
 #EndRegion ;**** Directives created by AutoIt3Wrapper_GUI ****
 #include "..\..\_storageS_UDF.au3"
@@ -75,7 +75,6 @@ _storageGO_TidyGroupVars(123)
 
 ConsoleWrite(@CRLF)
 
-_storageO_CreateGroup(123)
 $nTime = _Test_Write_DictObj_Method("1", 1e5)
 ConsoleWrite("DictObj  " & @TAB & "Single Byte Write Test" & @TAB & "took: " & @extended & " ms (" & $nTime & " ms/avg)"& @TAB & "(Not true for the DictObj)" & @CRLF)
 

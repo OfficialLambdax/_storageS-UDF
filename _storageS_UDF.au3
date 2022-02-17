@@ -1,10 +1,9 @@
 ;~ #include <Array.au3>
 
-Global $__storageS_sVersion = "0.1.2.2"
+Global $__storageS_sVersion = "0.1.2.3"
 Global $__storageS_oDictionaries = ObjCreate("Scripting.Dictionary")
 Global $__storageS_GO_PosObject = ObjCreate("Scripting.Dictionary")
 Global $__storageS_GO_IndexObject = ObjCreate("Scripting.Dictionary")
-Global $__storageS_GO_Index = 0
 Global $__storageS_GO_Size = 0
 
 __storageGO_Startup()
@@ -227,97 +226,52 @@ EndFunc
 #Region Reuse Assign / Eval Method
 ; ===============================================================================================================================
 ; ===============================================================================================================================
-; #FUNCTION# ====================================================================================================================
-; Name ..........: _storageGO_Overwrite
-; Description ...: Writes data to the Elementname of the Element group
-; Syntax ........: _storageGO_Overwrite($vElementGroup, $sElementName, $vElementData)
-; Parameters ....: $vElementGroup           - Element Group
-;                  $sElementName            - (String) Element Name
-;                  $vElementData            - (Variable) Element Data
-; Return values .: True						= If success
-;                : False					= If not
-; Modified ......:
-; Remarks .......:
-; Example .......: No
-; ===============================================================================================================================
+
 Func _storageGO_Overwrite($vElementGroup, $sElementName, $vElementData)
 
 	Local $sVarName = '__storageGO_' & $vElementGroup & $sElementName
 
-	; check if the storage already exists
 	Local $nPos = $__storageS_GO_PosObject($sVarName)
 
-	; if the storage is unknown
-	if $nPos == "" Then
-
-		; we wont declare a storage if the data is False because _Read will return False then anyway
-		If $vElementData == False Then Return True
-
-		; get index object, storage size and the latest index
-		Local $nIndex = $__storageS_GO_Index
-
-		; iterate through the index map to find a free storage
-		Local $bRepeat = False
-		While True
-
-			; found a free spot then exitloop
-			If $__storageS_GO_IndexObject($nIndex) == Null Then ExitLoop
-
-			If $nIndex == $__storageS_GO_Size Then
-
-				; if we iterated through the entire map and found no free spot then exitloop
-				If $bRepeat Then
-
-					$nIndex = 0
-					ExitLoop
-
-				EndIf
-
-				$nIndex = 0
-				$bRepeat = True
-			EndIf
-
-			$nIndex += 1
-
-		WEnd
+	If $nPos == "" Then
 
 		__storageGO_AddGroupVar($vElementGroup, $sElementName)
 
-		; if we found no free spot
-		If $nIndex == 0 Then
+		; if not free storage if available then create a new storage
+		If $__storageS_GO_IndexObject.Count == 0 Then
 
-			; create a new storage
+			Local $nPos = $__storageS_GO_Size + 1
 
 			; claim it
-			$__storageS_GO_IndexObject($__storageS_GO_Size + 1) = $sVarName
-			$__storageS_GO_PosObject($sVarName) = $__storageS_GO_Size + 1
+			$__storageS_GO_PosObject($sVarName) = $nPos
 
-			; save data
+			; increase size
 			$__storageS_GO_Size += 1
-			$__storageS_GO_Index += 1
 
-			; assign the data and return
-			Return Assign('__storageGO_' & $__storageS_GO_Size, $vElementData, 2)
+			; assign and return
+			Return Assign('__storageGO_' & $nPos, $vElementData, 2)
 
+		Else ; pick a free storage
 
-		Else ; if we found a free spot
+			; eh, how do i pick the first element in a dictobj
+			For $i In $__storageS_GO_IndexObject
+				Local $nPos = $i
+				ExitLoop
+			Next
 
-			; claim the spot
-			$__storageS_GO_IndexObject($nIndex) = $sVarName
-			$__storageS_GO_PosObject($sVarName) = $nIndex
+			; claim it
+			$__storageS_GO_IndexObject.Remove($nPos)
+			$__storageS_GO_PosObject($sVarName) = $nPos
 
-			; save data
-			$__storageS_GO_Index = $nIndex
-
-			; assign the data and return
-			Return Assign('__storageGO_' & $nIndex, $vElementData, 2)
+			; assign data and return
+			Return Assign('__storageGO_' & $nPos, $vElementData, 2)
 
 		EndIf
 
 
-	Else ; if the storage is known
 
-		; then assign and return
+	Else
+
 		Return Assign('__storageGO_' & $nPos, $vElementData, 2)
 
 	EndIf
