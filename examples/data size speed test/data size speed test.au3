@@ -21,17 +21,25 @@ Local $bDoNotRunTheMBTest = False
 Local $nTime = 0, $sText = ""
 
 
+
 ; ===============================================================================================================================
 ; Single Byte Test
-ConsoleWrite("Single Byte Start __________________________________________" & @CRLF)
-ConsoleWrite("Calling each function 1e5 Times" & @CRLF & @CRLF)
+ConsoleWrite("Single Byte Test Start __________________________________________" & @CRLF)
+ConsoleWrite("Calling each function 1e5 Times to create all storages" & @CRLF & @CRLF)
 
 $nTime = _Test_Write_Assign_Method("1", 1e5)
 ConsoleWrite("Assign/Eval" & @TAB & "Single Byte Write Test" & @TAB & "took: " & @extended & " ms (" & $nTime & " ms/avg)" & @CRLF)
 
 $nTime = _Test_Read_Assign_Method(1e5)
 ConsoleWrite("Assign/Eval" & @TAB & "Single Byte Read Test" & @TAB & "took: " & @extended & " ms (" & $nTime & " ms/avg)" & @CRLF)
-_storageG_TidyGroupVars(123)
+
+ConsoleWrite(@CRLF)
+
+$nTime = _Test_Write_GO_Method("1", 1e5)
+ConsoleWrite("GO         " & @TAB & "Single Byte Write Test" & @TAB & "took: " & @extended & " ms (" & $nTime & " ms/avg)" & @CRLF)
+
+$nTime = _Test_Read_GO_Method(1e5)
+ConsoleWrite("GO         " & @TAB & "Single Byte Read Test" & @TAB & "took: " & @extended & " ms (" & $nTime & " ms/avg)" & @CRLF)
 
 ConsoleWrite(@CRLF)
 
@@ -42,9 +50,11 @@ ConsoleWrite("DictObj  " & @TAB & "Single Byte Write Test" & @TAB & "took: " & @
 $nTime = _Test_Read_DictObj_Method(1e5)
 ConsoleWrite("DictObj  " & @TAB & "Single Byte Read Test" & @TAB & "took: " & @extended & " ms (" & $nTime & " ms/avg)" & @CRLF)
 
-_storageO_TidyGroupVars(123)
-
 ConsoleWrite(@CRLF)
+
+ConsoleWrite("Single Byte Test Start __________________________________________" & @CRLF)
+ConsoleWrite("Calling each function 1e5 Times again on the already existing storages" & @CRLF & @CRLF)
+
 
 $nTime = _Test_Write_Assign_Method("1", 1e5)
 ConsoleWrite("Assign/Eval" & @TAB & "Single Byte Write Test" & @TAB & "took: " & @extended & " ms (" & $nTime & " ms/avg)" & @TAB & "(Faster once variables already exist)" & @CRLF)
@@ -52,6 +62,16 @@ ConsoleWrite("Assign/Eval" & @TAB & "Single Byte Write Test" & @TAB & "took: " &
 $nTime = _Test_Read_Assign_Method(1e5)
 ConsoleWrite("Assign/Eval" & @TAB & "Single Byte Read Test" & @TAB & "took: " & @extended & " ms (" & $nTime & " ms/avg)" & @CRLF)
 _storageG_TidyGroupVars(123)
+
+ConsoleWrite(@CRLF)
+
+$nTime = _Test_Write_GO_Method("1", 1e5)
+ConsoleWrite("GO         " & @TAB & "Single Byte Write Test" & @TAB & "took: " & @extended & " ms (" & $nTime & " ms/avg)" & @TAB & "(Faster once variables already exist)" & @CRLF)
+
+$nTime = _Test_Read_GO_Method(1e5)
+ConsoleWrite("GO         " & @TAB & "Single Byte Read Test" & @TAB & "took: " & @extended & " ms (" & $nTime & " ms/avg)" & @CRLF)
+
+_storageGO_TidyGroupVars(123)
 
 ConsoleWrite(@CRLF)
 
@@ -65,6 +85,7 @@ ConsoleWrite("DictObj  " & @TAB & "Single Byte Read Test" & @TAB & "took: " & @e
 _storageO_TidyGroupVars(123)
 
 ConsoleWrite(@CRLF)
+
 
 
 ; ===============================================================================================================================
@@ -84,6 +105,15 @@ For $i = 1024 * 10 To 1024 * 100 Step 1024 * 10
 	$nTime = _Test_Read_Assign_Method($nTestIterations)
 	ConsoleWrite("Assign/Eval" & @TAB & $sText & " Read Test " & @TAB & "took: " & @extended & " ms" & @TAB & "(" & $nTime & " ms/avg)" & @CRLF)
 	_storageG_TidyGroupVars(123)
+
+	ConsoleWrite(@CRLF)
+
+	$nTime = _Test_Write_GO_Method(_CreateDataSet($i), $nTestIterations)
+	ConsoleWrite("GO         " & @TAB & $sText & " Write Test" & @TAB & "took: " & @extended & " ms" & @TAB & "(" & $nTime & " ms/avg)" & @CRLF)
+
+	$nTime = _Test_Read_GO_Method($nTestIterations)
+	ConsoleWrite("GO         " & @TAB & $sText & " Read Test " & @TAB & "took: " & @extended & " ms" & @TAB & "(" & $nTime & " ms/avg)" & @CRLF)
+	_storageGO_TidyGroupVars(123)
 
 	ConsoleWrite(@CRLF)
 
@@ -119,6 +149,15 @@ For $i = 1048576 To 1048576 * 5 Step 1048576
 	$nTime = _Test_Read_Assign_Method($nTestIterations)
 	ConsoleWrite("Assign/Eval" & @TAB & $sText & " Read Test " & @TAB & "took: " & @extended & " ms" & @TAB & "(" & $nTime & " ms/avg)" & @CRLF)
 	_storageG_TidyGroupVars(123)
+
+	ConsoleWrite(@CRLF)
+
+	$nTime = _Test_Write_GO_Method(_CreateDataSet($i), $nTestIterations)
+	ConsoleWrite("GO         " & @TAB & $sText & " Write Test" & @TAB & "took: " & @extended & " ms" & @TAB & "(" & $nTime & " ms/avg)" & @CRLF)
+
+	$nTime = _Test_Read_GO_Method($nTestIterations)
+	ConsoleWrite("GO         " & @TAB & $sText & " Read Test " & @TAB & "took: " & @extended & " ms" & @TAB & "(" & $nTime & " ms/avg)" & @CRLF)
+	_storageGO_TidyGroupVars(123)
 
 	ConsoleWrite(@CRLF)
 
@@ -178,6 +217,26 @@ Func _Test_Read_DictObj_Method($nTestIterations)
 	$hTimer = TimerInit()
 	For $i = 1 To $nTestIterations
 		_storageO_Read(123, $i)
+	Next
+	$nTime = TimerDiff($hTimer)
+	Return SetExtended($nTime, $nTime / $nTestIterations)
+EndFunc
+
+Func _Test_Write_GO_Method($sData, $nTestIterations)
+	Local $hTimer = 0, $nTime = 0
+	$hTimer = TimerInit()
+	For $i = 1 To $nTestIterations
+		_storageGO_Overwrite(123, $i, $sData)
+	Next
+	$nTime = TimerDiff($hTimer)
+	Return SetExtended($nTime, $nTime / $nTestIterations)
+EndFunc
+
+Func _Test_Read_GO_Method($nTestIterations)
+	Local $hTimer = 0, $nTime = 0
+	$hTimer = TimerInit()
+	For $i = 1 To $nTestIterations
+		_storageGO_Read(123, $i)
 	Next
 	$nTime = TimerDiff($hTimer)
 	Return SetExtended($nTime, $nTime / $nTestIterations)

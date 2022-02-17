@@ -1,3 +1,20 @@
+17.02.2022 (DD/MM/YYYY) 0.1.2
+
+	Added
+		- A new method called _storageGO.
+		
+		
+	Likely not going to happen
+	
+		Maps
+			Autoit Beta Only and becomes increasingly slower the more storages are created. Much much much slower then the DictObj.
+			Commands like MapAppend() are inaccessible in the Autoit Stable. So Execute() had to be used to circumenvent the Au3Check errors.
+			Which also decreased their performance.
+			
+			Maps would generally only make sense in a low storage count scenario. Everything below 1000. And where, similiar to the DictObj,
+			not much data is stored in them. But even then the DictObj is still faster. So why include it then?.
+
+
 16.02.2022 (DD/MM/YYYY) 0.1.1
 
 	Added

@@ -1,8 +1,14 @@
+;~ #include <Array.au3>
 
-Global $__storageS_sVersion = "0.1.1"
+Global $__storageS_sVersion = "0.1.2"
 Global $__storageS_oDictionaries = ObjCreate("Scripting.Dictionary")
 
+__storageGO_Startup()
 
+
+#Region Assign / Eval Method
+; ===============================================================================================================================
+; ===============================================================================================================================
 ; #FUNCTION# ====================================================================================================================
 ; Name ..........: _storageG_Overwrite
 ; Description ...: Writes data to the Elementname of the Element group
@@ -52,7 +58,7 @@ EndFunc   ;==>_storageS_Append
 
 ; #FUNCTION# ====================================================================================================================
 ; Name ..........: _storageG_Calc
-; Description ...: X operator Y. Where X is what is already stored and Y the $vElemenData
+; Description ...: X operator Y. Where X is what is already stored and Y the $vElementData
 ; Syntax ........: _storageG_Calc($vElementGroup, $sElementName, $vElementData, $Operator)
 ; Parameters ....: $vElementGroup       - Element Group
 ;                  $sElementName        - (String) Element Name
@@ -209,8 +215,289 @@ Func _storageG_GetGroupVars($vElementGroup)
 
 	Return $arGroupVars2D
 EndFunc
+#EndRegion
 
 
+#Region Reuse Assign / Eval Method
+; ===============================================================================================================================
+; ===============================================================================================================================
+; #FUNCTION# ====================================================================================================================
+; Name ..........: _storageGO_Overwrite
+; Description ...: Writes data to the Elementname of the Element group
+; Syntax ........: _storageGO_Overwrite($vElementGroup, $sElementName, $vElementData)
+; Parameters ....: $vElementGroup           - Element Group
+;                  $sElementName            - (String) Element Name
+;                  $vElementData            - (Variable) Element Data
+; Return values .: True						= If success
+;                : False					= If not
+; Modified ......:
+; Remarks .......:
+; Example .......: No
+; ===============================================================================================================================
+Func _storageGO_Overwrite($vElementGroup, $sElementName, $vElementData)
+
+	Local $sVarName = '__storageGO_' & $vElementGroup & $sElementName
+
+	; check if the storage already exists
+	Local $oPosObject = Eval('__storageGO_PosObject')
+	Local $nPos = $oPosObject($sVarName)
+
+	; if the storage is unknown
+	if $nPos == "" Then
+
+		; we wont declare a storage if the data is False because _Read will return False then anyway
+		If $vElementData == False Then Return True
+
+		; get index object, storage size and the latest index
+		Local $oIndexObject = Eval('__storageGO_IndexObject')
+		Local $nSize = Eval('__storageGO_Size')
+		Local $nIndex = Eval('__storageGO_Index')
+
+		; iterate through the index map to find a free storage
+		Local $bRepeat = False
+		While True
+
+			; found a free spot then exitloop
+			If $oIndexObject($nIndex) == "" Then ExitLoop
+
+			$nIndex += 1
+			If $nIndex = $nSize Then
+
+				; if we iterated through the entire map and found no free spot then exitloop
+				If $bRepeat Then
+
+					$nIndex = 0
+					ExitLoop
+
+				EndIf
+
+				$nIndex = 1
+				$bRepeat = True
+			EndIf
+
+		WEnd
+
+		__storageGO_AddGroupVar($vElementGroup, $sElementName)
+
+		; if we found no free spot
+		If $nIndex == 0 Then
+
+			; create a new storage
+
+			; claim it
+			$oIndexObject($nSize + 1) = $sVarName
+			$oPosObject($sVarName) = $nSize + 1
+
+			; save data
+			Assign('__storageGO_IndexObject', $oIndexObject, 2)
+			Assign('__storageGO_PosObject', $oPosObject, 2)
+			Assign('__storageGO_Size', $nSize + 1, 2)
+			Assign('__storageGO_Index', $nSize + 1, 2)
+
+			; assign the data and return
+			Return Assign('__storageGO_' & $nSize + 1, $vElementData, 2)
+
+
+		Else ; if we found a free spot
+
+			; claim the spot
+			$oIndexObject($nIndex) = $sVarName
+			$oPosObject($sVarName) = $nIndex
+
+			; save data
+			Assign('__storageGO_IndexObject', $oIndexObject, 2)
+			Assign('__storageGO_PosObject', $oPosObject, 2)
+			Assign('__storageGO_Index', $nIndex + 1, 2)
+
+			; assign the data and return
+			Return Assign('__storageGO_' & $nIndex, $vElementData, 2)
+
+		EndIf
+
+
+	Else ; if the storage is known
+
+		; then assign and return
+		Return Assign('__storageGO_' & $nPos, $vElementData, 2)
+
+	EndIf
+
+EndFunc
+
+
+; #FUNCTION# ====================================================================================================================
+; Name ..........: _storageGO_Append
+; Description ...: Appends data to the Elementname of the Element group
+; Syntax ........: _storageGO_Append($vElementGroup, $sElementName, $vElementData)
+; Parameters ....: $vElementGroup           - Element Group
+;                  $sElementName            - (String) Element Name
+;                  $vElementData            - (Variable) Element Data
+; Return values .: True						= If success
+;                : False					= If not
+; Modified ......:
+; Remarks .......: Append as in "Hello " & "World" = "Hello World"
+; Example .......: _storageGO_Overwrite(123, 'testdata', "Hello ")
+;                : _storageGO_Append(123, 'testdata', "World")
+; ===============================================================================================================================
+Func _storageGO_Append($vElementGroup, $sElementName, $vElementData)
+
+	Local $sVarName = '__storageGO_' & $vElementGroup & $sElementName
+
+	Local $oPosObject = Eval('__storageGO_PosObject')
+	Local $nPos = $oPosObject($sVarName)
+
+	If $nPos == "" Then Return _storageGO_Overwrite($vElementGroup, $sElementName, $vElementData)
+
+	Return Assign('__storageGO_' & $nPos, Eval('__storageGO_' & $nPos) & $vElementData, 2)
+EndFunc
+
+
+; #FUNCTION# ====================================================================================================================
+; Name ..........: _storageGO_Read
+; Description ...: Returns the data for the element name of the element group
+; Syntax ........: _storageGO_Read($vElementGroup, $sElementName)
+; Parameters ....: $vElementGroup           - Element Group
+;                  $sElementName            - (String) Element Name
+; Return values .: The data					= If success
+; Errors ........: 1						- If the variable isnt present.
+; Modified ......:
+; Remarks .......:
+; Example .......: No
+; ===============================================================================================================================
+Func _storageGO_Read($vElementGroup, $sElementName)
+
+	Local $sVarName = '__storageGO_' & $vElementGroup & $sElementName
+
+	; check if the storage exists
+	Local $oPosObject = Eval('__storageGO_PosObject')
+	Local $nPos = $oPosObject($sVarName)
+
+	If $nPos == Null Then Return SetError(1, 0, False)
+
+	Return Eval('__storageGO_' & $nPos)
+
+EndFunc
+
+
+; #FUNCTION# ====================================================================================================================
+; Name ..........: _storageGO_GetGroupVars
+; Description ...: Returns a 2D array of size [n][3] containing the elements stored for the Element group
+; Syntax ........: _storageGO_GetGroupVars($vElementGroup)
+; Parameters ....: $vElementGroup           - Element Group
+; Return values .: 2D array					= If success
+;                : False					= If not
+; Modified ......:
+; Remarks .......: Array looks like this
+;                : [n][0]					= Element name
+;                : [n][1]					= Element Variable Type
+;                : [n][2]					= Element Variable Data
+; Example .......: _storageGO_GetGroupVars(123)
+; ===============================================================================================================================
+Func _storageGO_GetGroupVars($vElementGroup)
+
+	$vElementGroup = '__storageGO_' & $vElementGroup
+
+	Local $oElementGroup = Eval($vElementGroup)
+	If Not IsObj($oElementGroup) Then Return False
+
+
+	Local $oPosObject = Eval('__storageGO_PosObject')
+
+	Local $arGroupVars2D[$oElementGroup.Count][3], $nCount = 0, $nPos = 0
+	For $i In $oElementGroup
+		$arGroupVars2D[$nCount][0] = $i
+
+		$nPos = $oPosObject($vElementGroup & $i)
+
+		$arGroupVars2D[$nCount][1] = VarGetType(Eval('__storageGO_' & $nPos))
+		$arGroupVars2D[$nCount][2] = Eval('__storageGO_' & $nPos)
+
+		$nCount += 1
+	Next
+
+	Return $arGroupVars2D
+
+EndFunc
+
+
+; #FUNCTION# ====================================================================================================================
+; Name ..........: _storageGO_TidyGroupVars
+; Description ...: Tidies all storages of the given group
+; Syntax ........: _storageGO_TidyGroupVars($vElementGroup)
+; Parameters ....: $vElementGroup       - Element Group
+; Return values .: None
+; Modified ......:
+; Remarks .......:
+; Example .......: No
+; ===============================================================================================================================
+Func _storageGO_TidyGroupVars($vElementGroup)
+
+	$vElementGroup = '__storageGO_' & $vElementGroup
+
+	Local $oElementGroup = Eval($vElementGroup)
+	If Not IsObj($oElementGroup) Then Return False
+
+	Local $oPosObject = Eval('__storageGO_PosObject'), $nPos = 0
+	For $i In $oElementGroup
+
+		$nPos = $oPosObject($vElementGroup & $i)
+
+		Assign('__storageGO_' & $nPos, Null, 2)
+	Next
+
+EndFunc
+
+
+; #FUNCTION# ====================================================================================================================
+; Name ..........: _storageGO_DestroyGroup
+; Description ...: Tidies and Frees all storages of the given group
+; Syntax ........: _storageGO_DestroyGroup($vElementGroup)
+; Parameters ....: $vElementGroup       - Element Group
+; Return values .: None
+; Modified ......:
+; Remarks .......:
+; Example .......: No
+; ===============================================================================================================================
+Func _storageGO_DestroyGroup($vElementGroup)
+
+	$vElementGroup = '__storageGO_' & $vElementGroup
+
+	Local $oElementGroup = Eval($vElementGroup)
+	If Not IsObj($oElementGroup) Then Return False
+
+
+	Local $oPosObject = Eval('__storageGO_PosObject'), $oIndexObject = Eval('__storageGO_IndexObject'), $nPos = 0
+	For $i In $oElementGroup
+
+		; get pos
+		$nPos = $oPosObject($vElementGroup & $i)
+
+		; tidy storage
+		Assign('__storageGO_' & $nPos, Null, 2)
+
+		; free storage
+		$oIndexObject($nPos) = ""
+
+		; remove element from group
+		$oElementGroup.Remove($i)
+
+		; remove element from pos object
+		$oPosObject.Remove($vElementGroup & $i)
+	Next
+
+	; remove group
+	Assign($vElementGroup, Null, 2)
+
+	; save changes
+	Assign('__storageGO_PosObject', $oPosObject, 2)
+	Assign('__storageGO_IndexObject', $oIndexObject, 2)
+
+EndFunc
+#EndRegion
+
+#Region DictObj method
+; ===============================================================================================================================
+; ===============================================================================================================================
 ; #FUNCTION# ====================================================================================================================
 ; Name ..........: _storageO_CreateGroup
 ; Description ...: Initializes a Storage for the Object variant. Needs to be called for each Element Group
@@ -228,6 +515,7 @@ Func _storageO_CreateGroup($vElementGroup)
 	Local $oElementGroup = ObjCreate("Scripting.Dictionary")
 	If @error Then Return False
 	$__storageS_oDictionaries($vElementGroup) = $oElementGroup
+;~ 	$__storageS_oDictionaries.Add($vElementGroup, $oElementGroup)
 
 	Return True
 EndFunc
@@ -288,7 +576,7 @@ EndFunc
 
 ; #FUNCTION# ====================================================================================================================
 ; Name ..........: _storageO_Calc
-; Description ...: X operator Y. Where X is what is already stored and Y the $vElemenData
+; Description ...: X operator Y. Where X is what is already stored and Y the $vElementData
 ; Syntax ........: _storageO_Calc($vElementGroup, $sElementName, $vElementData, $Operator)
 ; Parameters ....: $vElementGroup       - Element Group
 ;                  $sElementName        - (String) Element Name
@@ -404,9 +692,25 @@ Func _storageO_GetGroupVars($vElementGroup)
 
 	Return $arGroupVars2D
 EndFunc
+#EndRegion
 
 
-; internal
+; New Methods that require testing and optimization
+; ===============================================================================================================================
+; ===============================================================================================================================
+; ===============================================================================================================================
+
+; none
+
+; Internal Barrier
+; ===============================================================================================================================
+; ===============================================================================================================================
+; ===============================================================================================================================
+; ===============================================================================================================================
+; ===============================================================================================================================
+
+; the add group var functions cannot be map based. That would render them incompatible with the Autoit Stable.
+
 Func __storageG_AddGroupVar($vElementGroup, $sElementName)
 	Local $oGroupVars = Eval("StorageS" & $vElementGroup)
 	If Not IsObj($oGroupVars) Then
@@ -415,4 +719,44 @@ Func __storageG_AddGroupVar($vElementGroup, $sElementName)
 
 	$oGroupVars($sElementName)
 	Assign("StorageS" & $vElementGroup, $oGroupVars, 2)
+EndFunc
+
+Func __storageGO_Startup()
+
+	Local $sVarName = '__storageGO_'
+
+	; check if already started
+	Eval($sVarName & "1")
+
+	; if already started then return
+	If Not @error Then Return False
+
+	; assign a single storage
+	Assign($sVarName & "1", Null, 2)
+
+	; define size and current index
+	Assign($sVarName & 'Size', 1, 2)
+	Assign($sVarName & 'Index', 1, 2)
+
+	; create index and pos object
+	Local $oIndexObject = ObjCreate("Scripting.Dictionary")
+	Local $oPosObject = ObjCreate("Scripting.Dictionary")
+
+	; add a single storage to the index object
+	$oIndexObject(1) = ""
+
+	; store the objects
+	Assign($sVarName & 'IndexObject', $oIndexObject, 2)
+	Assign($sVarName & 'PosObject', $oPosObject, 2)
+
+EndFunc
+
+Func __storageGO_AddGroupVar($vElementGroup, $sElementName)
+	Local $oGroupVars = Eval('__storageGO_' & $vElementGroup)
+	If Not IsObj($oGroupVars) Then
+		$oGroupVars = ObjCreate("Scripting.Dictionary")
+	EndIf
+
+	$oGroupVars($sElementName)
+	Assign('__storageGO_' & $vElementGroup, $oGroupVars, 2)
 EndFunc
