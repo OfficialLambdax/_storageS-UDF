@@ -1,6 +1,6 @@
 ;~ #include <Array.au3>
 
-Global $__storageS_sVersion = "0.1.2.1"
+Global $__storageS_sVersion = "0.1.2.2"
 Global $__storageS_oDictionaries = ObjCreate("Scripting.Dictionary")
 Global $__storageS_GO_PosObject = ObjCreate("Scripting.Dictionary")
 Global $__storageS_GO_IndexObject = ObjCreate("Scripting.Dictionary")
@@ -261,10 +261,9 @@ Func _storageGO_Overwrite($vElementGroup, $sElementName, $vElementData)
 		While True
 
 			; found a free spot then exitloop
-			If $__storageS_GO_IndexObject($nIndex) == "" Then ExitLoop
+			If $__storageS_GO_IndexObject($nIndex) == Null Then ExitLoop
 
-			$nIndex += 1
-			If $nIndex = $__storageS_GO_Size Then
+			If $nIndex == $__storageS_GO_Size Then
 
 				; if we iterated through the entire map and found no free spot then exitloop
 				If $bRepeat Then
@@ -274,9 +273,11 @@ Func _storageGO_Overwrite($vElementGroup, $sElementName, $vElementData)
 
 				EndIf
 
-				$nIndex = 1
+				$nIndex = 0
 				$bRepeat = True
 			EndIf
+
+			$nIndex += 1
 
 		WEnd
 
@@ -306,7 +307,7 @@ Func _storageGO_Overwrite($vElementGroup, $sElementName, $vElementData)
 			$__storageS_GO_PosObject($sVarName) = $nIndex
 
 			; save data
-			$__storageS_GO_Index += 1
+			$__storageS_GO_Index = $nIndex
 
 			; assign the data and return
 			Return Assign('__storageGO_' & $nIndex, $vElementData, 2)
@@ -394,7 +395,7 @@ Func _storageGO_GetGroupVars($vElementGroup)
 
 	$vElementGroup = '__storageGO_' & $vElementGroup
 
-	Local $oElementGroup = Eval($vElementGroup)
+	Local $oElementGroup = Eval('Group' & $vElementGroup)
 	If Not IsObj($oElementGroup) Then Return False
 
 	Local $arGroupVars2D[$oElementGroup.Count][3], $nCount = 0, $nPos = 0
@@ -428,7 +429,7 @@ Func _storageGO_TidyGroupVars($vElementGroup)
 
 	$vElementGroup = '__storageGO_' & $vElementGroup
 
-	Local $oElementGroup = Eval($vElementGroup)
+	Local $oElementGroup = Eval('Group' & $vElementGroup)
 	If Not IsObj($oElementGroup) Then Return False
 
 	Local $nPos = 0
@@ -456,7 +457,7 @@ Func _storageGO_DestroyGroup($vElementGroup)
 
 	$vElementGroup = '__storageGO_' & $vElementGroup
 
-	Local $oElementGroup = Eval($vElementGroup)
+	Local $oElementGroup = Eval('Group' & $vElementGroup)
 	If Not IsObj($oElementGroup) Then Return False
 
 
@@ -470,7 +471,7 @@ Func _storageGO_DestroyGroup($vElementGroup)
 		Assign('__storageGO_' & $nPos, Null, 2)
 
 		; free storage
-		$__storageS_GO_IndexObject($nPos) = ""
+		$__storageS_GO_IndexObject($nPos) = Null
 
 		; remove element from group
 		$oElementGroup.Remove($i)
@@ -480,7 +481,7 @@ Func _storageGO_DestroyGroup($vElementGroup)
 	Next
 
 	; remove group
-	Assign($vElementGroup, Null, 2)
+	Assign('Group' & $vElementGroup, Null, 2)
 
 	; save changes
 
@@ -709,7 +710,7 @@ Func __storageG_AddGroupVar($vElementGroup, $sElementName)
 		$oGroupVars = ObjCreate("Scripting.Dictionary")
 	EndIf
 
-	$oGroupVars($sElementName)
+	$oGroupVars(String($sElementName))
 	Assign("StorageS" & $vElementGroup, $oGroupVars, 2)
 EndFunc
 
@@ -731,16 +732,16 @@ Func __storageGO_Startup()
 	$__storageS_GO_Index = 1
 
 	; add single storage to the index object
-	$__storageS_GO_IndexObject(1) = ""
+	$__storageS_GO_IndexObject(1) = Null
 
 EndFunc
 
 Func __storageGO_AddGroupVar($vElementGroup, $sElementName)
-	Local $oGroupVars = Eval('__storageGO_' & $vElementGroup)
+	Local $oGroupVars = Eval('Group__storageGO_' & $vElementGroup)
 	If Not IsObj($oGroupVars) Then
 		$oGroupVars = ObjCreate("Scripting.Dictionary")
 	EndIf
 
-	$oGroupVars($sElementName)
-	Assign('__storageGO_' & $vElementGroup, $oGroupVars, 2)
+	$oGroupVars(String($sElementName))
+	Assign('Group__storageGO_' & $vElementGroup, $oGroupVars, 2)
 EndFunc

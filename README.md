@@ -23,11 +23,11 @@ Its a combination of the Assign/Eval and Object method to counter the Memory lea
 
 Pros
 - Fast when writing or reading small and Very fast on large Data sets.
-- The method does not get slower with the increase of storages
 - Storages that get destroyed are reused by new storages. Aka new storages are only created when no other can currently be reused.
 
 Cons
-- Slower then the Original Assign/Eval Method
+- Slower then the Original Assign/Eval Method.
+- The method gets slower with the increase of storages
 - Leaks to memory, but only if a storage is created when no other can be reused.
 
 
