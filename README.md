@@ -12,6 +12,7 @@ The Assign/Eval Method. Functions that begin with _storageG are tied to this met
 Pros
 - Very fast when writing or reading small and large Data sets
 - The method does not get slower with the increase of storages
+- Repeated Data is not written to memory. Aka less memory is required.
 
 Cons
 - Global variables cannot be removed but rather just be overwritten with Null to make them as small as possible. Aka the Method leaks to memory.
@@ -24,6 +25,7 @@ Its a combination of the Assign/Eval and Object method to counter the Memory lea
 Pros
 - Fast when writing or reading small and Very fast on large Data sets
 - The method does not get slower with the increase of storages
+- Repeated Data is not written to memory. Aka less memory is required.
 - Storages that get destroyed are reused by new storages. Aka new storages are only created when no other can currently be reused.
 
 Cons
