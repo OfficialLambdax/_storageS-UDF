@@ -226,7 +226,19 @@ EndFunc
 #Region Reuse Assign / Eval Method
 ; ===============================================================================================================================
 ; ===============================================================================================================================
-
+; #FUNCTION# ====================================================================================================================
+; Name ..........: _storageGO_Overwrite
+; Description ...: Writes data to the Elementname of the Element group
+; Syntax ........: _storageGO_Overwrite($vElementGroup, $sElementName, $vElementData)
+; Parameters ....: $vElementGroup           - Element Group
+;                  $sElementName            - (String) Element Name
+;                  $vElementData            - (Variable) Element Data
+; Return values .: True						= If success
+;                : False					= If not
+; Modified ......:
+; Remarks .......:
+; Example .......: No
+; ===============================================================================================================================
 Func _storageGO_Overwrite($vElementGroup, $sElementName, $vElementData)
 
 	Local $sVarName = '__storageGO_' & $vElementGroup & $sElementName
