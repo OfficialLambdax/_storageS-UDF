@@ -1,7 +1,7 @@
 #include-once
 #include <Array.au3>
 
-Global $__storageS_sVersion = "0.1.2.4"
+Global $__storageS_sVersion = "0.1.2.5"
 Global $__storageS_oDictionaries = ObjCreate("Scripting.Dictionary")
 Global $__storageS_GO_PosObject = ObjCreate("Scripting.Dictionary")
 Global $__storageS_GO_IndexObject = ObjCreate("Scripting.Dictionary")
@@ -226,6 +226,25 @@ EndFunc
 ; ===============================================================================================================================
 ; ===============================================================================================================================
 ; #FUNCTION# ====================================================================================================================
+; Name ..........: _storageGO_CreateGroup
+; Description ...: Creates the Group. Needs to be called.
+; Syntax ........: _storageGO_CreateGroup($vElementGroup)
+; Parameters ....: $vElementGroup       - a variant value.
+; Return values .: True					= If Success
+;                : False				= If the group is already present
+; Modified ......:
+; Remarks .......: If the Group is not present then no storage for it can be created.
+; Example .......: No
+; ===============================================================================================================================
+Func _storageGO_CreateGroup($vElementGroup)
+	Local $oGroupVars = Eval('Group__storageGO_' & $vElementGroup)
+	If IsObj($oGroupVars) Then Return False
+
+	$oGroupVars = ObjCreate("Scripting.Dictionary")
+	Return Assign('Group__storageGO_' & $vElementGroup, $oGroupVars, 2)
+EndFunc
+
+; #FUNCTION# ====================================================================================================================
 ; Name ..........: _storageGO_Overwrite
 ; Description ...: Writes data to the Elementname of the Element group
 ; Syntax ........: _storageGO_Overwrite($vElementGroup, $sElementName, $vElementData)
@@ -234,6 +253,7 @@ EndFunc
 ;                  $vElementData            - (Variable) Element Data
 ; Return values .: True						= If success
 ;                : False					= If not
+; Errors ........: 1						- $vElementGroup is not created or got destroyed.
 ; Modified ......:
 ; Remarks .......:
 ; Example .......: No
@@ -244,7 +264,7 @@ Func _storageGO_Overwrite($vElementGroup, $sElementName, $vElementData)
 
 	If Not $__storageS_GO_PosObject.Exists($sVarName) Then
 
-		__storageGO_AddGroupVar($vElementGroup, $sElementName)
+		If Not __storageGO_AddGroupVar($vElementGroup, $sElementName) Then Return SetError(1, 0, False)
 
 		; if no free storage is available then create a new storage
 		If $__storageS_GO_IndexObject.Count == 0 Then
@@ -736,10 +756,11 @@ EndFunc
 
 Func __storageGO_AddGroupVar($vElementGroup, $sElementName)
 	Local $oGroupVars = Eval('Group__storageGO_' & $vElementGroup)
-	If Not IsObj($oGroupVars) Then
-		$oGroupVars = ObjCreate("Scripting.Dictionary")
-	EndIf
+	If Not IsObj($oGroupVars) Then Return False
+;~ 	If Not IsObj($oGroupVars) Then
+;~ 		$oGroupVars = ObjCreate("Scripting.Dictionary")
+;~ 	EndIf
 
 	$oGroupVars(String($sElementName))
-	Assign('Group__storageGO_' & $vElementGroup, $oGroupVars, 2)
+	Return Assign('Group__storageGO_' & $vElementGroup, $oGroupVars, 2)
 EndFunc

@@ -1,4 +1,12 @@
-17.02.2022 (DD/MM/YYYY) 0.1.2.4
+18.02.2022 (DD/MM/YYYY) 0.1.2.5
+
+	Added
+		- _storageGO_CreateGroup(). A storage can no longer be created if the tied group to it doesnt exist.
+		It must be created first. If a group is destroyed with _storageGO_DestroyGroup() then the same affect applies.
+		This change is done to further protect against accidental memory leaks.
+
+
+18.02.2022 (DD/MM/YYYY) 0.1.2.4
 
 	Fixed
 		- _storageGO remembering storages, that didnt exist.
