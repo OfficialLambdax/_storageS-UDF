@@ -1,6 +1,7 @@
-;~ #include <Array.au3>
+#include-once
+#include <Array.au3>
 
-Global $__storageS_sVersion = "0.1.2.3"
+Global $__storageS_sVersion = "0.1.2.4"
 Global $__storageS_oDictionaries = ObjCreate("Scripting.Dictionary")
 Global $__storageS_GO_PosObject = ObjCreate("Scripting.Dictionary")
 Global $__storageS_GO_IndexObject = ObjCreate("Scripting.Dictionary")
@@ -221,8 +222,6 @@ EndFunc
 #EndRegion
 
 
-
-
 #Region Reuse Assign / Eval Method
 ; ===============================================================================================================================
 ; ===============================================================================================================================
@@ -243,13 +242,11 @@ Func _storageGO_Overwrite($vElementGroup, $sElementName, $vElementData)
 
 	Local $sVarName = '__storageGO_' & $vElementGroup & $sElementName
 
-	Local $nPos = $__storageS_GO_PosObject($sVarName)
-
-	If $nPos == "" Then
+	If Not $__storageS_GO_PosObject.Exists($sVarName) Then
 
 		__storageGO_AddGroupVar($vElementGroup, $sElementName)
 
-		; if not free storage if available then create a new storage
+		; if no free storage is available then create a new storage
 		If $__storageS_GO_IndexObject.Count == 0 Then
 
 			Local $nPos = $__storageS_GO_Size + 1
@@ -283,13 +280,13 @@ Func _storageGO_Overwrite($vElementGroup, $sElementName, $vElementData)
 
 
 	Else
+		Local $nPos = $__storageS_GO_PosObject($sVarName)
 
 		Return Assign('__storageGO_' & $nPos, $vElementData, 2)
 
 	EndIf
 
 EndFunc
-
 
 ; #FUNCTION# ====================================================================================================================
 ; Name ..........: _storageGO_Append
@@ -309,10 +306,9 @@ Func _storageGO_Append($vElementGroup, $sElementName, $vElementData)
 
 	Local $sVarName = '__storageGO_' & $vElementGroup & $sElementName
 
+	If Not $__storageS_GO_PosObject.Exists($sVarName) Then Return _storageGO_Overwrite($vElementGroup, $sElementName, $vElementData)
+
 	Local $nPos = $__storageS_GO_PosObject($sVarName)
-
-	If $nPos == "" Then Return _storageGO_Overwrite($vElementGroup, $sElementName, $vElementData)
-
 	Return Assign('__storageGO_' & $nPos, Eval('__storageGO_' & $nPos) & $vElementData, 2)
 EndFunc
 
@@ -334,10 +330,9 @@ Func _storageGO_Read($vElementGroup, $sElementName)
 	Local $sVarName = '__storageGO_' & $vElementGroup & $sElementName
 
 	; check if the storage exists
+	If Not $__storageS_GO_PosObject.Exists($sVarName) Then Return SetError(1, 0, False)
+
 	Local $nPos = $__storageS_GO_PosObject($sVarName)
-
-	If $nPos == Null Then Return SetError(1, 0, False)
-
 	Return Eval('__storageGO_' & $nPos)
 
 EndFunc
@@ -436,7 +431,7 @@ Func _storageGO_DestroyGroup($vElementGroup)
 		; tidy storage
 		Assign('__storageGO_' & $nPos, Null, 2)
 
-		; free storage
+		; add as free storage to the index object
 		$__storageS_GO_IndexObject($nPos) = Null
 
 		; remove element from group
@@ -452,7 +447,45 @@ Func _storageGO_DestroyGroup($vElementGroup)
 	; save changes
 
 EndFunc
+
+
+; #FUNCTION# ====================================================================================================================
+; Name ..........: _storageGO_GetClaimedVars
+; Description ...: Returns all claimed variables in a 2D array
+; Syntax ........: _storageGO_GetClaimedVars()
+; Parameters ....: None
+; Return values .: 2D array					= If success
+;                : False					= If none
+; Modified ......:
+; Remarks .......: Array looks like this
+;                : [n][0]					= Element name
+;                : [n][1]					= Element Variable Type
+;                : [n][2]					= Element Variable Data
+;                :
+;                : This is a debug feature to find memory leaks
+; Example .......: No
+; ===============================================================================================================================
+Func _storageGO_GetClaimedVars()
+
+	Local $arGroupVars2D[$__storageS_GO_PosObject.Count][3], $nCount = 0, $nPos = 0
+	If UBound($arGroupVars2D) == 0 Then Return False
+
+	For $i In $__storageS_GO_PosObject
+		$arGroupVars2D[$nCount][0] = $i
+
+		$nPos = $__storageS_GO_PosObject($i)
+
+		$arGroupVars2D[$nCount][1] = VarGetType(Eval('__storageGO_' & $nPos))
+		$arGroupVars2D[$nCount][2] = Eval('__storageGO_' & $nPos)
+
+		$nCount += 1
+	Next
+
+	Return $arGroupVars2D
+
+EndFunc
 #EndRegion
+
 
 #Region DictObj method
 ; ===============================================================================================================================
@@ -474,7 +507,6 @@ Func _storageO_CreateGroup($vElementGroup)
 	Local $oElementGroup = ObjCreate("Scripting.Dictionary")
 	If @error Then Return False
 	$__storageS_oDictionaries($vElementGroup) = $oElementGroup
-;~ 	$__storageS_oDictionaries.Add($vElementGroup, $oElementGroup)
 
 	Return True
 EndFunc
