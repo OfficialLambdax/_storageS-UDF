@@ -1,3 +1,12 @@
+18.02.2022 (DD/MM/YYYY) 0.1.2.6
+
+	Added
+		- _storageGO_GetInfo(). Returns various information about the _storageGO method state, like the amount of storage vars, how many are free and more.
+		
+		- _storageS_GetVarSize(). Returns the Size in bytes of the given Variable. Objects, Maps and functions are not supported.
+		Objects not because im not well into them. Maps not because they are Beta only. And functions.. i mean, how to measure a functions size.
+
+
 18.02.2022 (DD/MM/YYYY) 0.1.2.5
 
 	Added

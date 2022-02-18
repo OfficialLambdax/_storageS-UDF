@@ -1,7 +1,7 @@
 #include-once
-#include <Array.au3>
+#include <Array.au3> ; for development of this UDF
 
-Global $__storageS_sVersion = "0.1.2.5"
+Global $__storageS_sVersion = "0.1.2.6"
 Global $__storageS_oDictionaries = ObjCreate("Scripting.Dictionary")
 Global $__storageS_GO_PosObject = ObjCreate("Scripting.Dictionary")
 Global $__storageS_GO_IndexObject = ObjCreate("Scripting.Dictionary")
@@ -504,6 +504,48 @@ Func _storageGO_GetClaimedVars()
 	Return $arGroupVars2D
 
 EndFunc
+
+
+; #FUNCTION# ====================================================================================================================
+; Name ..........: _storageGO_GetInfo
+; Description ...: Returns various informations of the GO method.
+; Syntax ........: _storageGO_GetInfo($nMode)
+; Parameters ....: $nMode               - (Int) the Mode
+;                : 1					- Returns the amount of existing storages
+;                : 2					- Returns the amount of free storages
+;                : 3					- Returns the amount of claimed storages
+;                : 4					- Returns the Size in Bytes of all claimed storages (CPU intensive)
+; Return values .: The Result			= as Int
+;                : False				= If an invalid option got used
+; Modified ......:
+; Remarks .......:
+; Example .......: No
+; ===============================================================================================================================
+; note: i should take into consideration that repeated data isnt put into memory again
+Func _storageGO_GetInfo($nMode)
+
+	Switch $nMode
+
+		Case 1 ; amount of existing storage vars
+			Return $__storageS_GO_Size
+
+		Case 2 ; free storage vars
+			Return $__storageS_GO_IndexObject.Count
+
+		Case 3 ; claimed storage vars
+			Return $__storageS_GO_PosObject.Count
+
+		Case 4 ; size of claimes storage vars
+			Local $nSize = 0
+			For $i In $__storageS_GO_PosObject
+				$nSize += _storageS_GetVarSize(Eval('__storageGO_' & $__storageS_GO_PosObject($i)))
+			Next
+
+			Return $nSize
+
+	EndSwitch
+
+EndFunc
 #EndRegion
 
 
@@ -705,6 +747,66 @@ Func _storageO_GetGroupVars($vElementGroup)
 EndFunc
 #EndRegion
 
+
+
+; #FUNCTION# ====================================================================================================================
+; Name ..........: _storageS_GetVarSize
+; Description ...: Returns the Size of the given Variable
+; Syntax ........: _storageS_GetVarSize($vData)
+; Parameters ....: $vData               - Variable
+; Return values .: None
+; Modified ......:
+; Remarks .......: Objects, Maps and functions are not supported. Array's 1D or 2D of any size.
+;                : Function is recursive. Arrays in Arrays in Arrays ... a dozen times will crash Autoit.
+; Example .......: No
+; ===============================================================================================================================
+Func _storageS_GetVarSize($vData)
+	Switch VarGetType($vData)
+
+		Case 'String', 'Binary'
+			Return StringLen($vData)
+
+		Case 'Int32', 'Int64', 'Double', 'Float'
+			Return StringLen($vData)
+
+		Case 'Ptr'
+			Return StringLen($vData)
+
+		Case 'Keyword'
+			Return 1
+
+		Case 'Bool'
+			Return 1
+
+		Case 'DLLStruct'
+			Return DllStructGetSize($vData)
+
+		Case 'Array'
+			Local $nY = UBound($vData), $nX = UBound($vData, 2)
+
+			If $nY == 0 Then Return 0
+			Local $nLen = 0
+
+			if $nX == 0 Then
+
+				For $iY = 0 To $nY - 1
+					$nLen += _storageS_GetVarSize($vData[$iY])
+				Next
+
+			ElseIf $nX > 0 Then
+
+				For $iY = 0 To $nY - 1
+					For $iX = 0 To $nX - 1
+						$nLen += _storageS_GetVarSize($vData[$iY][$iX])
+					Next
+				Next
+
+			EndIf
+
+			Return $nLen
+
+	EndSwitch
+EndFunc
 
 ; New Methods that require testing and optimization
 ; ===============================================================================================================================
