@@ -1,3 +1,11 @@
+19.02.2022 (DD/MM/YYYY) 0.1.2.8
+
+	Further Optimizations for the _storageGO Method
+	
+	Added
+		- _storageGO_DestroyVar() with which a specific var of a group can be free'd.
+
+
 19.02.2022 (DD/MM/YYYY) 0.1.2.7
 
 	Optimizations for the _storageGO Method

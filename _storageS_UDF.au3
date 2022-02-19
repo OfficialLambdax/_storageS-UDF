@@ -1,7 +1,7 @@
 #include-once
 #include <Array.au3> ; for development of this UDF
 
-Global $__storageS_sVersion = "0.1.2.7"
+Global $__storageS_sVersion = "0.1.2.8"
 Global $__storageS_O_Dictionaries = ObjCreate("Scripting.Dictionary")
 Global $__storageS_GO_PosObject = ObjCreate("Scripting.Dictionary")
 Global $__storageS_GO_IndexObject = ObjCreate("Scripting.Dictionary")
@@ -246,6 +246,7 @@ Func _storageGO_CreateGroup($vElementGroup)
 	Return True
 EndFunc
 
+
 ; #FUNCTION# ====================================================================================================================
 ; Name ..........: _storageGO_Overwrite
 ; Description ...: Writes data to the Elementname of the Element group
@@ -256,6 +257,8 @@ EndFunc
 ; Return values .: True						= If success
 ;                : False					= If not
 ; Errors ........: 1						- $vElementGroup is not created or got destroyed.
+;                : 2						- $vElementData is False. Not an issue because _storageGO_Read() will return False anyway.
+;                :							  This is a feature to reduce globals use.
 ; Modified ......:
 ; Remarks .......:
 ; Example .......: No
@@ -264,23 +267,26 @@ Func _storageGO_Overwrite($vElementGroup, $sElementName, $vElementData)
 
 	Local $sVarName = '__storageGO_' & $vElementGroup & $sElementName
 
+	; if the var is not known then claim one
 	If Not $__storageS_GO_PosObject.Exists($sVarName) Then
 
+		; if the element data is False then we wont claim a storage
+		If $vElementData == False Then Return SetError(2, 0, False)
+
+		; if the group addition fails then return False
 		If Not __storageGO_AddGroupVar($vElementGroup, $sElementName) Then Return SetError(1, 0, False)
 
 		; if no free storage is available then create a new storage
 		If $__storageS_GO_IndexObject.Count == 0 Then
 
-			Local $nPos = $__storageS_GO_Size + 1
-
-			; claim it
-			$__storageS_GO_PosObject($sVarName) = $nPos
-
 			; increase size
 			$__storageS_GO_Size += 1
 
+			; claim it
+			$__storageS_GO_PosObject($sVarName) = $__storageS_GO_Size
+
 			; assign and return
-			Return Assign('__storageGO_' & $nPos, $vElementData, 2)
+			Return Assign('__storageGO_' & $__storageS_GO_Size, $vElementData, 2)
 
 		Else ; pick a free storage
 
@@ -299,12 +305,9 @@ Func _storageGO_Overwrite($vElementGroup, $sElementName, $vElementData)
 
 		EndIf
 
+	Else ; if its known then assign the data
 
-
-	Else
-		Local $nPos = $__storageS_GO_PosObject($sVarName)
-
-		Return Assign('__storageGO_' & $nPos, $vElementData, 2)
+		Return Assign('__storageGO_' & $__storageS_GO_PosObject($sVarName), $vElementData, 2)
 
 	EndIf
 
@@ -354,8 +357,7 @@ Func _storageGO_Read($vElementGroup, $sElementName)
 	; check if the storage exists
 	If Not $__storageS_GO_PosObject.Exists($sVarName) Then Return SetError(1, 0, False)
 
-	Local $nPos = $__storageS_GO_PosObject($sVarName)
-	Return Eval('__storageGO_' & $nPos)
+	Return Eval('__storageGO_' & $__storageS_GO_PosObject($sVarName))
 
 EndFunc
 
@@ -377,7 +379,7 @@ EndFunc
 Func _storageGO_GetGroupVars($vElementGroup)
 
 	If Not $__storageS_GO_GroupObject.Exists('g' & $vElementGroup) Then Return False
-	$oElementGroup = $__storageS_GO_GroupObject('g' & $vElementGroup)
+	Local $oElementGroup = $__storageS_GO_GroupObject('g' & $vElementGroup)
 
 	$vElementGroup = '__storageGO_' & $vElementGroup
 
@@ -411,16 +413,12 @@ EndFunc
 Func _storageGO_TidyGroupVars($vElementGroup)
 
 	If Not $__storageS_GO_GroupObject.Exists('g' & $vElementGroup) Then Return False
-	$oElementGroup = $__storageS_GO_GroupObject('g' & $vElementGroup)
+	Local $oElementGroup = $__storageS_GO_GroupObject('g' & $vElementGroup)
 
 	$vElementGroup = '__storageGO_' & $vElementGroup
 
-	Local $nPos = 0
 	For $i In $oElementGroup
-
-		$nPos = $__storageS_GO_PosObject($vElementGroup & $i)
-
-		Assign('__storageGO_' & $nPos, Null, 2)
+		Assign('__storageGO_' & $__storageS_GO_PosObject($vElementGroup & $i), Null, 2)
 	Next
 
 EndFunc
@@ -439,7 +437,7 @@ EndFunc
 Func _storageGO_DestroyGroup($vElementGroup)
 
 	If Not $__storageS_GO_GroupObject.Exists('g' & $vElementGroup) Then Return False
-	$oElementGroup = $__storageS_GO_GroupObject('g' & $vElementGroup)
+	Local $oElementGroup = $__storageS_GO_GroupObject('g' & $vElementGroup)
 
 	Local $nPos = 0
 	For $i In $oElementGroup
@@ -451,7 +449,7 @@ Func _storageGO_DestroyGroup($vElementGroup)
 		Assign('__storageGO_' & $nPos, Null, 2)
 
 		; add as free storage to the index object
-		$__storageS_GO_IndexObject($nPos) = Null
+		$__storageS_GO_IndexObject($nPos)
 
 		; remove element from group
 		$oElementGroup.Remove($i)
@@ -462,6 +460,40 @@ Func _storageGO_DestroyGroup($vElementGroup)
 
 	; remove group
 	$__storageS_GO_GroupObject.Remove('g' & $vElementGroup)
+
+EndFunc
+
+
+; #FUNCTION# ====================================================================================================================
+; Name ..........: _storageGO_DestroyVar
+; Description ...: Tidies and frees the given var from the given group
+; Syntax ........: _storageGO_DestroyVar($vElementGroup, $sElementName)
+; Parameters ....: $vElementGroup           - Element Group
+;                  $sElementName            - (String) Element Name
+; Return values .: None
+; Modified ......:
+; Remarks .......:
+; Example .......: No
+; ===============================================================================================================================
+Func _storageGO_DestroyVar($vElementGroup, $sElementName)
+
+	If Not $__storageS_GO_GroupObject.Exists('g' & $vElementGroup) Then Return False
+	Local $oElementGroup = $__storageS_GO_GroupObject('g' & $vElementGroup)
+
+	Local $sVarName = '__storageGO_' & $vElementGroup & $sElementName
+
+	If Not $__storageS_GO_PosObject.Exists($sVarName) Then Return False
+	Local $nPos = $__storageS_GO_PosObject($sVarName)
+
+	Assign('__storageGO_' & $nPos, Null, 2)
+
+	$__storageS_GO_PosObject.Remove($sVarName)
+	$__storageS_GO_IndexObject($nPos)
+
+	$oElementGroup.Remove(String($sElementName))
+	$__storageS_GO_GroupObject('g' & $vElementGroup) = $oElementGroup
+
+	Return True
 
 EndFunc
 
@@ -823,7 +855,7 @@ EndFunc
 
 Func __storageG_AddGroupVar($vElementGroup, $sElementName)
 	Local $oGroupVars = Eval("StorageS" & $vElementGroup)
-	If Not IsObj($oGroupVars) Then
+	If IsObj($oGroupVars) == 0 Then
 		$oGroupVars = ObjCreate("Scripting.Dictionary")
 	EndIf
 
@@ -849,7 +881,7 @@ Func __storageGO_Startup()
 	$__storageS_GO_Index = 1
 
 	; add single storage to the index object
-	$__storageS_GO_IndexObject(1) = Null
+	$__storageS_GO_IndexObject(1)
 
 EndFunc
 
