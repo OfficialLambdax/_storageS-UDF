@@ -1,10 +1,11 @@
 #include-once
 #include <Array.au3> ; for development of this UDF
 
-Global $__storageS_sVersion = "0.1.2.6"
-Global $__storageS_oDictionaries = ObjCreate("Scripting.Dictionary")
+Global $__storageS_sVersion = "0.1.2.7"
+Global $__storageS_O_Dictionaries = ObjCreate("Scripting.Dictionary")
 Global $__storageS_GO_PosObject = ObjCreate("Scripting.Dictionary")
 Global $__storageS_GO_IndexObject = ObjCreate("Scripting.Dictionary")
+Global $__storageS_GO_GroupObject = ObjCreate("Scripting.Dictionary")
 Global $__storageS_GO_Size = 0
 
 __storageGO_Startup()
@@ -237,11 +238,12 @@ EndFunc
 ; Example .......: No
 ; ===============================================================================================================================
 Func _storageGO_CreateGroup($vElementGroup)
-	Local $oGroupVars = Eval('Group__storageGO_' & $vElementGroup)
-	If IsObj($oGroupVars) Then Return False
+	If $__storageS_GO_GroupObject.Exists('g' & $vElementGroup) Then Return False
 
 	$oGroupVars = ObjCreate("Scripting.Dictionary")
-	Return Assign('Group__storageGO_' & $vElementGroup, $oGroupVars, 2)
+	$__storageS_GO_GroupObject('g' & $vElementGroup) = $oGroupVars
+
+	Return True
 EndFunc
 
 ; #FUNCTION# ====================================================================================================================
@@ -374,10 +376,10 @@ EndFunc
 ; ===============================================================================================================================
 Func _storageGO_GetGroupVars($vElementGroup)
 
-	$vElementGroup = '__storageGO_' & $vElementGroup
+	If Not $__storageS_GO_GroupObject.Exists('g' & $vElementGroup) Then Return False
+	$oElementGroup = $__storageS_GO_GroupObject('g' & $vElementGroup)
 
-	Local $oElementGroup = Eval('Group' & $vElementGroup)
-	If Not IsObj($oElementGroup) Then Return False
+	$vElementGroup = '__storageGO_' & $vElementGroup
 
 	Local $arGroupVars2D[$oElementGroup.Count][3], $nCount = 0, $nPos = 0
 	For $i In $oElementGroup
@@ -408,10 +410,10 @@ EndFunc
 ; ===============================================================================================================================
 Func _storageGO_TidyGroupVars($vElementGroup)
 
-	$vElementGroup = '__storageGO_' & $vElementGroup
+	If Not $__storageS_GO_GroupObject.Exists('g' & $vElementGroup) Then Return False
+	$oElementGroup = $__storageS_GO_GroupObject('g' & $vElementGroup)
 
-	Local $oElementGroup = Eval('Group' & $vElementGroup)
-	If Not IsObj($oElementGroup) Then Return False
+	$vElementGroup = '__storageGO_' & $vElementGroup
 
 	Local $nPos = 0
 	For $i In $oElementGroup
@@ -436,17 +438,14 @@ EndFunc
 ; ===============================================================================================================================
 Func _storageGO_DestroyGroup($vElementGroup)
 
-	$vElementGroup = '__storageGO_' & $vElementGroup
-
-	Local $oElementGroup = Eval('Group' & $vElementGroup)
-	If Not IsObj($oElementGroup) Then Return False
-
+	If Not $__storageS_GO_GroupObject.Exists('g' & $vElementGroup) Then Return False
+	$oElementGroup = $__storageS_GO_GroupObject('g' & $vElementGroup)
 
 	Local $nPos = 0
 	For $i In $oElementGroup
 
 		; get pos
-		$nPos = $__storageS_GO_PosObject($vElementGroup & $i)
+		$nPos = $__storageS_GO_PosObject('__storageGO_' & $vElementGroup & $i)
 
 		; tidy storage
 		Assign('__storageGO_' & $nPos, Null, 2)
@@ -458,13 +457,11 @@ Func _storageGO_DestroyGroup($vElementGroup)
 		$oElementGroup.Remove($i)
 
 		; remove element from pos object
-		$__storageS_GO_PosObject.Remove($vElementGroup & $i)
+		$__storageS_GO_PosObject.Remove('__storageGO_' & $vElementGroup & $i)
 	Next
 
 	; remove group
-	Assign('Group' & $vElementGroup, Null, 2)
-
-	; save changes
+	$__storageS_GO_GroupObject.Remove('g' & $vElementGroup)
 
 EndFunc
 
@@ -568,7 +565,7 @@ Func _storageO_CreateGroup($vElementGroup)
 
 	Local $oElementGroup = ObjCreate("Scripting.Dictionary")
 	If @error Then Return False
-	$__storageS_oDictionaries($vElementGroup) = $oElementGroup
+	$__storageS_O_Dictionaries($vElementGroup) = $oElementGroup
 
 	Return True
 EndFunc
@@ -592,10 +589,10 @@ EndFunc
 Func _storageO_Overwrite($vElementGroup, $sElementName, $vElementData)
 	$vElementGroup = '_storageS_' & $vElementGroup
 
-	If Not $__storageS_oDictionaries.Exists($vElementGroup) Then Return SetError(1, 0, False)
-;~ 	If Not $__storageS_oDictionaries.Exists($vElementGroup) Then _storageO_CreateGroup($vElementGroup) ; doesnt work ? Object keeps inaccessible
+	If Not $__storageS_O_Dictionaries.Exists($vElementGroup) Then Return SetError(1, 0, False)
+;~ 	If Not $__storageS_O_Dictionaries.Exists($vElementGroup) Then _storageO_CreateGroup($vElementGroup) ; doesnt work ? Object keeps inaccessible
 
-	Local $oElementGroup = $__storageS_oDictionaries($vElementGroup)
+	Local $oElementGroup = $__storageS_O_Dictionaries($vElementGroup)
 	if Not IsObj($oElementGroup) Then Return SetError(2, 0, False)
 
 	$oElementGroup($sElementName) = $vElementData
@@ -619,7 +616,7 @@ EndFunc
 Func _storageO_Append($vElementGroup, $sElementName, $vElementData)
 	$vElementGroup = '_storageS_' & $vElementGroup
 
-	Local $oElementGroup = $__storageS_oDictionaries($vElementGroup)
+	Local $oElementGroup = $__storageS_O_Dictionaries($vElementGroup)
 	if Not IsObj($oElementGroup) Then Return _storageO_Overwrite($vElementGroup, $sElementName, $vElementData)
 
 	$oElementGroup($sElementName) &= $vElementData
@@ -683,7 +680,7 @@ EndFunc
 Func _storageO_Read($vElementGroup, $sElementName)
 	$vElementGroup = '_storageS_' & $vElementGroup
 
-	Local $oElementGroup = $__storageS_oDictionaries($vElementGroup)
+	Local $oElementGroup = $__storageS_O_Dictionaries($vElementGroup)
 	if Not IsObj($oElementGroup) Then Return SetError(1, 0, False)
 
 	If Not $oElementGroup.Exists($sElementName) Then Return SetError(2, 0, False)
@@ -705,13 +702,13 @@ EndFunc
 Func _storageO_TidyGroupVars($vElementGroup)
 	$vElementGroup = '_storageS_' & $vElementGroup
 
-	Local $oElementGroup = $__storageS_oDictionaries($vElementGroup)
+	Local $oElementGroup = $__storageS_O_Dictionaries($vElementGroup)
 
 	For $i In $oElementGroup
 		$oElementGroup.Remove($i)
 	Next
 
-	$__storageS_oDictionaries.Remove($vElementGroup)
+	$__storageS_O_Dictionaries.Remove($vElementGroup)
 EndFunc
 
 
@@ -732,7 +729,7 @@ EndFunc
 Func _storageO_GetGroupVars($vElementGroup)
 	$vElementGroup = '_storageS_' & $vElementGroup
 
-	Local $oElementGroup = $__storageS_oDictionaries($vElementGroup)
+	Local $oElementGroup = $__storageS_O_Dictionaries($vElementGroup)
 	If Not IsObj($oElementGroup) Then Return False
 
 	Local $arGroupVars2D[$oElementGroup.Count][3], $nCount = 0
@@ -857,12 +854,10 @@ Func __storageGO_Startup()
 EndFunc
 
 Func __storageGO_AddGroupVar($vElementGroup, $sElementName)
-	Local $oGroupVars = Eval('Group__storageGO_' & $vElementGroup)
-	If Not IsObj($oGroupVars) Then Return False
-;~ 	If Not IsObj($oGroupVars) Then
-;~ 		$oGroupVars = ObjCreate("Scripting.Dictionary")
-;~ 	EndIf
+	If Not $__storageS_GO_GroupObject.Exists('g' & $vElementGroup) Then Return False
+	$oGroupVars = $__storageS_GO_GroupObject('g' & $vElementGroup)
 
 	$oGroupVars(String($sElementName))
-	Return Assign('Group__storageGO_' & $vElementGroup, $oGroupVars, 2)
+	$__storageS_GO_GroupObject($vElementGroup) = $oGroupVars
+	Return True
 EndFunc
