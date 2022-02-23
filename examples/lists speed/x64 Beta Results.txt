@@ -1,13 +1,47 @@
 1000 Elements Test
 
-ML Add took: 250.8824 ms (0.2508824 ms/avg)
-OL Add took: 16.7332 ms (0.0167332 ms/avg)
+ML Add took: 288.8625 ms (0.2888625 ms/avg)
+OL Add took: 18.2155 ms (0.0182155 ms/avg)
+AL Add took: 151.7889 ms (0.1517889 ms/avg)
 
-ML Exists took: 2.9626 ms (0.0029626 ms/avg)
-OL Exists took: 12.0294 ms (0.0120294 ms/avg)
+AL Rapid Add took: 2.5022 ms (0.0025022 ms/avg)
+AL Rapid to AL Conversion took: 0.2901 ms
+AL RapidX Add took: 4075.0754 ms (4.0750754 ms/avg) (ignore rapidx)
+AL RapidX to AL Conversion took: 0.083 ms
 
-ML GetElements took: 137.6058 ms (0.1376058 ms/avg)
-OL GetElements took: 1536.4697 ms (1.5364697 ms/avg)
+ML Exists took: 3.3219 ms (0.0033219 ms/avg)
+OL Exists took: 12.5368 ms (0.0125368 ms/avg)
+AL Exists took: 400.1429 ms (0.4001429 ms/avg)
 
-ML Remove took: 239.8531 ms (0.2398531 ms/avg)
-OL Remove took: 18.7401 ms (0.0187401 ms/avg)
+ML GetElements took: 150.7249 ms (0.1507249 ms/avg)
+OL GetElements took: 1650.8938 ms (1.6508938 ms/avg)
+AL GetElements took: 10.6243 ms (0.0106243 ms/avg)
+
+ML Remove took: 240.2441 ms (0.2402441 ms/avg)
+OL Remove took: 18.168 ms (0.018168 ms/avg)
+AL Remove took: 386.7044 ms (0.3867044 ms/avg)
+
+
+
+10000 Elements Test
+
+ML Add took: 97197.8185 ms (9.71978185 ms/avg)
+OL Add took: 178.3582 ms (0.01783582 ms/avg)
+AL Add took: 12640.5223 ms (1.26405223 ms/avg)
+
+AL Rapid Add took: 25.9802 ms (0.00259802 ms/avg)
+AL Rapid to AL Conversion took: 2.4059 ms
+AL RapidX Add took: 46571.4885 ms (4.65714885 ms/avg) (ignore rapidx)
+AL RapidX to AL Conversion took: 0.0797 ms
+
+ML Exists took: 31.8109 ms (0.00318109 ms/avg)
+OL Exists took: 135.1919 ms (0.01351919 ms/avg)
+AL Exists took: 37800.2898 ms (3.78002898 ms/avg)
+
+ML GetElements took: 16260.9141 ms (1.62609141 ms/avg)
+OL GetElements took: 164199.865 ms (16.4199865 ms/avg)
+AL GetElements took: 161.0265 ms (0.01610265 ms/avg)
+
+ML Remove took: 94978.5328 ms (9.49785328 ms/avg)
+OL Remove took: 189.3231 ms (0.01893231 ms/avg)
+AL Remove took: 38165.276 ms (3.8165276 ms/avg)

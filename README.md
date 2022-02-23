@@ -5,7 +5,7 @@ The UDF aims to provide multiple methods to make access to data and lists easy a
 Support for X32/64 Autoit Stable/Beta. Windows XP to 10. 11 and Wine not tested.
 
 
-As of Version 0.1.3.1 there are three data storage methods and two listing storage methods.
+As of Version 0.1.3.2 there are three data storage methods and three listing storage methods.
 
 ============================== Tl;dr ==============================
 
@@ -15,8 +15,12 @@ Data storages
 - _storageO is good for when performance is not your goal and a long runtime is required.
 
 Listing storages
-- _storageOL is good for when your lists constantly change in size and its contents.
-- _storageML is good for when your lists are not constantly changing but you are constantly checking for the existence of a element or where you constantly need to get all elements of a group.
+- _storageOL is good for when your lists constantly change in size and its contents (Fastest Add, Remove Element method).
+- _storageML is good for when you need to constantly iterate through somewhat static lists or for when you need to constantly check if a element exists (Fastest Exists method).
+- _storageAL is only good for when you need to constantly iterate through somewhat static lists (Fastest GetElements method).
+- _storageALRapid is a set of special functions to add elements extremly fast to a AL list (faster then _storageOL) to fasten the creation of large arrays.
+
+Storage methods are not compatible with each other. But methods can easiely be changed to another with CTRL+H, to a degree.
 
 ======================= Data Storage methods ======================
 
@@ -83,6 +87,20 @@ Cons
 - Slow when adding elements
 - Slow when removing elements
 - Map interactions get slower the more Elements are stored within it (Adding 1e4 Elements took ~90sec)
+
+
+The Array Method. Functions that begin with _storageAL are tied to this method.
+Works on top of _storageGO.
+
+Pros
+- Fastest when getting all elements of a group
+- Fastest when adding elements to a group if used in conjunction with _storageALRapid
+- Elements with the same name can be added multiple times
+
+Cons
+- Slow when adding elements byitself
+- Slow when removing elements
+- Slow when checking the existence of a Element
 
 
 
