@@ -1,8 +1,9 @@
 #include-once
 #include <Array.au3> ; for development of this UDF
 
-Global $__storageS_sVersion = "0.1.2.8"
+Global $__storageS_sVersion = "0.1.3"
 Global $__storageS_O_Dictionaries = ObjCreate("Scripting.Dictionary")
+Global $__storageS_OL_Dictionaries = ObjCreate("Scripting.Dictionary")
 Global $__storageS_GO_PosObject = ObjCreate("Scripting.Dictionary")
 Global $__storageS_GO_IndexObject = ObjCreate("Scripting.Dictionary")
 Global $__storageS_GO_GroupObject = ObjCreate("Scripting.Dictionary")
@@ -265,7 +266,7 @@ EndFunc
 ; ===============================================================================================================================
 Func _storageGO_Overwrite($vElementGroup, $sElementName, $vElementData)
 
-	Local $sVarName = '__storageGO_' & $vElementGroup & $sElementName
+	Local $sVarName = 'g' & $vElementGroup & $sElementName
 
 	; if the var is not known then claim one
 	If Not $__storageS_GO_PosObject.Exists($sVarName) Then
@@ -329,7 +330,7 @@ EndFunc
 ; ===============================================================================================================================
 Func _storageGO_Append($vElementGroup, $sElementName, $vElementData)
 
-	Local $sVarName = '__storageGO_' & $vElementGroup & $sElementName
+	Local $sVarName = 'g' & $vElementGroup & $sElementName
 
 	If Not $__storageS_GO_PosObject.Exists($sVarName) Then Return _storageGO_Overwrite($vElementGroup, $sElementName, $vElementData)
 
@@ -352,7 +353,7 @@ EndFunc
 ; ===============================================================================================================================
 Func _storageGO_Read($vElementGroup, $sElementName)
 
-	Local $sVarName = '__storageGO_' & $vElementGroup & $sElementName
+	Local $sVarName = 'g' & $vElementGroup & $sElementName
 
 	; check if the storage exists
 	If Not $__storageS_GO_PosObject.Exists($sVarName) Then Return SetError(1, 0, False)
@@ -381,7 +382,7 @@ Func _storageGO_GetGroupVars($vElementGroup)
 	If Not $__storageS_GO_GroupObject.Exists('g' & $vElementGroup) Then Return False
 	Local $oElementGroup = $__storageS_GO_GroupObject('g' & $vElementGroup)
 
-	$vElementGroup = '__storageGO_' & $vElementGroup
+	$vElementGroup = 'g' & $vElementGroup
 
 	Local $arGroupVars2D[$oElementGroup.Count][3], $nCount = 0, $nPos = 0
 	For $i In $oElementGroup
@@ -415,7 +416,7 @@ Func _storageGO_TidyGroupVars($vElementGroup)
 	If Not $__storageS_GO_GroupObject.Exists('g' & $vElementGroup) Then Return False
 	Local $oElementGroup = $__storageS_GO_GroupObject('g' & $vElementGroup)
 
-	$vElementGroup = '__storageGO_' & $vElementGroup
+	$vElementGroup = 'g' & $vElementGroup
 
 	For $i In $oElementGroup
 		Assign('__storageGO_' & $__storageS_GO_PosObject($vElementGroup & $i), Null, 2)
@@ -443,7 +444,7 @@ Func _storageGO_DestroyGroup($vElementGroup)
 	For $i In $oElementGroup
 
 		; get pos
-		$nPos = $__storageS_GO_PosObject('__storageGO_' & $vElementGroup & $i)
+		$nPos = $__storageS_GO_PosObject('g' & $vElementGroup & $i)
 
 		; tidy storage
 		Assign('__storageGO_' & $nPos, Null, 2)
@@ -455,7 +456,7 @@ Func _storageGO_DestroyGroup($vElementGroup)
 		$oElementGroup.Remove($i)
 
 		; remove element from pos object
-		$__storageS_GO_PosObject.Remove('__storageGO_' & $vElementGroup & $i)
+		$__storageS_GO_PosObject.Remove('g' & $vElementGroup & $i)
 	Next
 
 	; remove group
@@ -480,7 +481,7 @@ Func _storageGO_DestroyVar($vElementGroup, $sElementName)
 	If Not $__storageS_GO_GroupObject.Exists('g' & $vElementGroup) Then Return False
 	Local $oElementGroup = $__storageS_GO_GroupObject('g' & $vElementGroup)
 
-	Local $sVarName = '__storageGO_' & $vElementGroup & $sElementName
+	Local $sVarName = 'g' & $vElementGroup & $sElementName
 
 	If Not $__storageS_GO_PosObject.Exists($sVarName) Then Return False
 	Local $nPos = $__storageS_GO_PosObject($sVarName)
@@ -777,6 +778,176 @@ EndFunc
 #EndRegion
 
 
+#Region DictObj List method
+; ===============================================================================================================================
+; ===============================================================================================================================
+; #FUNCTION# ====================================================================================================================
+; Name ..........: _storageOL_CreateGroup
+; Description ...: Creates a dictobj list under the given groupname
+; Syntax ........: _storageOL_CreateGroup($vElementGroup)
+; Parameters ....: $vElementGroup       - Element Group
+; Return values .: True					= If success
+;                : False				= If the group already exists
+; Modified ......:
+; Remarks .......:
+; Example .......: No
+; ===============================================================================================================================
+Func _storageOL_CreateGroup($vElementGroup)
+
+	; numbers dont work and converting the numer to String() often doesnt too.
+	; so we add a char in front to make sure that the dict wont have any issues with the name
+	$vElementGroup = 'g' & $vElementGroup
+
+	; if the group already exists then return False
+	if $__storageS_OL_Dictionaries.Exists($vElementGroup) Then Return False
+
+	Local $oElementGroup = ObjCreate("Scripting.Dictionary")
+	$__storageS_OL_Dictionaries($vElementGroup) = $oElementGroup
+
+	Return True
+EndFunc
+
+
+; #FUNCTION# ====================================================================================================================
+; Name ..........: _storageOL_AddElement
+; Description ...: Adds a element to the dictobj
+; Syntax ........: _storageOL_AddElement($vElementGroup, $sElementName)
+; Parameters ....: $vElementGroup       - Element Group
+;                  $sElementName        - Element Name
+; Return values .: True					= If success
+;                : False				= If not
+; Errors ........: 1					- The elementgroup is unknown
+;                : 2					- The elementname is already added to the list
+; Modified ......:
+; Remarks .......:
+; Example .......: No
+; ===============================================================================================================================
+Func _storageOL_AddElement($vElementGroup, $sElementName)
+	$vElementGroup = 'g' & $vElementGroup
+
+	; if the elementgroup is unknown then return false
+	If Not $__storageS_OL_Dictionaries.Exists($vElementGroup) Then Return SetError(1, 0, False)
+	Local $oElementGroup = $__storageS_OL_Dictionaries($vElementGroup)
+
+	$sElementName = 'g' & $sElementName
+
+	; if the element is already present then return false
+	if $oElementGroup.Exists($sElementName) Then Return SetError(2, 0, False)
+
+	; add the element
+	$oElementGroup($sElementName)
+	$__storageS_OL_Dictionaries($vElementGroup) = $oElementGroup
+
+	Return True
+EndFunc
+
+
+; #FUNCTION# ====================================================================================================================
+; Name ..........: _storageOL_GetElements
+; Description ...: Returns all existing elements in the given groupname in a 1D Array
+; Syntax ........: _storageOL_GetElements($vElementGroup)
+; Parameters ....: $vElementGroup       - Element Group
+; Return values .: False				= If the elementgroup is unknown
+;                : 1D Array				= Containing all elements, starting at [0]
+; Modified ......:
+; Remarks .......:
+; Example .......: No
+; ===============================================================================================================================
+Func _storageOL_GetElements($vElementGroup)
+	$vElementGroup = 'g' & $vElementGroup
+
+	; if the elementgroup is unknown then return false
+	If Not $__storageS_OL_Dictionaries.Exists($vElementGroup) Then Return False
+	Local $oElementGroup = $__storageS_OL_Dictionaries($vElementGroup)
+
+	Local $arGroupVars[$oElementGroup.Count], $nCount = 0
+	For $i In $oElementGroup
+		$arGroupVars[$nCount] = StringTrimLeft($i, 1)
+		$nCount += 1
+	Next
+
+	Return $arGroupVars
+EndFunc
+
+
+; #FUNCTION# ====================================================================================================================
+; Name ..........: _storageOL_Exists
+; Description ...: Checks if the given element exists in the given element group
+; Syntax ........: _storageOL_Exists($vElementGroup, $sElementName)
+; Parameters ....: $vElementGroup       - Element Group
+;                  $sElementName        - Element Name
+; Return values .: True					= Element exists
+;                : False				= Element does not exists
+; Modified ......:
+; Remarks .......:
+; Example .......: No
+; ===============================================================================================================================
+Func _storageOL_Exists($vElementGroup, $sElementName)
+	$vElementGroup = 'g' & $vElementGroup
+
+	; if the elementgroup is unknown then return false
+	If Not $__storageS_OL_Dictionaries.Exists($vElementGroup) Then Return SetError(1, 0, False)
+	Local $oElementGroup = $__storageS_OL_Dictionaries($vElementGroup)
+
+	$sElementName = 'g' & $sElementName
+
+	Return $oElementGroup.Exists($sElementName)
+EndFunc
+
+
+; #FUNCTION# ====================================================================================================================
+; Name ..........: _storageOL_RemoveElement
+; Description ...: Removes the given element from the given element group
+; Syntax ........: _storageOL_RemoveElement($vElementGroup, $sElementName)
+; Parameters ....: $vElementGroup       - Element Group
+;                  $sElementName        - Element Name
+; Return values .: True					= If success
+;                : False				= If not
+; Errors ........: 1					- elementgroup is unknown
+;                : 2					- element not part of the group
+; Modified ......:
+; Remarks .......:
+; Example .......: No
+; ===============================================================================================================================
+Func _storageOL_RemoveElement($vElementGroup, $sElementName)
+	$vElementGroup = 'g' & $vElementGroup
+
+	; if the elementgroup is unknown then return false
+	If Not $__storageS_OL_Dictionaries.Exists($vElementGroup) Then Return SetError(1, 0, False)
+	Local $oElementGroup = $__storageS_OL_Dictionaries($vElementGroup)
+
+	$sElementName = 'g' & $sElementName
+
+	If Not $oElementGroup.Exists($sElementName) Then Return SetError(2, 0, False)
+
+	$oElementGroup.Remove($sElementName)
+	$__storageS_OL_Dictionaries($vElementGroup) = $oElementGroup
+
+	Return True
+EndFunc
+
+
+; #FUNCTION# ====================================================================================================================
+; Name ..........: _storageOL_DestroyGroup
+; Description ...: Destroys the whole group and its contents
+; Syntax ........: _storageOL_DestroyGroup($vElementGroup)
+; Parameters ....: $vElementGroup       - Element Group
+; Return values .: True					= If success
+;                : False				= If the elementgroup is unknown
+; Modified ......:
+; Remarks .......:
+; Example .......: No
+; ===============================================================================================================================
+Func _storageOL_DestroyGroup($vElementGroup)
+	$vElementGroup = 'g' & $vElementGroup
+
+	If Not $__storageS_OL_Dictionaries.Exists($vElementGroup) Then Return False
+
+	$__storageS_OL_Dictionaries.Remove($vElementGroup)
+	Return True
+EndFunc
+#EndRegion
+
 
 ; #FUNCTION# ====================================================================================================================
 ; Name ..........: _storageS_GetVarSize
@@ -842,7 +1013,9 @@ EndFunc
 ; ===============================================================================================================================
 ; ===============================================================================================================================
 
+
 ; none
+
 
 ; Internal Barrier
 ; ===============================================================================================================================

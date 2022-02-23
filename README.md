@@ -2,17 +2,19 @@
 _storageSimpel is a UDF meant for fast data read's and write's.
 
 The UDF aims to provide multiple methods to make access to data easy and as fast as possible.
-Support for X32/64 Autoit Stable/Beta. Windows XP to 10. Wine not tested.
+Support for X32/64 Autoit Stable/Beta. Windows XP to 10. 11 and Wine not tested.
 
 
-As of Version 0.1.2 there are three methods
+As of Version 0.1.3 there are three data storage methods and 1 listing storage method.
+
+=========================================== Data Storage methods ===============================================
 
 The Assign/Eval Method. Functions that begin with _storageG are tied to this method.
 	
 Pros
 - Very fast when writing or reading small and large Data sets
 - The method does not get slower with the increase of storages
-- Repeated Data is not written to memory. Aka less memory is required.
+- Repeated Data is not written to memory. Aka less memory is required. CoW or something similiar seems to be present within Autoit which affects Global variables.
 
 Cons
 - Global variables cannot be removed but rather just be overwritten with Null to make them as small as possible. Aka the Method leaks to memory.
@@ -25,7 +27,7 @@ Its a combination of the Assign/Eval and Object method to counter the Memory lea
 Pros
 - Fast when writing or reading small and Very fast on large Data sets
 - The method does not get slower with the increase of storages
-- Repeated Data is not written to memory. Aka less memory is required.
+- Repeated Data is not written to memory. Aka less memory is required. CoW or something similiar seems to be present within Autoit which affects Global variables.
 - Storages that get destroyed are reused by new storages. Aka new storages are only created when no other can currently be reused.
 
 Cons
@@ -44,7 +46,20 @@ Cons
 - The method gets slower the more storages exist and the more data is stored in it.
 
 
+========================================= Listing Storage methods ==============================================
 
-You can check out the Examples Directory to see which method suits you better.
+
+The Dictionary Object Method. Functions that begin with _storageOL are tied to this method.
+
+Pros
+- Very fast when adding elements
+- Very fast when removing elements
+- Very fast when checking the existens of a element
+
+Cons
+- A Element can only be added a single time per group
+
+
+You can check out the Examples Directory to see which methods suits you better.
 
 Big thanks to AspirinJunkie@Autoit.de for introducing me to the Dictionary Object. It helped me improve the UDF by alot.
