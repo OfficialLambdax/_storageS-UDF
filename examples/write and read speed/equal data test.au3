@@ -66,7 +66,7 @@ _storageG_TidyGroupVars(123)
 ConsoleWrite(@CRLF)
 
 $nTime = _Test_Write_GO_Method("1", 1e5)
-ConsoleWrite("GO         " & @TAB & "Single Byte Write Test" & @TAB & "took: " & @extended & " ms (" & $nTime & " ms/avg)" & @TAB & "(Faster once variables already exist)" & @CRLF)
+ConsoleWrite("GO         " & @TAB & "Single Byte Write Test" & @TAB & "took: " & @extended & " ms (" & $nTime & " ms/avg)" & @TAB & "(Not true for the GO method)" & @CRLF)
 
 $nTime = _Test_Read_GO_Method(1e5)
 ConsoleWrite("GO         " & @TAB & "Single Byte Read Test" & @TAB & "took: " & @extended & " ms (" & $nTime & " ms/avg)" & @CRLF)

@@ -1,164 +1,164 @@
 Single Byte Test Start __________________________________________
 Creating 1e5 Storages
 
-Assign/Eval	Single Byte Write Test	took: 2187 ms (0.021872835 ms/avg)
-Assign/Eval	Single Byte Read Test	took: 475 ms (0.004751207 ms/avg)
+Assign/Eval	Single Byte Write Test	took: 2047 ms (0.020473545 ms/avg)
+Assign/Eval	Single Byte Read Test	took: 454 ms (0.004542913 ms/avg)
 
-GO         	Single Byte Write Test	took: 3401 ms (0.034016623 ms/avg)
-GO         	Single Byte Read Test	took: 1240 ms (0.012406345 ms/avg)
+GO         	Single Byte Write Test	took: 1602 ms (0.016028709 ms/avg)
+GO         	Single Byte Read Test	took: 771 ms (0.007716935 ms/avg)
 
-DictObj  	Single Byte Write Test	took: 1497 ms (0.014973337 ms/avg)
-DictObj  	Single Byte Read Test	took: 1367 ms (0.01367522 ms/avg)
+DictObj  	Single Byte Write Test	took: 1323 ms (0.013238423 ms/avg)
+DictObj  	Single Byte Read Test	took: 1218 ms (0.012187466 ms/avg)
 
 Single Byte Test Start __________________________________________
 Writing and Reading to and from all 1e5 Storages
 
-Assign/Eval	Single Byte Write Test	took: 686 ms (0.006862604 ms/avg)	(Faster once variables already exist)
-Assign/Eval	Single Byte Read Test	took: 480 ms (0.004800963 ms/avg)
+Assign/Eval	Single Byte Write Test	took: 653 ms (0.006532082 ms/avg)	(Faster once variables already exist)
+Assign/Eval	Single Byte Read Test	took: 454 ms (0.004547293 ms/avg)
 
-GO         	Single Byte Write Test	took: 1454 ms (0.014541618 ms/avg)	(Faster once variables already exist)
-GO         	Single Byte Read Test	took: 1248 ms (0.012482554 ms/avg)
+GO         	Single Byte Write Test	took: 1611 ms (0.016114936 ms/avg)	(Not true for the GO method)
+GO         	Single Byte Read Test	took: 776 ms (0.007760184 ms/avg)
 
-DictObj  	Single Byte Write Test	took: 1510 ms (0.015109671 ms/avg)	(Not true for the DictObj)
-DictObj  	Single Byte Read Test	took: 1390 ms (0.013901225 ms/avg)
+DictObj  	Single Byte Write Test	took: 1331 ms (0.01331299 ms/avg)	(Not true for the DictObj)
+DictObj  	Single Byte Read Test	took: 1229 ms (0.012293583 ms/avg)
 
 Kilo Byte Test Start __________________________________________
 Writing to 1e4 Storages
 
-Assign/Eval	10 KB  Write Test	took: 81 ms	(0.00811452 ms/avg)
-Assign/Eval	10 KB  Read Test 	took: 47 ms	(0.00477909 ms/avg)
+Assign/Eval	10 KB  Write Test	took: 77 ms	(0.00774428 ms/avg)
+Assign/Eval	10 KB  Read Test 	took: 45 ms	(0.00452458 ms/avg)
 
-GO         	10 KB  Write Test	took: 181 ms	(0.01819397 ms/avg)
-GO         	10 KB  Read Test 	took: 142 ms	(0.01420641 ms/avg)
+GO         	10 KB  Write Test	took: 165 ms	(0.0165622 ms/avg)
+GO         	10 KB  Read Test 	took: 77 ms	(0.00770515 ms/avg)
 
-DictObj  	10 KB  Write Test	took: 288 ms	(0.02886404 ms/avg)
-DictObj  	10 KB  Read Test 	took: 179 ms	(0.01793807 ms/avg)
+DictObj  	10 KB  Write Test	took: 249 ms	(0.02491402 ms/avg)
+DictObj  	10 KB  Read Test 	took: 153 ms	(0.01531815 ms/avg)
 
-Assign/Eval	20 KB  Write Test	took: 82 ms	(0.00829881 ms/avg)
-Assign/Eval	20 KB  Read Test 	took: 48 ms	(0.00487695 ms/avg)
+Assign/Eval	20 KB  Write Test	took: 75 ms	(0.00756032 ms/avg)
+Assign/Eval	20 KB  Read Test 	took: 48 ms	(0.00480721 ms/avg)
 
-GO         	20 KB  Write Test	took: 181 ms	(0.01816422 ms/avg)
-GO         	20 KB  Read Test 	took: 144 ms	(0.01441978 ms/avg)
+GO         	20 KB  Write Test	took: 159 ms	(0.01594559 ms/avg)
+GO         	20 KB  Read Test 	took: 76 ms	(0.00761443 ms/avg)
 
-DictObj  	20 KB  Write Test	took: 453 ms	(0.04536938 ms/avg)
-DictObj  	20 KB  Read Test 	took: 244 ms	(0.0244001 ms/avg)
+DictObj  	20 KB  Write Test	took: 390 ms	(0.03907112 ms/avg)
+DictObj  	20 KB  Read Test 	took: 210 ms	(0.02108772 ms/avg)
 
-Assign/Eval	30 KB  Write Test	took: 85 ms	(0.00856746 ms/avg)
-Assign/Eval	30 KB  Read Test 	took: 48 ms	(0.00483929 ms/avg)
+Assign/Eval	30 KB  Write Test	took: 77 ms	(0.00777335 ms/avg)
+Assign/Eval	30 KB  Read Test 	took: 45 ms	(0.0045398 ms/avg)
 
-GO         	30 KB  Write Test	took: 189 ms	(0.01896226 ms/avg)
-GO         	30 KB  Read Test 	took: 146 ms	(0.01469038 ms/avg)
+GO         	30 KB  Write Test	took: 163 ms	(0.01635874 ms/avg)
+GO         	30 KB  Read Test 	took: 78 ms	(0.00784422 ms/avg)
 
-DictObj  	30 KB  Write Test	took: 574 ms	(0.05747652 ms/avg)
-DictObj  	30 KB  Read Test 	took: 314 ms	(0.03147331 ms/avg)
+DictObj  	30 KB  Write Test	took: 503 ms	(0.05031432 ms/avg)
+DictObj  	30 KB  Read Test 	took: 264 ms	(0.0264336 ms/avg)
 
-Assign/Eval	40 KB  Write Test	took: 82 ms	(0.00827754 ms/avg)
-Assign/Eval	40 KB  Read Test 	took: 47 ms	(0.00478138 ms/avg)
+Assign/Eval	40 KB  Write Test	took: 77 ms	(0.00777999 ms/avg)
+Assign/Eval	40 KB  Read Test 	took: 46 ms	(0.00469095 ms/avg)
 
-GO         	40 KB  Write Test	took: 182 ms	(0.01822877 ms/avg)
-GO         	40 KB  Read Test 	took: 146 ms	(0.01469471 ms/avg)
+GO         	40 KB  Write Test	took: 161 ms	(0.01618493 ms/avg)
+GO         	40 KB  Read Test 	took: 77 ms	(0.00773283 ms/avg)
 
-DictObj  	40 KB  Write Test	took: 746 ms	(0.07464146 ms/avg)
-DictObj  	40 KB  Read Test 	took: 388 ms	(0.0388352 ms/avg)
+DictObj  	40 KB  Write Test	took: 623 ms	(0.06232604 ms/avg)
+DictObj  	40 KB  Read Test 	took: 338 ms	(0.03382166 ms/avg)
 
-Assign/Eval	50 KB  Write Test	took: 80 ms	(0.0080203 ms/avg)
-Assign/Eval	50 KB  Read Test 	took: 48 ms	(0.00488505 ms/avg)
+Assign/Eval	50 KB  Write Test	took: 79 ms	(0.00793415 ms/avg)
+Assign/Eval	50 KB  Read Test 	took: 45 ms	(0.00451093 ms/avg)
 
-GO         	50 KB  Write Test	took: 182 ms	(0.0182803 ms/avg)
-GO         	50 KB  Read Test 	took: 147 ms	(0.01477439 ms/avg)
+GO         	50 KB  Write Test	took: 163 ms	(0.01634615 ms/avg)
+GO         	50 KB  Read Test 	took: 78 ms	(0.00783305 ms/avg)
 
-DictObj  	50 KB  Write Test	took: 878 ms	(0.08783413 ms/avg)
-DictObj  	50 KB  Read Test 	took: 452 ms	(0.04528291 ms/avg)
+DictObj  	50 KB  Write Test	took: 758 ms	(0.07587832 ms/avg)
+DictObj  	50 KB  Read Test 	took: 384 ms	(0.0384773 ms/avg)
 
-Assign/Eval	60 KB  Write Test	took: 82 ms	(0.0082299 ms/avg)
-Assign/Eval	60 KB  Read Test 	took: 50 ms	(0.00502504 ms/avg)
+Assign/Eval	60 KB  Write Test	took: 80 ms	(0.00800654 ms/avg)
+Assign/Eval	60 KB  Read Test 	took: 49 ms	(0.00498993 ms/avg)
 
-GO         	60 KB  Write Test	took: 200 ms	(0.02001126 ms/avg)
-GO         	60 KB  Read Test 	took: 149 ms	(0.0149115 ms/avg)
+GO         	60 KB  Write Test	took: 159 ms	(0.01592389 ms/avg)
+GO         	60 KB  Read Test 	took: 77 ms	(0.00778511 ms/avg)
 
-DictObj  	60 KB  Write Test	took: 1040 ms	(0.10406568 ms/avg)
-DictObj  	60 KB  Read Test 	took: 541 ms	(0.05417354 ms/avg)
+DictObj  	60 KB  Write Test	took: 864 ms	(0.08641322 ms/avg)
+DictObj  	60 KB  Read Test 	took: 430 ms	(0.04300973 ms/avg)
 
-Assign/Eval	70 KB  Write Test	took: 86 ms	(0.00860389 ms/avg)
-Assign/Eval	70 KB  Read Test 	took: 49 ms	(0.004972 ms/avg)
+Assign/Eval	70 KB  Write Test	took: 86 ms	(0.00867784 ms/avg)
+Assign/Eval	70 KB  Read Test 	took: 54 ms	(0.00541654 ms/avg)
 
-GO         	70 KB  Write Test	took: 177 ms	(0.01775764 ms/avg)
-GO         	70 KB  Read Test 	took: 145 ms	(0.01456245 ms/avg)
+GO         	70 KB  Write Test	took: 157 ms	(0.01570898 ms/avg)
+GO         	70 KB  Read Test 	took: 76 ms	(0.00762153 ms/avg)
 
-DictObj  	70 KB  Write Test	took: 1212 ms	(0.1212751 ms/avg)
-DictObj  	70 KB  Read Test 	took: 589 ms	(0.05897158 ms/avg)
+DictObj  	70 KB  Write Test	took: 1074 ms	(0.10749021 ms/avg)
+DictObj  	70 KB  Read Test 	took: 949 ms	(0.09497921 ms/avg)
 
-Assign/Eval	80 KB  Write Test	took: 85 ms	(0.00852594 ms/avg)
-Assign/Eval	80 KB  Read Test 	took: 54 ms	(0.0054257 ms/avg)
+Assign/Eval	80 KB  Write Test	took: 84 ms	(0.00840778 ms/avg)
+Assign/Eval	80 KB  Read Test 	took: 49 ms	(0.00493654 ms/avg)
 
-GO         	80 KB  Write Test	took: 186 ms	(0.01864561 ms/avg)
-GO         	80 KB  Read Test 	took: 144 ms	(0.0144716 ms/avg)
+GO         	80 KB  Write Test	took: 163 ms	(0.01636838 ms/avg)
+GO         	80 KB  Read Test 	took: 80 ms	(0.0080414 ms/avg)
 
-DictObj  	80 KB  Write Test	took: 1363 ms	(0.13633774 ms/avg)
-DictObj  	80 KB  Read Test 	took: 677 ms	(0.06771207 ms/avg)
+DictObj  	80 KB  Write Test	took: 1216 ms	(0.12169681 ms/avg)
+DictObj  	80 KB  Read Test 	took: 590 ms	(0.05909039 ms/avg)
 
-Assign/Eval	90 KB  Write Test	took: 84 ms	(0.00846301 ms/avg)
-Assign/Eval	90 KB  Read Test 	took: 48 ms	(0.00486694 ms/avg)
+Assign/Eval	90 KB  Write Test	took: 80 ms	(0.00806973 ms/avg)
+Assign/Eval	90 KB  Read Test 	took: 46 ms	(0.0046865 ms/avg)
 
-GO         	90 KB  Write Test	took: 186 ms	(0.01861932 ms/avg)
-GO         	90 KB  Read Test 	took: 144 ms	(0.01446806 ms/avg)
+GO         	90 KB  Write Test	took: 165 ms	(0.01654568 ms/avg)
+GO         	90 KB  Read Test 	took: 79 ms	(0.00792359 ms/avg)
 
-DictObj  	90 KB  Write Test	took: 1550 ms	(0.15509426 ms/avg)
-DictObj  	90 KB  Read Test 	took: 782 ms	(0.07829509 ms/avg)
+DictObj  	90 KB  Write Test	took: 1394 ms	(0.13947627 ms/avg)
+DictObj  	90 KB  Read Test 	took: 675 ms	(0.06752571 ms/avg)
 
-Assign/Eval	100 KB  Write Test	took: 81 ms	(0.00819311 ms/avg)
-Assign/Eval	100 KB  Read Test 	took: 49 ms	(0.00492145 ms/avg)
+Assign/Eval	100 KB  Write Test	took: 81 ms	(0.0081463 ms/avg)
+Assign/Eval	100 KB  Read Test 	took: 46 ms	(0.00469849 ms/avg)
 
-GO         	100 KB  Write Test	took: 184 ms	(0.01842433 ms/avg)
-GO         	100 KB  Read Test 	took: 149 ms	(0.01492348 ms/avg)
+GO         	100 KB  Write Test	took: 162 ms	(0.0162609 ms/avg)
+GO         	100 KB  Read Test 	took: 77 ms	(0.00779188 ms/avg)
 
-DictObj  	100 KB  Write Test	took: 1766 ms	(0.17666708 ms/avg)
-DictObj  	100 KB  Read Test 	took: 881 ms	(0.08815925 ms/avg)
+DictObj  	100 KB  Write Test	took: 1558 ms	(0.15584651 ms/avg)
+DictObj  	100 KB  Read Test 	took: 750 ms	(0.07508282 ms/avg)
 
 Mega Byte Test Start __________________________________________
 Writing to 1000 Storages
 
-Assign/Eval	1 MB  Write Test	took: 16 ms	(0.0169194 ms/avg)
-Assign/Eval	1 MB  Read Test 	took: 4 ms	(0.0044917 ms/avg)
+Assign/Eval	1 MB  Write Test	took: 15 ms	(0.015874 ms/avg)
+Assign/Eval	1 MB  Read Test 	took: 4 ms	(0.0047316 ms/avg)
 
-GO         	1 MB  Write Test	took: 30 ms	(0.0304341 ms/avg)
-GO         	1 MB  Read Test 	took: 15 ms	(0.0154925 ms/avg)
+GO         	1 MB  Write Test	took: 17 ms	(0.0179922 ms/avg)
+GO         	1 MB  Read Test 	took: 7 ms	(0.0077473 ms/avg)
 
-DictObj  	1 MB  Write Test	took: 3076 ms	(3.0764064 ms/avg)
-DictObj  	1 MB  Read Test 	took: 1853 ms	(1.8537656 ms/avg)
+DictObj  	1 MB  Write Test	took: 3064 ms	(3.0642171 ms/avg)
+DictObj  	1 MB  Read Test 	took: 1662 ms	(1.6621275 ms/avg)
 
-Assign/Eval	2 MB  Write Test	took: 14 ms	(0.0141627 ms/avg)
-Assign/Eval	2 MB  Read Test 	took: 4 ms	(0.0043671 ms/avg)
+Assign/Eval	2 MB  Write Test	took: 13 ms	(0.013388 ms/avg)
+Assign/Eval	2 MB  Read Test 	took: 4 ms	(0.0043908 ms/avg)
 
-GO         	2 MB  Write Test	took: 29 ms	(0.0291378 ms/avg)
-GO         	2 MB  Read Test 	took: 14 ms	(0.0145409 ms/avg)
+GO         	2 MB  Write Test	took: 17 ms	(0.0170098 ms/avg)
+GO         	2 MB  Read Test 	took: 7 ms	(0.007366 ms/avg)
 
-DictObj  	2 MB  Write Test	took: 6438 ms	(6.4387231 ms/avg)
-DictObj  	2 MB  Read Test 	took: 3710 ms	(3.7104495 ms/avg)
+DictObj  	2 MB  Write Test	took: 6318 ms	(6.3188665 ms/avg)
+DictObj  	2 MB  Read Test 	took: 3672 ms	(3.6724205 ms/avg)
 
-Assign/Eval	3 MB  Write Test	took: 14 ms	(0.0140711 ms/avg)
-Assign/Eval	3 MB  Read Test 	took: 4 ms	(0.0049556 ms/avg)
+Assign/Eval	3 MB  Write Test	took: 13 ms	(0.0136444 ms/avg)
+Assign/Eval	3 MB  Read Test 	took: 4 ms	(0.0046447 ms/avg)
 
-GO         	3 MB  Write Test	took: 27 ms	(0.0276985 ms/avg)
-GO         	3 MB  Read Test 	took: 14 ms	(0.0147279 ms/avg)
+GO         	3 MB  Write Test	took: 17 ms	(0.0177004 ms/avg)
+GO         	3 MB  Read Test 	took: 7 ms	(0.007744 ms/avg)
 
-DictObj  	3 MB  Write Test	took: 9957 ms	(9.9574226 ms/avg)
-DictObj  	3 MB  Read Test 	took: 5937 ms	(5.9378717 ms/avg)
+DictObj  	3 MB  Write Test	took: 9489 ms	(9.4896391 ms/avg)
+DictObj  	3 MB  Read Test 	took: 5723 ms	(5.7239478 ms/avg)
 
-Assign/Eval	4 MB  Write Test	took: 17 ms	(0.0178196 ms/avg)
-Assign/Eval	4 MB  Read Test 	took: 4 ms	(0.0047665 ms/avg)
+Assign/Eval	4 MB  Write Test	took: 15 ms	(0.0156477 ms/avg)
+Assign/Eval	4 MB  Read Test 	took: 4 ms	(0.0044259 ms/avg)
 
-GO         	4 MB  Write Test	took: 28 ms	(0.0289856 ms/avg)
-GO         	4 MB  Read Test 	took: 14 ms	(0.0148919 ms/avg)
+GO         	4 MB  Write Test	took: 16 ms	(0.0162639 ms/avg)
+GO         	4 MB  Read Test 	took: 7 ms	(0.0076348 ms/avg)
 
-DictObj  	4 MB  Write Test	took: 13370 ms	(13.3708432 ms/avg)
-DictObj  	4 MB  Read Test 	took: 7651 ms	(7.6511829 ms/avg)
+DictObj  	4 MB  Write Test	took: 12788 ms	(12.7886726 ms/avg)
+DictObj  	4 MB  Read Test 	took: 7783 ms	(7.7834701 ms/avg)
 
-Assign/Eval	5 MB  Write Test	took: 16 ms	(0.016527 ms/avg)
-Assign/Eval	5 MB  Read Test 	took: 4 ms	(0.0047874 ms/avg)
+Assign/Eval	5 MB  Write Test	took: 16 ms	(0.016544 ms/avg)
+Assign/Eval	5 MB  Read Test 	took: 4 ms	(0.0043279 ms/avg)
 
-GO         	5 MB  Write Test	took: 96 ms	(0.0967338 ms/avg)
-GO         	5 MB  Read Test 	took: 27 ms	(0.0276091 ms/avg)
+GO         	5 MB  Write Test	took: 16 ms	(0.0161909 ms/avg)
+GO         	5 MB  Read Test 	took: 8 ms	(0.0083394 ms/avg)
 
-DictObj  	5 MB  Write Test	took: 17213 ms	(17.2130042 ms/avg)
-DictObj  	5 MB  Read Test 	took: 10406 ms	(10.4064161 ms/avg)
+DictObj  	5 MB  Write Test	took: 16026 ms	(16.0269922 ms/avg)
+DictObj  	5 MB  Read Test 	took: 10588 ms	(10.5888202 ms/avg)
