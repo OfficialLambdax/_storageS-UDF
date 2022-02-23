@@ -7,7 +7,7 @@ Support for X32/64 Autoit Stable/Beta. Windows XP to 10. 11 and Wine not tested.
 
 As of Version 0.1.3 there are three data storage methods and 1 listing storage method.
 
-=========================================== Data Storage methods ===============================================
+======================= Data Storage methods ======================
 
 The Assign/Eval Method. Functions that begin with _storageG are tied to this method.
 	
@@ -45,9 +45,7 @@ Cons
 - Very slow when writing or reading large Data sets. Everything above 100 KBytes should be avoided if performance is the focus.
 - The method gets slower the more storages exist and the more data is stored in it.
 
-
-========================================= Listing Storage methods ==============================================
-
+===================== Listing Storage methods =====================
 
 The Dictionary Object Method. Functions that begin with _storageOL are tied to this method.
 
