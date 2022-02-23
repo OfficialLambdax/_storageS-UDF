@@ -1,7 +1,7 @@
 #include-once
 #include <Array.au3> ; for development of this UDF
 
-Global $__storageS_sVersion = "0.1.3"
+Global $__storageS_sVersion = "0.1.3.1"
 Global $__storageS_O_Dictionaries = ObjCreate("Scripting.Dictionary")
 Global $__storageS_OL_Dictionaries = ObjCreate("Scripting.Dictionary")
 Global $__storageS_GO_PosObject = ObjCreate("Scripting.Dictionary")
@@ -1013,9 +1013,7 @@ EndFunc
 ; ===============================================================================================================================
 ; ===============================================================================================================================
 
-
 ; none
-
 
 ; Internal Barrier
 ; ===============================================================================================================================

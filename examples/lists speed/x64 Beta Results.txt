@@ -1,0 +1,13 @@
+1000 Elements Test
+
+ML Add took: 250.8824 ms (0.2508824 ms/avg)
+OL Add took: 16.7332 ms (0.0167332 ms/avg)
+
+ML Exists took: 2.9626 ms (0.0029626 ms/avg)
+OL Exists took: 12.0294 ms (0.0120294 ms/avg)
+
+ML GetElements took: 137.6058 ms (0.1376058 ms/avg)
+OL GetElements took: 1536.4697 ms (1.5364697 ms/avg)
+
+ML Remove took: 239.8531 ms (0.2398531 ms/avg)
+OL Remove took: 18.7401 ms (0.0187401 ms/avg)

@@ -1,3 +1,9 @@
+23.02.2022 (DD/MM/YYYY) 0.1.3.1
+
+	Added
+		- A listing method named _storageML (Map based). Only available for the Autoit Beta. Requires "_storageS-Beta_UDF.au3"
+
+
 22.02.2022 (DD/MM/YYYY) 0.1.3
 	
 	Optimizations for the _storageGO Method
