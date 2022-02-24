@@ -1,7 +1,7 @@
 #include-once
 #include <Array.au3> ; for development of this UDF
 
-Global $__storageS_sVersion = "0.1.4"
+Global $__storageS_sVersion = "0.1.4.1"
 Global $__storageS_O_Dictionaries = ObjCreate("Scripting.Dictionary")
 Global $__storageS_OL_Dictionaries = ObjCreate("Scripting.Dictionary")
 Global $__storageS_ALR_Array[1e6]
@@ -525,7 +525,7 @@ Func _storageGO_GetClaimedVars()
 	If UBound($arGroupVars2D) == 0 Then Return False
 
 	For $i In $__storageS_GO_PosObject
-		$arGroupVars2D[$nCount][0] = $i
+		$arGroupVars2D[$nCount][0] = StringTrimLeft($i, 1)
 
 		$nPos = $__storageS_GO_PosObject($i)
 
@@ -1211,7 +1211,7 @@ Func _storageGL_GetElements($vElementGroup)
 
 	Local $arGroupVars2D[$oElementGroup.Count], $nCount = 0
 	For $i In $oElementGroup
-		$arGroupVars2D[$nCount] = $i
+		$arGroupVars2D[$nCount] = BinaryToString($i)
 		$nCount += 1
 	Next
 
