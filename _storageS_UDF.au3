@@ -1,7 +1,7 @@
 #include-once
 #include <Array.au3> ; for development of this UDF
 
-Global $__storageS_sVersion = "0.1.3.2"
+Global $__storageS_sVersion = "0.1.3.3"
 Global $__storageS_O_Dictionaries = ObjCreate("Scripting.Dictionary")
 Global $__storageS_OL_Dictionaries = ObjCreate("Scripting.Dictionary")
 Global $__storageS_ALR_Array[1e6]
@@ -16,7 +16,7 @@ __storageAL_Startup()
 __storageALRx_Startup()
 
 
-#Region Assign / Eval Method
+#Region _storageG 		Assign / Eval Method
 ; ===============================================================================================================================
 ; ===============================================================================================================================
 ; #FUNCTION# ====================================================================================================================
@@ -228,7 +228,7 @@ EndFunc
 #EndRegion
 
 
-#Region Reuse Assign / Eval Method
+#Region _storageGO		Reuse Assign / Eval Method
 ; ===============================================================================================================================
 ; ===============================================================================================================================
 ; #FUNCTION# ====================================================================================================================
@@ -583,7 +583,7 @@ EndFunc
 #EndRegion
 
 
-#Region DictObj method
+#Region _storageO		DictObj method
 ; ===============================================================================================================================
 ; ===============================================================================================================================
 ; #FUNCTION# ====================================================================================================================
@@ -782,7 +782,7 @@ EndFunc
 #EndRegion
 
 
-#Region DictObj List method
+#Region _storageOL		DictObj List method
 ; ===============================================================================================================================
 ; ===============================================================================================================================
 ; #FUNCTION# ====================================================================================================================
@@ -953,7 +953,7 @@ EndFunc
 #EndRegion
 
 
-#Region Array List method
+#Region _storageAL		Array List method
 ; ===============================================================================================================================
 ; ===============================================================================================================================
 ; #FUNCTION# ====================================================================================================================
@@ -1106,7 +1106,7 @@ EndFunc
 #EndRegion
 
 
-#Region Array Rapid List method
+#Region _storageALR		Array List Rapid Add
 ; ===============================================================================================================================
 ; ===============================================================================================================================
 ; #FUNCTION# ====================================================================================================================
@@ -1173,6 +1173,7 @@ EndFunc
 #EndRegion
 
 
+#Region Miscellaneous Functions
 ; #FUNCTION# ====================================================================================================================
 ; Name ..........: _storageS_GetVarSize
 ; Description ...: Returns the Size of the given Variable
@@ -1231,6 +1232,7 @@ Func _storageS_GetVarSize($vData)
 
 	EndSwitch
 EndFunc
+#EndRegion
 
 
 ; New Methods that require testing and optimization
@@ -1238,6 +1240,59 @@ EndFunc
 ; ===============================================================================================================================
 ; ===============================================================================================================================
 
+
+#Region _storageGORB	WIP Ring Buffer
+Func _storageGORB_CreateGroup($sRingName, $nRingElementCount)
+
+	$sRingName = '_storageGORB' & $sRingName
+
+	If Not _storageGO_CreateGroup($sRingName) Then Return False
+
+	; claim required storages
+	For $i = 1 To $nRingElementCount
+		_storageGO_Overwrite($sRingName, $i, Null)
+	Next
+
+	; store information
+	_storageGO_Overwrite($sRingName, 'Size', $nRingElementCount)
+	_storageGO_Overwrite($sRingName, 'Pos', 1)
+
+	Return True
+
+EndFunc
+
+Func _storageGORB_Add($sRingName, $vElementData)
+
+	$sRingName = '_storageGORB' & $sRingName
+	Local $nSize = _storageGO_Read($sRingName, 'Size')
+	If $nSize == False Then Return False
+
+	Local $nPos = _storageGO_Read($sRingName, 'Pos')
+	If $nPos == $nSize Then $nPos = 1
+
+	_storageGO_Overwrite($sRingName, $nPos, $vElementData)
+	Return _storageGO_Overwrite($sRingName, 'Pos', $nSize)
+
+EndFunc
+
+Func _storageGORB_Get($sRingName)
+
+	$sRingName = '_storageGORB' & $sRingName
+
+
+EndFunc
+
+Func _storageGORB_GetInfo($sRingName)
+
+EndFunc
+
+Func _storageGORB_DestroyGroup($sRingName)
+
+EndFunc
+#EndRegion
+
+
+#Region _storageALRx	WIP ALRapidX
 Func _storageALRx_CreateGroup($vElementGroup)
 
 	If IsArray(_storageGO_Read('_storageALRx', $vElementGroup)) Then Return False
@@ -1295,6 +1350,7 @@ EndFunc
 Func __storageALRx_Startup()
 	_storageGO_CreateGroup('_storageALRx')
 EndFunc
+#EndRegion
 
 
 ; Internal Barrier
@@ -1347,6 +1403,6 @@ Func __storageGO_AddGroupVar($vElementGroup, $sElementName)
 	$oGroupVars = $__storageS_GO_GroupObject('g' & $vElementGroup)
 
 	$oGroupVars(String($sElementName))
-	$__storageS_GO_GroupObject($vElementGroup) = $oGroupVars
+	$__storageS_GO_GroupObject('g' & $vElementGroup) = $oGroupVars
 	Return True
 EndFunc
