@@ -20,7 +20,7 @@ Listing storages
 - _storageAL is only good for when you need to constantly iterate through somewhat static lists (Fastest GetElements method).
 - _storageALRapid is a set of special functions to add elements extremly fast to a AL list (faster then _storageOL) to fasten the creation of large arrays.
 
-Storage methods are not compatible with each other. But methods can easiely be changed to another with CTRL+H, to a degree.
+Storage methods are not compatible with each other. But methods can easiely be replaced to another with CTRL+H, to a degree.
 
 ======================= Data Storage methods ======================
 
@@ -37,7 +37,7 @@ Cons
 
 
 The Reuse Assign/Eval Method. Functions that begin with _storageGO are tied to this method.
-Its a combination of the Assign/Eval and Object method to counter the Memory leak.
+Its a combination of the Assign/Eval and Object method to combine the pros of them and to minimalize their cons.
 
 Pros
 - Fast when writing or reading small and Very fast on large Data sets
