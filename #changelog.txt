@@ -1,3 +1,14 @@
+24.02.2022 (DD/MM/YYYY) 0.1.4
+
+	Added
+		- A listing method named _storageGL
+		
+		- A listing method named _storageGLx
+
+	Removed
+		- _storageALRapidX duo to it being to inefficient.
+
+
 24.02.2022 (DD/MM/YYYY) 0.1.3.3
 	
 	Fixed

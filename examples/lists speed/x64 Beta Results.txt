@@ -1,47 +1,59 @@
 1000 Elements Test
 
-ML Add took: 288.8625 ms (0.2888625 ms/avg)
-OL Add took: 18.2155 ms (0.0182155 ms/avg)
-AL Add took: 151.7889 ms (0.1517889 ms/avg)
+ML Add took: 237.6444 ms (0.2376444 ms/avg)
+OL Add took: 16.2059 ms (0.0162059 ms/avg)
+AL Add took: 141.4444 ms (0.1414444 ms/avg)
+GL Add took: 20.3988 ms (0.0203988 ms/avg)
+GLx Add took: 4.4055 ms (0.0044055 ms/avg)
 
-AL Rapid Add took: 2.5022 ms (0.0025022 ms/avg)
-AL Rapid to AL Conversion took: 0.2901 ms
-AL RapidX Add took: 4075.0754 ms (4.0750754 ms/avg) (ignore rapidx)
-AL RapidX to AL Conversion took: 0.083 ms
+ALRapid Add took: 2.8526 ms (0.0028526 ms/avg)
+ALRapid to AL Conversion took: 0.3021 ms
 
-ML Exists took: 3.3219 ms (0.0033219 ms/avg)
-OL Exists took: 12.5368 ms (0.0125368 ms/avg)
-AL Exists took: 400.1429 ms (0.4001429 ms/avg)
+ML Exists took: 2.8046 ms (0.0028046 ms/avg)
+OL Exists took: 12.1794 ms (0.0121794 ms/avg)
+AL Exists took: 386.9386 ms (0.3869386 ms/avg)
+GL Exists took: 7.3019 ms (0.0073019 ms/avg)
+GLx Exists took: 3.4964 ms (0.0034964 ms/avg)
 
-ML GetElements took: 150.7249 ms (0.1507249 ms/avg)
-OL GetElements took: 1650.8938 ms (1.6508938 ms/avg)
-AL GetElements took: 10.6243 ms (0.0106243 ms/avg)
+ML GetElements took: 137.5251 ms (0.1375251 ms/avg)
+OL GetElements took: 1560.0255 ms (1.5600255 ms/avg)
+AL GetElements took: 10.8923 ms (0.0108923 ms/avg)
+GL GetElements took: 1040.8002 ms (1.0408002 ms/avg)
+GLx GetElements not available
 
-ML Remove took: 240.2441 ms (0.2402441 ms/avg)
-OL Remove took: 18.168 ms (0.018168 ms/avg)
-AL Remove took: 386.7044 ms (0.3867044 ms/avg)
+ML Remove took: 237.8583 ms (0.2378583 ms/avg)
+OL Remove took: 17.9685 ms (0.0179685 ms/avg)
+AL Remove took: 383.6264 ms (0.3836264 ms/avg)
+GL Remove took: 9.7425 ms (0.0097425 ms/avg)
+GLx Remove took: 4.4993 ms (0.0044993 ms/avg)
 
 
 
 10000 Elements Test
 
-ML Add took: 97197.8185 ms (9.71978185 ms/avg)
-OL Add took: 178.3582 ms (0.01783582 ms/avg)
-AL Add took: 12640.5223 ms (1.26405223 ms/avg)
+ML Add took: 89506.5351 ms (8.95065351 ms/avg)
+OL Add took: 163.0388 ms (0.01630388 ms/avg)
+AL Add took: 11968.2564 ms (1.19682564 ms/avg)
+GL Add took: 202.3944 ms (0.02023944 ms/avg)
+GLx Add took: 45.8959 ms (0.00458959 ms/avg)
 
-AL Rapid Add took: 25.9802 ms (0.00259802 ms/avg)
-AL Rapid to AL Conversion took: 2.4059 ms
-AL RapidX Add took: 46571.4885 ms (4.65714885 ms/avg) (ignore rapidx)
-AL RapidX to AL Conversion took: 0.0797 ms
+ALRapid Add took: 25.6529 ms (0.00256529 ms/avg)
+ALRapid to AL Conversion took: 2.3401 ms
 
-ML Exists took: 31.8109 ms (0.00318109 ms/avg)
-OL Exists took: 135.1919 ms (0.01351919 ms/avg)
-AL Exists took: 37800.2898 ms (3.78002898 ms/avg)
+ML Exists took: 31.267 ms (0.0031267 ms/avg)
+OL Exists took: 119.463 ms (0.0119463 ms/avg)
+AL Exists took: 36832.4536 ms (3.68324536 ms/avg)
+GL Exists took: 69.6136 ms (0.00696136 ms/avg)
+GLx Exists took: 35.0139 ms (0.00350139 ms/avg)
 
-ML GetElements took: 16260.9141 ms (1.62609141 ms/avg)
-OL GetElements took: 164199.865 ms (16.4199865 ms/avg)
-AL GetElements took: 161.0265 ms (0.01610265 ms/avg)
+ML GetElements took: 14548.3985 ms (1.45483985 ms/avg)
+OL GetElements took: 153413.0735 ms (15.34130735 ms/avg)
+AL GetElements took: 154.4855 ms (0.01544855 ms/avg)
+GL GetElements took: 106219.4395 ms (10.62194395 ms/avg)
+GLx GetElements not available
 
-ML Remove took: 94978.5328 ms (9.49785328 ms/avg)
-OL Remove took: 189.3231 ms (0.01893231 ms/avg)
-AL Remove took: 38165.276 ms (3.8165276 ms/avg)
+ML Remove took: 88423.3675 ms (8.84233675 ms/avg)
+OL Remove took: 185.3654 ms (0.01853654 ms/avg)
+AL Remove took: 36014.1374 ms (3.60141374 ms/avg)
+GL Remove took: 98.8842 ms (0.00988842 ms/avg)
+GLx Remove took: 44.3644 ms (0.00443644 ms/avg)

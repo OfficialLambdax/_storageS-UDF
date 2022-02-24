@@ -5,7 +5,7 @@
 #include "..\..\_storageS_UDF.au3"
 #include "..\..\_storageS-Beta_UDF.au3"
 
-Local $hTimer = 0, $nTime = 0, $nIterations = 1000
+Local $hTimer = 0, $nTime = 0, $nIterations = 1e4
 
 _storageML_CreateGroup(123)
 _storageOL_CreateGroup(123)
@@ -34,6 +34,19 @@ Next
 $nTime = TimerDiff($hTimer)
 ConsoleWrite("AL Add took: " & $nTime & " ms (" & $nTime / $nIterations & " ms/avg)" & @CRLF)
 
+$hTimer = TimerInit()
+For $i = 1 To $nIterations
+	_storageGL_AddElement(123, $i)
+Next
+$nTime = TimerDiff($hTimer)
+ConsoleWrite("GL Add took: " & $nTime & " ms (" & $nTime / $nIterations & " ms/avg)" & @CRLF)
+
+$hTimer = TimerInit()
+For $i = 1 To $nIterations
+	_storageGLx_AddElement(123, $i)
+Next
+$nTime = TimerDiff($hTimer)
+ConsoleWrite("GLx Add took: " & $nTime & " ms (" & $nTime / $nIterations & " ms/avg)" & @CRLF)
 
 ConsoleWrite(@CRLF)
 
@@ -43,26 +56,13 @@ For $i = 1 To $nIterations
 	_storageALR_AddElement($i)
 Next
 $nTime = TimerDiff($hTimer)
-ConsoleWrite("AL Rapid Add took: " & $nTime & " ms (" & $nTime / $nIterations & " ms/avg)" & @CRLF)
+ConsoleWrite("ALRapid Add took: " & $nTime & " ms (" & $nTime / $nIterations & " ms/avg)" & @CRLF)
 
 $hTimer = TimerInit()
 _storageALR_ConvertToAL(456)
 $nTime = TimerDiff($hTimer)
-ConsoleWrite("AL Rapid to AL Conversion took: " & $nTime & " ms" & @CRLF)
+ConsoleWrite("ALRapid to AL Conversion took: " & $nTime & " ms" & @CRLF)
 _storageAL_DestroyGroup(456)
-
-$hTimer = TimerInit()
-_storageALRx_CreateGroup(123)
-For $i = 1 To $nIterations
-	_storageALRx_AddElement(123, $i)
-Next
-$nTime = TimerDiff($hTimer)
-ConsoleWrite("AL RapidX Add took: " & $nTime & " ms (" & $nTime / $nIterations & " ms/avg)" & @CRLF)
-
-$hTimer = TimerInit()
-_storageALRx_ConvertToAL(123, 456)
-$nTime = TimerDiff($hTimer)
-ConsoleWrite("AL RapidX to AL Conversion took: " & $nTime & " ms" & @CRLF)
 
 
 ConsoleWrite(@CRLF)
@@ -89,6 +89,20 @@ Next
 $nTime = TimerDiff($hTimer)
 ConsoleWrite("AL Exists took: " & $nTime & " ms (" & $nTime / $nIterations & " ms/avg)" & @CRLF)
 
+$hTimer = TimerInit()
+For $i = 1 To $nIterations
+	_storageGL_Exists(123, $i)
+Next
+$nTime = TimerDiff($hTimer)
+ConsoleWrite("GL Exists took: " & $nTime & " ms (" & $nTime / $nIterations & " ms/avg)" & @CRLF)
+
+$hTimer = TimerInit()
+For $i = 1 To $nIterations
+	_storageGLx_Exists(123, $i)
+Next
+$nTime = TimerDiff($hTimer)
+ConsoleWrite("GLx Exists took: " & $nTime & " ms (" & $nTime / $nIterations & " ms/avg)" & @CRLF)
+
 
 ConsoleWrite(@CRLF)
 
@@ -114,6 +128,14 @@ Next
 $nTime = TimerDiff($hTimer)
 ConsoleWrite("AL GetElements took: " & $nTime & " ms (" & $nTime / $nIterations & " ms/avg)" & @CRLF)
 
+$hTimer = TimerInit()
+For $i = 1 To $nIterations
+	_storageGL_GetElements(123)
+Next
+$nTime = TimerDiff($hTimer)
+ConsoleWrite("GL GetElements took: " & $nTime & " ms (" & $nTime / $nIterations & " ms/avg)" & @CRLF)
+
+ConsoleWrite("GLx GetElements not available" & @CRLF)
 
 ConsoleWrite(@CRLF)
 
@@ -138,3 +160,17 @@ For $i = 1 To $nIterations
 Next
 $nTime = TimerDiff($hTimer)
 ConsoleWrite("AL Remove took: " & $nTime & " ms (" & $nTime / $nIterations & " ms/avg)" & @CRLF)
+
+$hTimer = TimerInit()
+For $i = 1 To $nIterations
+	_storageGL_RemoveElement(123, $i)
+Next
+$nTime = TimerDiff($hTimer)
+ConsoleWrite("GL Remove took: " & $nTime & " ms (" & $nTime / $nIterations & " ms/avg)" & @CRLF)
+
+$hTimer = TimerInit()
+For $i = 1 To $nIterations
+	_storageGLx_RemoveElement(123, $i)
+Next
+$nTime = TimerDiff($hTimer)
+ConsoleWrite("GLx Remove took: " & $nTime & " ms (" & $nTime / $nIterations & " ms/avg)" & @CRLF)

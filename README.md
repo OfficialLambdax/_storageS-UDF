@@ -1,11 +1,11 @@
 # _storageS-UDF
 _storageSimpel is a UDF meant for fast data read's and write's.
 
-The UDF aims to provide multiple methods to make access to data and lists easy and as fast as possible for different kinds of usages.
+The UDF aims to provide multiple methods to make access to data and lists easy and AS FAST AS POSSIBLE for different kinds of usages.
 Support for X32/64 Autoit Stable/Beta. Windows XP to 10. 11 and Wine not tested.
 
 
-As of Version 0.1.3.2 there are three data storage methods and three listing storage methods.
+As of Version 0.1.4 there are three data storage methods and five listing storage methods.
 
 ============================== Tl;dr ==============================
 
@@ -18,7 +18,9 @@ Listing storages
 - _storageOL is good for when your lists constantly change in size and its contents (Fastest Add, Remove Element method).
 - _storageML is good for when you need to constantly iterate through somewhat static lists or for when you need to constantly check if a element exists (Fastest Exists method).
 - _storageAL is only good for when you need to constantly iterate through somewhat static lists (Fastest GetElements method).
-- _storageALRapid is a set of special functions to add elements extremly fast to a AL list (faster then _storageOL) to fasten the creation of large arrays.
+- _storageALRapid is a set of special functions to add elements extremly fast to a AL list (faster then _storageGLx) to fasten the creation of large arrays.
+- _storageGL is good for when you need OL like fast Adds, ML like fast Exists checks and you cannot use the Autoit Beta.
+- _storageGLx is good for when you need extremly large lists with exceptional fast Exists checks and element additions.
 
 Storage methods are not compatible with each other. But methods can easiely be replaced to another with CTRL+H, to a degree.
 
@@ -103,6 +105,32 @@ Cons
 - Slow when checking the existence of a Element
 
 
+The Assign/Eval Method. Functions that begin with _storageOL are tied to this method.
+
+Pros
+- Very fast when checking the existence of a element
+- Very fast when adding elements
+- Very fast when removing a element
+- Fast when getting all elements of a group
+
+Cons
+- A Element can only be added a single time per group
+- Leaks removed elements to Memory !
+
+
+The Assign/Eval X Method. Functions that begin with _storageOLx are tied to this method.
+Method is for a special usecase: For when you need extremly large lists and ONLY need to check if a element in it exists.
+
+Pros
+- Very fast when checking the existence of a element
+- Very fast when adding elements (only ALRapid is faster)
+- Very fast when removing a element
+- The Size of the list doesnt matter (if you already have multiple billions of elements, then that only affects your ram but not the speed of this method)
+
+Const
+- The Elements of the group cannot be retrieved
+- A Element can only be added a single time per group
+- Leaks removed elements to Memory !
 
 
 You can check out the Examples Directory to see and test some performance tests.

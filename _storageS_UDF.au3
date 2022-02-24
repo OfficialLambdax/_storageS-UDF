@@ -1,7 +1,7 @@
 #include-once
 #include <Array.au3> ; for development of this UDF
 
-Global $__storageS_sVersion = "0.1.3.3"
+Global $__storageS_sVersion = "0.1.4"
 Global $__storageS_O_Dictionaries = ObjCreate("Scripting.Dictionary")
 Global $__storageS_OL_Dictionaries = ObjCreate("Scripting.Dictionary")
 Global $__storageS_ALR_Array[1e6]
@@ -13,7 +13,6 @@ Global $__storageS_GO_Size = 0
 
 __storageGO_Startup()
 __storageAL_Startup()
-__storageALRx_Startup()
 
 
 #Region _storageG 		Assign / Eval Method
@@ -224,6 +223,7 @@ Func _storageG_GetGroupVars($vElementGroup)
 	Next
 
 	Return $arGroupVars2D
+
 EndFunc
 #EndRegion
 
@@ -991,14 +991,15 @@ EndFunc
 ; ===============================================================================================================================
 Func _storageAL_AddElement($vElementGroup, $sElementName)
 
-	Local $arElemenGroup = _storageGO_Read('_storageAL', $vElementGroup)
-	If Not IsArray($arElemenGroup) Then Return False
+	Local $arElementGroup = _storageGO_Read('_storageAL', $vElementGroup)
+	If Not IsArray($arElementGroup) Then Return False
 
-	Local $nArSize = UBound($arElemenGroup)
-	ReDim $arElemenGroup[$nArSize + 1]
-	$arElemenGroup[$nArSize] = $sElementName
+	Local $nArSize = UBound($arElementGroup)
 
-	Return _storageGO_Overwrite('_storageAL', $vElementGroup, $arElemenGroup)
+	ReDim $arElementGroup[$nArSize + 1]
+	$arElementGroup[$nArSize] = $sElementName
+
+	Return _storageGO_Overwrite('_storageAL', $vElementGroup, $arElementGroup)
 
 EndFunc
 
@@ -1085,9 +1086,9 @@ EndFunc
 
 
 ; #FUNCTION# ====================================================================================================================
-; Name ..........: _storageAl_DestroyGroup
+; Name ..........: _storageAL_DestroyGroup
 ; Description ...: Destroys the entire Group and its elements.
-; Syntax ........: _storageAl_DestroyGroup($vElementGroup)
+; Syntax ........: _storageAL_DestroyGroup($vElementGroup)
 ; Parameters ....: $vElementGroup       - a variant value.
 ; Return values .: True					= If success
 ;                : False				= Group is unknown
@@ -1095,7 +1096,7 @@ EndFunc
 ; Remarks .......:
 ; Example .......: No
 ; ===============================================================================================================================
-Func _storageAl_DestroyGroup($vElementGroup)
+Func _storageAL_DestroyGroup($vElementGroup)
 
 	Local $arElemenGroup = _storageGO_Read('_storageAL', $vElementGroup)
 	If Not IsArray($arElemenGroup) Then Return False
@@ -1169,6 +1170,146 @@ Func _storageALR_Destroy()
 	$__storageS_ALR_Array = $arElemenGroup
 	$__storageS_ALR_Index = 0
 
+EndFunc
+#EndRegion
+
+
+#Region _storageGL		Assign/Eval List
+; ===============================================================================================================================
+; ===============================================================================================================================
+; #FUNCTION# ====================================================================================================================
+; Name ..........: _storageGL_AddElement
+; Description ...: Adds an Element to the List
+; Syntax ........: _storageGL_AddElement($vElementGroup, $sElementName)
+; Parameters ....: $vElementGroup       - a variant value.
+;                  $sElementName        - a string value.
+; Return values .: True
+; Modified ......:
+; Remarks .......:
+; Example .......: No
+; ===============================================================================================================================
+Func _storageGL_AddElement($vElementGroup, $sElementName)
+	Return _storageG_Overwrite($vElementGroup, StringToBinary($sElementName), True)
+EndFunc
+
+
+; #FUNCTION# ====================================================================================================================
+; Name ..........: _storageGL_GetElements
+; Description ...: Returns all Elements of the List
+; Syntax ........: _storageGL_GetElements($vElementGroup)
+; Parameters ....: $vElementGroup       - a variant value.
+; Return values .: None
+; Modified ......:
+; Remarks .......:
+; Example .......: No
+; ===============================================================================================================================
+Func _storageGL_GetElements($vElementGroup)
+	Local $oElementGroup = Eval("StorageS" & $vElementGroup)
+	If Not IsObj($oElementGroup) Then Return False
+
+	$vElementGroup = '__storageS_' & $vElementGroup
+
+	Local $arGroupVars2D[$oElementGroup.Count], $nCount = 0
+	For $i In $oElementGroup
+		$arGroupVars2D[$nCount] = $i
+		$nCount += 1
+	Next
+
+	Return $arGroupVars2D
+EndFunc
+
+
+; #FUNCTION# ====================================================================================================================
+; Name ..........: _storageGL_Exists
+; Description ...: Checks if an element exists in the list
+; Syntax ........: _storageGL_Exists($vElementGroup, $sElementName)
+; Parameters ....: $vElementGroup       - a variant value.
+;                  $sElementName        - a string value.
+; Return values .: None
+; Modified ......:
+; Remarks .......:
+; Example .......: No
+; ===============================================================================================================================
+Func _storageGL_Exists($vElementGroup, $sElementName)
+	Return _storageG_Read($vElementGroup, StringToBinary($sElementName))
+EndFunc
+
+
+; #FUNCTION# ====================================================================================================================
+; Name ..........: _storageGL_RemoveElement
+; Description ...: Removes an element from the list
+; Syntax ........: _storageGL_RemoveElement($vElementGroup, $sElementName)
+; Parameters ....: $vElementGroup       - a variant value.
+;                  $sElementName        - a string value.
+; Return values .: None
+; Modified ......:
+; Remarks .......: Leaks to memory
+; Example .......: No
+; ===============================================================================================================================
+Func _storageGL_RemoveElement($vElementGroup, $sElementName)
+	Return _storageG_Overwrite($vElementGroup, StringToBinary($sElementName), False)
+EndFunc
+
+
+Func _storageGL_TidyGroupVars($vElementGroup)
+	Return _storageG_TidyGroupVars($vElementGroup)
+EndFunc
+
+
+Func _storageGL_DestroyGroup($vElementGroup)
+	Return _storageG_DestroyGroup($vElementGroup)
+EndFunc
+#EndRegion
+
+
+#Region _storageGLx		Assign/Eval List X
+; ===============================================================================================================================
+; ===============================================================================================================================
+; #FUNCTION# ====================================================================================================================
+; Name ..........: _storageGLx_AddElement
+; Description ...: Adds an Element to the List
+; Syntax ........: _storageGLx_AddElement($vElementGroup, $sElementName)
+; Parameters ....: $vElementGroup       - a variant value.
+;                  $sElementName        - a string value.
+; Return values .: True
+; Modified ......:
+; Remarks .......:
+; Example .......: No
+; ===============================================================================================================================
+Func _storageGLx_AddElement($vElementGroup, $sElementName)
+	Return Assign(StringToBinary($vElementGroup & $sElementName), True, 2)
+EndFunc
+
+
+; #FUNCTION# ====================================================================================================================
+; Name ..........: _storageGLx_Exists
+; Description ...: Checks if an element exists in the list
+; Syntax ........: _storageGLx_Exists($vElementGroup, $sElementName)
+; Parameters ....: $vElementGroup       - a variant value.
+;                  $sElementName        - a string value.
+; Return values .: None
+; Modified ......:
+; Remarks .......:
+; Example .......: No
+; ===============================================================================================================================
+Func _storageGLx_Exists($vElementGroup, $sElementName)
+	Return Eval(StringToBinary($vElementGroup & $sElementName))
+EndFunc
+
+
+; #FUNCTION# ====================================================================================================================
+; Name ..........: _storageGLx_RemoveElement
+; Description ...: Removes an element from the list
+; Syntax ........: _storageGLx_RemoveElement($vElementGroup, $sElementName)
+; Parameters ....: $vElementGroup       - a variant value.
+;                  $sElementName        - a string value.
+; Return values .: None
+; Modified ......:
+; Remarks .......:
+; Example .......: No
+; ===============================================================================================================================
+Func _storageGLx_RemoveElement($vElementGroup, $sElementName)
+	Return Assign(StringToBinary($vElementGroup & $sElementName), False, 6)
 EndFunc
 #EndRegion
 
@@ -1288,67 +1429,6 @@ EndFunc
 
 Func _storageGORB_DestroyGroup($sRingName)
 
-EndFunc
-#EndRegion
-
-
-#Region _storageALRx	WIP ALRapidX
-Func _storageALRx_CreateGroup($vElementGroup)
-
-	If IsArray(_storageGO_Read('_storageALRx', $vElementGroup)) Then Return False
-
-	Local $arElementGroup[1e6]
-	_storageGO_Overwrite('_storageALRx', $vElementGroup, $arElementGroup)
-	_storageGO_Overwrite('_storageALRx', $vElementGroup & 'Index', 0)
-
-	Return True
-
-EndFunc
-
-Func _storageALRx_AddElement($vElementGroup, $sElementName)
-
-	Local $arElemenGroup = _storageGO_Read('_storageALRx', $vElementGroup)
-	If Not IsArray($arElemenGroup) Then Return False
-
-	Local $nArSize = UBound($arElemenGroup)
-	Local $nIndex = _storageGO_Read('_storageALRx', $vElementGroup & 'Index')
-
-	If $nIndex = $nArSize Then ReDim $arElemenGroup[$nArSize + 1e6]
-
-	$arElemenGroup[$nIndex] = $sElementName
-
-	_storageGO_Overwrite('_storageALRx', $vElementGroup, $arElemenGroup)
-	Return _storageGO_Overwrite('_storageALRx', $vElementGroup & 'Index', $nIndex + 1)
-
-EndFunc
-
-Func _storageALRx_ConvertToAL($vElementGroup, $vToElementGroup)
-
-	Local $arElemenGroup = _storageGO_Read('_storageALRx', $vElementGroup)
-	If Not IsArray($arElemenGroup) Then Return False
-
-	If IsArray(_storageGO_Read('_storageAL', $vElementGroup)) Then Return False
-
-	Local $nIndex = _storageGO_Read('_storageALRx', $vElementGroup & 'Index')
-	ReDim $arElemenGroup[$nIndex]
-
-	Return _storageGO_Overwrite('_storageAL', $vToElementGroup, $arElemenGroup)
-EndFunc
-
-Func _storageALRx_Destroy($vElementGroup)
-
-	Local $arElemenGroup = _storageGO_Read('_storageALRx', $vElementGroup)
-	If Not IsArray($arElemenGroup) Then Return False
-
-	_storageGO_DestroyVar('_storageALRx', $vElementGroup)
-	_storageGO_DestroyVar('_storageALRx', $vElementGroup & 'Index')
-
-	Return True
-
-EndFunc
-
-Func __storageALRx_Startup()
-	_storageGO_CreateGroup('_storageALRx')
 EndFunc
 #EndRegion
 
