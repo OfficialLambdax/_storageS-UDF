@@ -1,0 +1,59 @@
+1000 Elements Test
+
+ML Add took: 237.6444 ms (0.2376444 ms/avg)
+OL Add took: 16.2059 ms (0.0162059 ms/avg)
+AL Add took: 141.4444 ms (0.1414444 ms/avg)
+GL Add took: 20.3988 ms (0.0203988 ms/avg)
+GLx Add took: 4.4055 ms (0.0044055 ms/avg)
+
+ALRapid Add took: 2.8526 ms (0.0028526 ms/avg)
+ALRapid to AL Conversion took: 0.3021 ms
+
+ML Exists took: 2.8046 ms (0.0028046 ms/avg)
+OL Exists took: 12.1794 ms (0.0121794 ms/avg)
+AL Exists took: 386.9386 ms (0.3869386 ms/avg)
+GL Exists took: 7.3019 ms (0.0073019 ms/avg)
+GLx Exists took: 3.4964 ms (0.0034964 ms/avg)
+
+ML GetElements took: 137.5251 ms (0.1375251 ms/avg)
+OL GetElements took: 1560.0255 ms (1.5600255 ms/avg)
+AL GetElements took: 10.8923 ms (0.0108923 ms/avg)
+GL GetElements took: 1040.8002 ms (1.0408002 ms/avg)
+GLx GetElements not available
+
+ML Remove took: 237.8583 ms (0.2378583 ms/avg)
+OL Remove took: 17.9685 ms (0.0179685 ms/avg)
+AL Remove took: 383.6264 ms (0.3836264 ms/avg)
+GL Remove took: 9.7425 ms (0.0097425 ms/avg)
+GLx Remove took: 4.4993 ms (0.0044993 ms/avg)
+
+
+
+10000 Elements Test
+
+ML Add took: 89506.5351 ms (8.95065351 ms/avg)
+OL Add took: 163.0388 ms (0.01630388 ms/avg)
+AL Add took: 11968.2564 ms (1.19682564 ms/avg)
+GL Add took: 202.3944 ms (0.02023944 ms/avg)
+GLx Add took: 45.8959 ms (0.00458959 ms/avg)
+
+ALRapid Add took: 25.6529 ms (0.00256529 ms/avg)
+ALRapid to AL Conversion took: 2.3401 ms
+
+ML Exists took: 31.267 ms (0.0031267 ms/avg)
+OL Exists took: 119.463 ms (0.0119463 ms/avg)
+AL Exists took: 36832.4536 ms (3.68324536 ms/avg)
+GL Exists took: 69.6136 ms (0.00696136 ms/avg)
+GLx Exists took: 35.0139 ms (0.00350139 ms/avg)
+
+ML GetElements took: 14548.3985 ms (1.45483985 ms/avg)
+OL GetElements took: 153413.0735 ms (15.34130735 ms/avg)
+AL GetElements took: 154.4855 ms (0.01544855 ms/avg)
+GL GetElements took: 106219.4395 ms (10.62194395 ms/avg)
+GLx GetElements not available
+
+ML Remove took: 88423.3675 ms (8.84233675 ms/avg)
+OL Remove took: 185.3654 ms (0.01853654 ms/avg)
+AL Remove took: 36014.1374 ms (3.60141374 ms/avg)
+GL Remove took: 98.8842 ms (0.00988842 ms/avg)
+GLx Remove took: 44.3644 ms (0.00443644 ms/avg)

@@ -5,7 +5,7 @@ The UDF aims to provide multiple methods to make access to data and lists easy a
 Support for X32/64 Autoit Stable/Beta. Windows XP to 10. 11 and Wine not tested.
 
 
-As of Version 0.1.4 there are three data storage methods and five listing storage methods.
+As of Version 0.1.5 there are three data storage methods, five listing storage methods and three ring buffer methods.
 
 ============================== Tl;dr ==============================
 
@@ -21,6 +21,11 @@ Listing storages
 - _storageALRapid is a set of special functions to add elements extremly fast to a AL list (faster then _storageGLx) to fasten the creation of large arrays.
 - _storageGL is good for when you need OL like fast Adds, ML like fast Exists checks and you cannot use the Autoit Beta.
 - _storageGLx is good for when you need extremly large lists with exceptional fast Exists checks and element additions.
+
+Ring Buffers
+- _storageRBr creates, returns and requires the returned ring buffer for each addition to- or retrieval of data from it.
+- _storageRBx is a single ring buffer meant for when only a single is required or to favor one, which requires better performance.
+- _storageRBs (WIP) is a multi ring buffer meant for when the ring buffer, returned by RBr, cannot be kept easiely.
 
 Storage methods are not compatible with each other. But methods can easiely be replaced to another with CTRL+H, to a degree.
 

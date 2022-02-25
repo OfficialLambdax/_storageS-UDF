@@ -1,3 +1,23 @@
+25.02.2022 (DD/MM/YYYY) 0.1.5
+
+	Added
+		- A Ring buffer named _storageRBr
+		
+		- A Ring buffer named _storageRBx
+		
+		- A WIP Ring buffer named _storageRBs
+		
+	Changed
+	
+		- Rearranged and added various examples
+		
+		- _storageO_TidyGroupVars() got renamed to _storageO_DestroyGroup()
+	
+	Removed
+	
+		- The WIP Ring buffer _storageGORB
+
+
 24.02.2022 (DD/MM/YYYY) 0.1.4.1
 
 	A few bug fixes for the latest added methods.

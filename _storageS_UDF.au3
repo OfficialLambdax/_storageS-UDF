@@ -1,7 +1,7 @@
 #include-once
 #include <Array.au3> ; for development of this UDF
 
-Global $__storageS_sVersion = "0.1.4.1"
+Global $__storageS_sVersion = "0.1.5"
 Global $__storageS_O_Dictionaries = ObjCreate("Scripting.Dictionary")
 Global $__storageS_OL_Dictionaries = ObjCreate("Scripting.Dictionary")
 Global $__storageS_ALR_Array[1e6]
@@ -10,6 +10,9 @@ Global $__storageS_GO_PosObject = ObjCreate("Scripting.Dictionary")
 Global $__storageS_GO_IndexObject = ObjCreate("Scripting.Dictionary")
 Global $__storageS_GO_GroupObject = ObjCreate("Scripting.Dictionary")
 Global $__storageS_GO_Size = 0
+Global $__storageS_RBx_Array = False
+Global $__storageS_RBx_WritePos = False
+Global $__storageS_RBx_ReadPos = False
 
 __storageGO_Startup()
 __storageAL_Startup()
@@ -727,16 +730,16 @@ EndFunc
 
 
 ; #FUNCTION# ====================================================================================================================
-; Name ..........: _storageO_TidyGroupVars
+; Name ..........: _storageO_DestroyGroup
 ; Description ...: Tidies and destroys all Variables of the given element group, including the element group.
-; Syntax ........: _storageO_TidyGroupVars($vElementGroup)
+; Syntax ........: _storageO_DestroyGroup($vElementGroup)
 ; Parameters ....: $vElementGroup           - Element Group
 ; Return values .: None
 ; Modified ......:
 ; Remarks .......:
-; Example .......: _storageO_TidyGroupVars(123)
+; Example .......: _storageO_DestroyGroup(123)
 ; ===============================================================================================================================
-Func _storageO_TidyGroupVars($vElementGroup)
+Func _storageO_DestroyGroup($vElementGroup)
 	$vElementGroup = '_storageS_' & $vElementGroup
 
 	Local $oElementGroup = $__storageS_O_Dictionaries($vElementGroup)
@@ -1314,6 +1317,191 @@ EndFunc
 #EndRegion
 
 
+#Region _storageRBr		Multi Return Ring Buffer (lossy)
+; #FUNCTION# ====================================================================================================================
+; Name ..........: _storageRBr_CreateGroup
+; Description ...: Creates a Ring buffer and returns it
+; Syntax ........: _storageRBr_CreateGroup($nRingElementCount)
+; Parameters ....: $nRingElementCount   - Element count
+; Return values .: Array
+; Modified ......:
+; Remarks .......:
+; Example .......: No
+; ===============================================================================================================================
+Func _storageRBr_CreateGroup($nRingElementCount)
+
+	Local $arRingBuffer[$nRingElementCount + 2]
+	$arRingBuffer[0] = 2 ; WritePos
+	$arRingBuffer[1] = 2 ; ReadPos
+
+	Return $arRingBuffer
+
+EndFunc
+
+
+; #FUNCTION# ====================================================================================================================
+; Name ..........: _storageRBr_Add
+; Description ...: Adds an Element to the given Ring Buffer
+; Syntax ........: _storageRBr_Add(Byref $arRingBuffer, $vElementData)
+; Parameters ....: $arRingBuffer        - [in/out] The Ring Buffer
+;                  $vElementData        - Data of any kind
+; Return values .: None
+; Modified ......:
+; Remarks .......:
+; Example .......: No
+; ===============================================================================================================================
+Func _storageRBr_Add(ByRef $arRingBuffer, $vElementData)
+
+	If UBound($arRingBuffer) == $arRingBuffer[0] Then $arRingBuffer[0] = 2
+
+	$arRingBuffer[$arRingBuffer[0]] = $vElementData
+	$arRingBuffer[0] += 1
+
+EndFunc
+
+
+; #FUNCTION# ====================================================================================================================
+; Name ..........: _storageRBr_Get
+; Description ...: Returns the oldest data of the given Ring Buffer
+; Syntax ........: _storageRBr_Get(Byref $arRingBuffer)
+; Parameters ....: $arRingBuffer        - [in/out] The Ring Buffer
+; Return values .: The oldest data
+; Modified ......:
+; Remarks .......:
+; Example .......: No
+; ===============================================================================================================================
+Func _storageRBr_Get(ByRef $arRingBuffer)
+
+	If UBound($arRingBuffer) == $arRingBuffer[1] Then $arRingBuffer[1] = 2
+
+	Local $vElementData = $arRingBuffer[$arRingBuffer[1]]
+	if $vElementData == "" Then Return SetError(1, 0, False)
+
+	$arRingBuffer[$arRingBuffer[1]] = ""
+	$arRingBuffer[1] += 1
+
+	Return $vElementData
+
+EndFunc
+
+
+; #FUNCTION# ====================================================================================================================
+; Name ..........: _storageRBr_DestroyGroup
+; Description ...: Destroys the given Ring Buffer
+; Syntax ........: _storageRBr_DestroyGroup(Byref $arRingBuffer)
+; Parameters ....: $arRingBuffer        - [in/out] The Ring Buffer
+; Return values .: None
+; Modified ......:
+; Remarks .......:
+; Example .......: No
+; ===============================================================================================================================
+Func _storageRBr_DestroyGroup(ByRef $arRingBuffer)
+	$arRingBuffer = Null
+EndFunc
+#EndRegion
+
+
+#Region _storageRBx		Single Storage Ring Buffer (lossy)
+; #FUNCTION# ====================================================================================================================
+; Name ..........: _storageRBx_Init
+; Description ...: Initializes the Single Ring Buffer
+; Syntax ........: _storageRBx_Init($nRingElementCount)
+; Parameters ....: $nRingElementCount   - Element count
+; Return values .: True					= If success
+;                : False				= If the ring buffer is already initialized
+; Modified ......:
+; Remarks .......:
+; Example .......: No
+; ===============================================================================================================================
+Func _storageRBx_Init($nRingElementCount)
+
+	If IsArray($__storageS_RBx_Array) Then Return False
+
+	Local $arRingBuffer[$nRingElementCount]
+	$__storageS_RBx_Array = $arRingBuffer
+	$__storageS_RBx_ReadPos = 0
+	$__storageS_RBx_WritePos = 0
+
+	Return True
+
+EndFunc
+
+
+; #FUNCTION# ====================================================================================================================
+; Name ..........: _storageRBx_Add
+; Description ...: Adds a Element to the Single Ring buffer
+; Syntax ........: _storageRBx_Add($vElementData)
+; Parameters ....: $vElementData        - Data of any kind
+; Return values .: True					= If success
+;                : False				= If the Single Buffer isnt initialized
+; Modified ......:
+; Remarks .......:
+; Example .......: No
+; ===============================================================================================================================
+Func _storageRBx_Add($vElementData)
+
+	If Not IsArray($__storageS_RBx_Array) Then Return False
+
+	If UBound($__storageS_RBx_Array) == $__storageS_RBx_WritePos Then $__storageS_RBx_WritePos = 0
+
+	$__storageS_RBx_Array[$__storageS_RBx_WritePos] = $vElementData
+	$__storageS_RBx_WritePos += 1
+
+	Return True
+
+EndFunc
+
+
+; #FUNCTION# ====================================================================================================================
+; Name ..........: _storageRBx_Get
+; Description ...: Returns the oldest data of the Single Ring buffer
+; Syntax ........: _storageRBx_Get()
+; Parameters ....: None
+; Return values .: The oldest Data
+;                : False				= if not possible
+; Errors ........: 1					- If the Single Buffer isnt initialized
+;                : 2					- If there is no Element in the Ring Buffer
+; Modified ......:
+; Remarks .......:
+; Example .......: No
+; ===============================================================================================================================
+Func _storageRBx_Get()
+
+	If Not IsArray($__storageS_RBx_Array) Then Return SetError(1, 0, False)
+
+	If UBound($__storageS_RBx_Array) == $__storageS_RBx_ReadPos Then $__storageS_RBx_ReadPos = 0
+
+	Local $vElementData = $__storageS_RBx_Array[$__storageS_RBx_ReadPos]
+	If $vElementData == "" Then Return SetError(2, 0, False)
+
+	$__storageS_RBx_Array[$__storageS_RBx_ReadPos] = ""
+	$__storageS_RBx_ReadPos += 1
+
+	Return $vElementData
+
+EndFunc
+
+
+; #FUNCTION# ====================================================================================================================
+; Name ..........: _storageRBx_Destroy
+; Description ...: Destroys the Single Ring buffer
+; Syntax ........: _storageRBx_Destroy()
+; Parameters ....: None
+; Return values .: None
+; Modified ......:
+; Remarks .......: Ring buffer can be reinitialized
+; Example .......: No
+; ===============================================================================================================================
+Func _storageRBx_Destroy()
+
+	$__storageS_RBx_Array = False
+	$__storageS_RBx_ReadPos = False
+	$__storageS_RBx_WritePos = False
+
+EndFunc
+#EndRegion
+
+
 #Region Miscellaneous Functions
 ; #FUNCTION# ====================================================================================================================
 ; Name ..........: _storageS_GetVarSize
@@ -1381,54 +1569,49 @@ EndFunc
 ; ===============================================================================================================================
 ; ===============================================================================================================================
 
+#Region _storageRBs		WIP Multi Storage Ring Buffer (lossy) (needs optimization)
+Func _storageRBs_CreateGroup($sRingName, $nRingElementCount)
 
-#Region _storageGORB	WIP Ring Buffer
-Func _storageGORB_CreateGroup($sRingName, $nRingElementCount)
-
-	$sRingName = '_storageGORB' & $sRingName
-
+	$sRingName = '_storageRBs' & $sRingName
 	If Not _storageGO_CreateGroup($sRingName) Then Return False
 
-	; claim required storages
-	For $i = 1 To $nRingElementCount
-		_storageGO_Overwrite($sRingName, $i, Null)
-	Next
+	Local $arRingBuffer = _storageRBr_CreateGroup($nRingElementCount)
 
-	; store information
-	_storageGO_Overwrite($sRingName, 'Size', $nRingElementCount)
-	_storageGO_Overwrite($sRingName, 'Pos', 1)
-
-	Return True
+	Return _storageGO_Overwrite($sRingName, 'RingBuffer', $arRingBuffer)
 
 EndFunc
 
-Func _storageGORB_Add($sRingName, $vElementData)
 
-	$sRingName = '_storageGORB' & $sRingName
-	Local $nSize = _storageGO_Read($sRingName, 'Size')
-	If $nSize == False Then Return False
+Func _storageRBs_Add($sRingName, $vElementData)
 
-	Local $nPos = _storageGO_Read($sRingName, 'Pos')
-	If $nPos == $nSize Then $nPos = 1
+	$sRingName = '_storageRBs' & $sRingName
+	Local $arRingBuffer = _storageGO_Read($sRingName, 'RingBuffer')
+	If Not IsArray($arRingBuffer) Then Return False
 
-	_storageGO_Overwrite($sRingName, $nPos, $vElementData)
-	Return _storageGO_Overwrite($sRingName, 'Pos', $nSize)
+	_storageRBr_Add($arRingBuffer, $vElementData)
 
-EndFunc
-
-Func _storageGORB_Get($sRingName)
-
-	$sRingName = '_storageGORB' & $sRingName
-
+	Return _storageGO_Overwrite($sRingName, 'RingBuffer', $arRingBuffer)
 
 EndFunc
 
-Func _storageGORB_GetInfo($sRingName)
+
+Func _storageRBs_Get($sRingName)
+
+	$sRingName = '_storageRBs' & $sRingName
+	Local $arRingBuffer = _storageGO_Read($sRingName, 'RingBuffer')
+	If Not IsArray($arRingBuffer) Then Return False
+
+	Local $vElementData = _storageRBr_Get($arRingBuffer)
+	if @error Then Return SetError(1, 0, False)
+	_storageGO_Overwrite($sRingName, 'RingBuffer', $arRingBuffer)
+
+	Return $vElementData
 
 EndFunc
 
-Func _storageGORB_DestroyGroup($sRingName)
 
+Func _storageRBs_DestroyGroup($sRingName)
+	Return _storageGO_DestroyGroup('_storageRBs' & $sRingName)
 EndFunc
 #EndRegion
 
