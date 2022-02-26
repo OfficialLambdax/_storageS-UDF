@@ -5,13 +5,14 @@ The UDF aims to provide multiple methods to make access to data and lists easy a
 Support for X32/64 Autoit Stable/Beta. Windows XP to 10. 11 and Wine not tested.
 
 
-As of Version 0.1.5 there are three data storage methods, five listing storage methods and three ring buffer methods.
+As of Version 0.1.5 there are four data storage methods, five listing storage methods and three ring buffer methods.
 
 ============================== Tl;dr ==============================
 
 Data storages
 - _storageG is good for when you need the fastest data write and read speed while your script does not consistently create new storages.
-- _storageGO is good for when you need fast data write and read speed for a script that does consistently create new storages.
+- _storageGO is good for when you need fast data write and read speed for a script that does consistently create new storages and requires a somewhat long runtime.
+- _storageAO is nearly identical to GO in terms of how it works and its speed, but comes with different pros and cons duo to its storage being a Array.
 - _storageO is good for when performance is not your goal and a long runtime is required.
 
 Listing storages
@@ -57,11 +58,24 @@ Cons
 - Leaks to memory, but only if a storage is created when no other can be reused.
 
 
+The Reuse Array Method. Functions that begin with _storageAO are tied to this method.
+Nearly identical to the GO method, but instead of using a global per storage, this uses a single Array as a data storage.
+
+Pros
+- Fastest method to write large data sets (>= 3 Mb). Fast when writing or reading small data sets
+- The method does not get slower the more storages exists
+- Long runtime support
+
+Cons
+- Slower when writing or reading small data sets compared to GO
+- Very slow when creating storages that exceed the available storage size. _storageAO_ReDim can greatly improve the time.
+
+
 The Dictionary Object Method. Functions that begin with _storageO are tied to this method.
 
 Pros
 - Very fast when writing or reading small Data sets
-- Storages can be fully removed
+- Long runtime support
 	
 Cons
 - Very slow when writing or reading large Data sets. Everything above 100 KBytes should be avoided if performance is the focus.
