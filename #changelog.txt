@@ -1,3 +1,24 @@
+28.02.2022 (DD/MM/YYYY) 0.1.5.2
+
+	SCRIPT BREAKING CHANGES
+	CODE EXECUTION VULNERABILITY DETECTED
+
+	Changed
+		- _storageAO_Shorten() got a second, more CPU intensive, method to shorten the storage better
+		
+		- _storageG_Math() got renamed to _storageG_Execute()
+		
+	What you need to change
+	
+		Change _storageG_Math() to _storageG_Execute() if it was used.
+		
+		
+	Exploit Warning
+	
+		_storageG_Execute() is vulnerable to malicious code execution.
+		Please view the "# Execute Vulnerability" dir in the example folder.
+
+
 26.02.2022 (DD/MM/YYYY) 0.1.5.1
 
 	Added

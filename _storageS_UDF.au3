@@ -1,7 +1,7 @@
 #include-once
 #include <Array.au3> ; for development of this UDF
 
-Global $__storageS_sVersion = "0.1.5.1"
+Global $__storageS_sVersion = "0.1.5.2"
 Global $__storageS_O_Dictionaries = ObjCreate("Scripting.Dictionary")
 Global $__storageS_OL_Dictionaries = ObjCreate("Scripting.Dictionary")
 Global $__storageS_ALR_Array[1e6]
@@ -111,28 +111,30 @@ EndFunc
 
 
 ; #FUNCTION# ====================================================================================================================
-; Name ..........: _storageG_Math
+; Name ..........: _storageG_Execute
 ; Description ...: Like Cosinos the stored element. Also works with other Functions.
-; Syntax ........: _storageG_Math($vElementGroup, $sElementName, $Math)
+; Syntax ........: _storageG_Execute($vElementGroup, $sElementName, $Math)
 ; Parameters ....: $vElementGroup       - Element Group
 ;                  $sElementName        - (String) Element Name
-;                  $Math                - (String) Cos Sin Mod Log Exp etc.
+;                  $Operation           - (String) Cos Sin Mod Log Exp etc.
 ;                  $bSave				- True / False. If True will store the result.
 ; Return values .: The Result of the Operation
 ;                : ""					= if the operation failed
 ;                : False				= If the Element is unknown
 ; Modified ......:
-; Remarks .......: Functions like Ceiling() or Floor() also work just like your own Functions.
+; Remarks .......: CODE EXECUTION VULNERABLE (CE). Please ensure the input and storage data is no code.
+;                :
+;                : Functions like Ceiling() or Floor() also work just like your own Functions.
 ; Example .......: _storageG_Overwrite(123, 'testinteger', 3)
-;                : _storageG_Math(123, 'testinteger, "Cos")
-;                : Or _storageG_Math(123, 'testinteger, "_MyMathFunc")
+;                : _storageG_Execute(123, 'testinteger, "Cos")
+;                : Or _storageG_Execute(123, 'testinteger, "_MyMathFunc")
 ; ===============================================================================================================================
-Func _storageG_Math($vElementGroup, $sElementName, $Math, $bSave = True)
+Func _storageG_Execute($vElementGroup, $sElementName, $Operation, $bSave = True)
 	Local $sVarName = "__storageS_" & $vElementGroup & $sElementName
 
 	If Not IsDeclared($sVarName) Then Return False
 
-	Local $vCalc = Execute($Math & "(" & Eval($sVarName) & ")")
+	Local $vCalc = Execute($Operation & "(" & Eval($sVarName) & ")")
 
 	If $bSave Then Assign($sVarName, $vCalc)
 	Return $vCalc
@@ -907,29 +909,88 @@ EndFunc
 ; Name ..........: _storageAO_Shorten
 ; Description ...: Shortens the Storage Array to the smallest size possible without destroying used storages
 ; Syntax ........: _storageAO_Shorten()
-; Parameters ....: None
+; Parameters ....: $bMax					- (Bool) True / False (More CPU Intensive, but shortens the array better)
 ; Return values .: None
 ; Modified ......:
 ; Remarks .......: Should only be called when required, duo to it being a iteration function which takes some time
 ; Example .......: No
 ; ===============================================================================================================================
-Func _storageAO_Shorten()
+Func _storageAO_Shorten($bMax = False)
 
-	Local $nLastIndex = -1
+	If $bMax Then
 
-	For $i In $__storageS_AO_PosObject
-		If $__storageS_AO_PosObject($i) > $nLastIndex Then $nLastIndex = $__storageS_AO_PosObject($i)
-	Next
+		Local $nLastIndex = $__storageS_AO_Size, $nIndex = -1, $nPos = -1
 
-	if $nLastIndex == $__storageS_AO_Size Then Return
+		; for each element in the array
+		For $i = 0 To $__storageS_AO_Size
 
-	ReDim $__storageS_AO_StorageArray[$nLastIndex + 1]
+			; if the index is claimed then check the next
+			If Not $__storageS_AO_IndexObject.Exists($i) Then ContinueLoop
 
-	For $i = $nLastIndex + 1 To $__storageS_AO_Size
-		If $__storageS_AO_IndexObject.Exists($i) Then $__storageS_AO_IndexObject.Remove($i)
-	Next
+			; otherwise locate a taken pos backwards
+			$nIndex = -1
+			For $iS = $nLastIndex To 0 Step - 1
+				ConsoleWrite($iS & @CRLF)
+				If Not $__storageS_AO_IndexObject.Exists($iS) Then
+					$nIndex = $iS
+					ExitLoop
+				EndIf
+			Next
 
-	$__storageS_AO_Size = $nLastIndex
+			; if we found none then exitloop
+			If $nIndex == -1 Then ExitLoop
+
+			; update last found index, so that we wont search through already searched indexes
+			$nLastIndex = $nIndex
+
+			; make sure we are moving a higher index
+			If $i >= $nIndex Then ExitLoop
+
+			; find the storage in the pos object
+			$nPos = -1
+			For $iS In $__storageS_AO_PosObject
+				If $__storageS_AO_PosObject($iS) == $nIndex Then
+					$nPos = $iS
+					ExitLoop
+				EndIf
+			Next
+
+			; that shouldnt happen
+			If $nPos == -1 Then ExitLoop
+
+			; move data
+			$__storageS_AO_StorageArray[$i] = $__storageS_AO_StorageArray[$nIndex]
+
+			; change index in pos object
+			$__storageS_AO_PosObject($nPos) = $i
+
+			; and tidy var
+			$__storageS_AO_StorageArray[$nIndex] = Null
+
+		Next
+
+		If $nLastIndex + 1 == $__storageS_AO_Size Then Return
+		ReDim $__storageS_AO_StorageArray[$nLastIndex]
+
+	Else
+
+		Local $nLastIndex = -1
+
+		For $i In $__storageS_AO_PosObject
+			If $__storageS_AO_PosObject($i) > $nLastIndex Then $nLastIndex = $__storageS_AO_PosObject($i)
+		Next
+
+		if $nLastIndex == $__storageS_AO_Size Then Return
+
+		ReDim $__storageS_AO_StorageArray[$nLastIndex + 1]
+
+		For $i = $nLastIndex + 1 To $__storageS_AO_Size
+			If $__storageS_AO_IndexObject.Exists($i) Then $__storageS_AO_IndexObject.Remove($i)
+		Next
+
+		$__storageS_AO_Size = $nLastIndex
+
+	EndIf
 
 EndFunc
 
