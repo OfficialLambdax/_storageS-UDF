@@ -124,7 +124,7 @@ Cons
 - Slow when checking the existence of a Element
 
 
-The Assign/Eval Method. Functions that begin with _storageOL are tied to this method.
+The Assign/Eval Method. Functions that begin with _storageGL are tied to this method.
 
 Pros
 - Very fast when checking the existence of a element
@@ -137,7 +137,7 @@ Cons
 - Leaks removed elements to Memory !
 
 
-The Assign/Eval X Method. Functions that begin with _storageOLx are tied to this method.
+The Assign/Eval X Method. Functions that begin with _storageGLx are tied to this method.
 Method is for a special usecase: For when you need extremly large lists and ONLY need to check if a element in it exists.
 
 Pros
