@@ -1,3 +1,18 @@
+07.03.2022 (DD/MM/YYYY) 0.1.5.3
+
+	SCRIPT BREAKING CHANGES
+	
+	Requires Autoit 3.3.16.0 Stable
+
+	Added
+		- Integrated _storageML into _storageS_UDF.au3
+		
+
+	Removed
+		- _storageS-Beta_UDF.au3
+
+
+
 28.02.2022 (DD/MM/YYYY) 0.1.5.2
 
 	SCRIPT BREAKING CHANGES

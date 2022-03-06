@@ -20,7 +20,7 @@ Listing storages
 - _storageML is good for when you need to constantly iterate through somewhat static lists or for when you need to constantly check if a element exists (Fastest Exists method).
 - _storageAL is only good for when you need to constantly iterate through somewhat static lists (Fastest GetElements method).
 - _storageALRapid is a set of special functions to add elements extremly fast to a AL list (faster then _storageGLx) to fasten the creation of large arrays.
-- _storageGL is good for when you need OL like fast Adds, ML like fast Exists checks and you cannot use the Autoit Beta.
+- _storageGL is good for when you need OL like fast Adds and ML like fast Exists checks.
 - _storageGLx is good for when you need extremly large lists with exceptional fast Exists checks and element additions.
 
 Ring Buffers
@@ -103,7 +103,6 @@ Pros
 - Elements with the same name can be added multiple times
 
 Cons
-- Autoit Beta Only
 - Experimental Autoit Feature
 - Slow when adding elements
 - Slow when removing elements

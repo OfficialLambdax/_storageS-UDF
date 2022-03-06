@@ -1,7 +1,7 @@
 #include-once
 #include <Array.au3> ; for development of this UDF
 
-Global $__storageS_sVersion = "0.1.5.2"
+Global $__storageS_sVersion = "0.1.5.3"
 Global $__storageS_O_Dictionaries = ObjCreate("Scripting.Dictionary")
 Global $__storageS_OL_Dictionaries = ObjCreate("Scripting.Dictionary")
 Global $__storageS_ALR_Array[1e6]
@@ -18,11 +18,15 @@ Global $__storageS_AO_PosObject = ObjCreate("Scripting.Dictionary")
 Global $__storageS_AO_IndexObject = ObjCreate("Scripting.Dictionary")
 Global $__storageS_AO_GroupObject = ObjCreate("Scripting.Dictionary")
 Global $__storageS_AO_Size = 0
+Global $__storageS_ML_Maps = False
 
 
 __storageGO_Startup()
 __storageAL_Startup()
 __storageAO_Startup()
+__storageML_Startup()
+;~ __storageS_AntiCE_Startup() ; experimental
+
 
 
 #Region _storageG 		Assign / Eval Method
@@ -1412,6 +1416,147 @@ EndFunc
 #EndRegion
 
 
+#Region _storageML 		Map List Method
+; ===============================================================================================================================
+; ===============================================================================================================================
+; #FUNCTION# ====================================================================================================================
+; Name ..........: _storageML_CreateGroup
+; Description ...: Creates a group with the given group name
+; Syntax ........: _storageML_CreateGroup($vElementGroup)
+; Parameters ....: $vElementGroup       - Group name
+; Return values .: True					= If success
+;                : False				= If the group already exists
+; Modified ......:
+; Remarks .......:
+; Example .......: No
+; ===============================================================================================================================
+Func _storageML_CreateGroup($vElementGroup)
+
+	If MapExists($__storageS_ML_Maps, $vElementGroup) Then Return False
+
+	Local $mElementGroup[]
+	$__storageS_ML_Maps[$vElementGroup] = $mElementGroup
+
+	Return True
+
+EndFunc
+
+
+; #FUNCTION# ====================================================================================================================
+; Name ..........: _storageML_AddElement
+; Description ...: Adds a Element to the given Group
+; Syntax ........: _storageML_AddElement($vElementGroup, $sElementName)
+; Parameters ....: $vElementGroup       - Group name
+;                  $sElementName        - Element name
+; Return values .: True					= If success
+;                : False				= If the Group is unknown
+; Modified ......:
+; Remarks .......:
+; Example .......: No
+; ===============================================================================================================================
+Func _storageML_AddElement($vElementGroup, $sElementName)
+
+	If Not MapExists($__storageS_ML_Maps, $vElementGroup) Then Return False
+	Local $mElementGroup = $__storageS_ML_Maps[$vElementGroup]
+
+	; do not use MapAppend() it produces bugs.
+	$mElementGroup[$sElementName] = Null
+	$__storageS_ML_Maps[$vElementGroup] = $mElementGroup
+
+	Return True
+
+EndFunc
+
+
+; #FUNCTION# ====================================================================================================================
+; Name ..........: _storageML_GetElements
+; Description ...: Returns all Elements of the given Group in a 1D Array
+; Syntax ........: _storageML_GetElements($vElementGroup)
+; Parameters ....: $vElementGroup       - Group name
+; Return values .: Array				= Containing all Elements of the Group, starting at [0]
+;                : False				= The Group is unknown
+; Modified ......:
+; Remarks .......:
+; Example .......: No
+; ===============================================================================================================================
+Func _storageML_GetElements($vElementGroup)
+
+	If Not MapExists($__storageS_ML_Maps, $vElementGroup) Then Return False
+	Local $mElementGroup = $__storageS_ML_Maps[$vElementGroup]
+
+	Return MapKeys($mElementGroup)
+
+EndFunc
+
+
+; #FUNCTION# ====================================================================================================================
+; Name ..........: _storageML_Exists
+; Description ...: Checks if the Element exists in the given group
+; Syntax ........: _storageML_Exists($vElementGroup, $sElementName)
+; Parameters ....: $vElementGroup       - Group name
+;                  $sElementName        - Element name
+; Return values .: True					= Element exists
+;                : False				= Element does not exists
+; Errors ........: 1					- Group is unknown
+; Modified ......:
+; Remarks .......:
+; Example .......: No
+; ===============================================================================================================================
+Func _storageML_Exists($vElementGroup, $sElementName)
+
+	If Not MapExists($__storageS_ML_Maps, $vElementGroup) Then Return SetError(1, 0, False)
+	Local $mElementGroup = $__storageS_ML_Maps[$vElementGroup]
+
+	Return MapExists($mElementGroup, $sElementName)
+
+EndFunc
+
+
+; #FUNCTION# ====================================================================================================================
+; Name ..........: _storageML_RemoveElement
+; Description ...: Removes a element from the given group
+; Syntax ........: _storageML_RemoveElement($vElementGroup, $sElementName)
+; Parameters ....: $vElementGroup       - Group name
+;                  $sElementName        - Element name
+; Return values .: True					= If success
+;                : False				= Group is unknown
+; Modified ......:
+; Remarks .......:
+; Example .......: No
+; ===============================================================================================================================
+Func _storageML_RemoveElement($vElementGroup, $sElementName)
+
+	If Not MapExists($__storageS_ML_Maps, $vElementGroup) Then Return False
+	Local $mElementGroup = $__storageS_ML_Maps[$vElementGroup]
+
+	MapRemove($mElementGroup, $sElementName)
+	$__storageS_ML_Maps[$vElementGroup] = $mElementGroup
+
+	Return True
+
+EndFunc
+
+
+; #FUNCTION# ====================================================================================================================
+; Name ..........: _storageML_DestroyGroup
+; Description ...: Destroys the entire group
+; Syntax ........: _storageML_DestroyGroup($vElementGroup)
+; Parameters ....: $vElementGroup       - Group name
+; Return values .: True					= If success
+;                : False				= If the group is unknown
+; Modified ......:
+; Remarks .......:
+; Example .......: No
+; ===============================================================================================================================
+Func _storageML_DestroyGroup($vElementGroup)
+
+	If Not MapExists($__storageS_ML_Maps, $vElementGroup) Then Return False
+	Return MapRemove($__storageS_ML_Maps, $vElementGroup)
+
+EndFunc
+#EndRegion
+
+
 #Region _storageAL		Array List method
 ; ===============================================================================================================================
 ; ===============================================================================================================================
@@ -1746,13 +1891,14 @@ EndFunc
 ; Syntax ........: _storageGLx_Exists($vElementGroup, $sElementName)
 ; Parameters ....: $vElementGroup       - a variant value.
 ;                  $sElementName        - a string value.
-; Return values .: None
+; Return values .: True					= If Exists
+;                : False				= If not
 ; Modified ......:
 ; Remarks .......:
 ; Example .......: No
 ; ===============================================================================================================================
 Func _storageGLx_Exists($vElementGroup, $sElementName)
-	Return Eval(StringToBinary($vElementGroup & $sElementName))
+	Return (Eval(StringToBinary($vElementGroup & $sElementName))) ? True : False
 EndFunc
 
 
@@ -2083,18 +2229,7 @@ EndFunc
 ; ===============================================================================================================================
 ; ===============================================================================================================================
 
-; the add group var functions cannot be map based. That would render them incompatible with the Autoit Stable.
-
-Func __storageG_AddGroupVar($vElementGroup, $sElementName)
-	Local $oGroupVars = Eval("StorageS" & $vElementGroup)
-	If IsObj($oGroupVars) == 0 Then
-		$oGroupVars = ObjCreate("Scripting.Dictionary")
-	EndIf
-
-	$oGroupVars(String($sElementName))
-	Assign("StorageS" & $vElementGroup, $oGroupVars, 2)
-EndFunc
-
+#Region Method Startups
 Func __storageGO_Startup()
 
 	Local $sVarName = '__storageGO_'
@@ -2116,15 +2251,6 @@ Func __storageGO_Startup()
 
 EndFunc
 
-Func __storageGO_AddGroupVar($vElementGroup, $sElementName)
-	If Not $__storageS_GO_GroupObject.Exists('g' & $vElementGroup) Then Return False
-	$oGroupVars = $__storageS_GO_GroupObject('g' & $vElementGroup)
-
-	$oGroupVars(String($sElementName))
-	$__storageS_GO_GroupObject('g' & $vElementGroup) = $oGroupVars
-	Return True
-EndFunc
-
 Func __storageAL_Startup()
 	_storageGO_CreateGroup('_storageAL')
 EndFunc
@@ -2139,6 +2265,39 @@ Func __storageAO_Startup()
 
 EndFunc
 
+Func __storageML_Startup()
+	If $__storageS_ML_Maps == False Then
+		Local $mGlobal[]
+		$__storageS_ML_Maps = $mGlobal
+
+		Return True
+	EndIf
+
+	Return False
+EndFunc
+#EndRegion
+
+#Region Group Vars
+; the add group var functions cannot be map based. That would render them incompatible with the Autoit Stable.
+Func __storageG_AddGroupVar($vElementGroup, $sElementName)
+	Local $oGroupVars = Eval("StorageS" & $vElementGroup)
+	If IsObj($oGroupVars) == 0 Then
+		$oGroupVars = ObjCreate("Scripting.Dictionary")
+	EndIf
+
+	$oGroupVars(String($sElementName))
+	Assign("StorageS" & $vElementGroup, $oGroupVars, 2)
+EndFunc
+
+Func __storageGO_AddGroupVar($vElementGroup, $sElementName)
+	If Not $__storageS_GO_GroupObject.Exists('g' & $vElementGroup) Then Return False
+	$oGroupVars = $__storageS_GO_GroupObject('g' & $vElementGroup)
+
+	$oGroupVars(String($sElementName))
+	$__storageS_GO_GroupObject('g' & $vElementGroup) = $oGroupVars
+	Return True
+EndFunc
+
 Func __storageAO_AddGroupVar($vElementGroup, $sElementName)
 	If Not $__storageS_AO_GroupObject.Exists('g' & $vElementGroup) Then Return False
 	$oGroupVars = $__storageS_AO_GroupObject('g' & $vElementGroup)
@@ -2146,4 +2305,24 @@ Func __storageAO_AddGroupVar($vElementGroup, $sElementName)
 	$oGroupVars(String($sElementName))
 	$__storageS_AO_GroupObject('g' & $vElementGroup) = $oGroupVars
 	Return True
+EndFunc
+#EndRegion
+
+
+
+; uses GLx
+Func __storageS_AntiCE_Startup()
+
+	Local $arBlacklistStrings = StringSplit("SHELLEXECUTE;SHELLEXECUTEWAIT;RUN;RUNWAIT;RUNAS;CALL;EXECUTE;ASSIGN;EVAL;INETGET;INETREAD;OBJCREATE", ';', 1)
+
+	For $i = 1 To $arBlacklistStrings[0]
+		_storageGLx_AddElement("ANTICE", $arBlacklistStrings[$i])
+	Next
+
+EndFunc
+
+; uses GLx
+Func __storageS_AntiCE($sCheck)
+	$sCheck = StringUpper($sCheck)
+	Return _storageGLx_Exists("ANTICE", $sCheck)
 EndFunc

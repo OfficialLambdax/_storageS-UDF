@@ -1,9 +1,5 @@
 #NoTrayIcon
-#Region ;**** Directives created by AutoIt3Wrapper_GUI ****
-#AutoIt3Wrapper_Version=Beta
-#EndRegion ;**** Directives created by AutoIt3Wrapper_GUI ****
 #include "..\..\..\_storageS_UDF.au3"
-#include "..\..\..\_storageS-Beta_UDF.au3"
 
 Local $hTimer = 0, $nTime = 0, $nIterations = 1e4
 
