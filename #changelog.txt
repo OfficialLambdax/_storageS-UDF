@@ -1,3 +1,11 @@
+14.03.2022 (DD/MM/YYYY) 0.1.5.4
+
+	Added
+		- _storageS_AntiCECheck() to help discover CE attempts mentioned in v0.1.5.2.
+		
+		- Further describtions for each method
+
+
 07.03.2022 (DD/MM/YYYY) 0.1.5.3
 
 	SCRIPT BREAKING CHANGES

@@ -1,37 +1,57 @@
 #include-once
 #include <Array.au3> ; for development of this UDF
 
-Global $__storageS_sVersion = "0.1.5.3"
-Global $__storageS_O_Dictionaries = ObjCreate("Scripting.Dictionary")
-Global $__storageS_OL_Dictionaries = ObjCreate("Scripting.Dictionary")
-Global $__storageS_ALR_Array[1e6]
-Global $__storageS_ALR_Index = 0
-Global $__storageS_GO_PosObject = ObjCreate("Scripting.Dictionary")
-Global $__storageS_GO_IndexObject = ObjCreate("Scripting.Dictionary")
-Global $__storageS_GO_GroupObject = ObjCreate("Scripting.Dictionary")
-Global $__storageS_GO_Size = 0
-Global $__storageS_RBx_Array = False
-Global $__storageS_RBx_WritePos = False
-Global $__storageS_RBx_ReadPos = False
-Global $__storageS_AO_StorageArray = False
-Global $__storageS_AO_PosObject = ObjCreate("Scripting.Dictionary")
-Global $__storageS_AO_IndexObject = ObjCreate("Scripting.Dictionary")
-Global $__storageS_AO_GroupObject = ObjCreate("Scripting.Dictionary")
-Global $__storageS_AO_Size = 0
-Global $__storageS_ML_Maps = False
+Global Const $__storageS_sVersion = "0.1.5.4"
+Global $__storageS_O_Dictionaries = ObjCreate("Scripting.Dictionary") ; holds all storages
+Global $__storageS_OL_Dictionaries = ObjCreate("Scripting.Dictionary") ; holds all lists
+Global $__storageS_ALR_Array[1e6] ; ALRapid works on a single array
+Global $__storageS_ALR_Index = 0 ; latest element
+Global $__storageS_GO_PosObject = ObjCreate("Scripting.Dictionary") ; holds the positions for each go storage
+Global $__storageS_GO_IndexObject = ObjCreate("Scripting.Dictionary") ; holds all free storages
+Global $__storageS_GO_GroupObject = ObjCreate("Scripting.Dictionary") ; holds all groups
+Global $__storageS_GO_Size = 0 ; the current size of the GO storage. Can never decrease
+Global $__storageS_RBx_Array = False ; RBx works on a single array
+Global $__storageS_RBx_WritePos = False ; holds the write pos
+Global $__storageS_RBx_ReadPos = False ; holds the read pos
+Global $__storageS_AO_StorageArray = False ; AO works on a single array
+Global $__storageS_AO_PosObject = ObjCreate("Scripting.Dictionary") ; holds the positions for each ao storage
+Global $__storageS_AO_IndexObject = ObjCreate("Scripting.Dictionary") ; holds all free storages
+Global $__storageS_AO_GroupObject = ObjCreate("Scripting.Dictionary") ; holds all groups
+Global $__storageS_AO_Size = 0 ; the current size of the AO storage. Can decrease
+Global $__storageS_ML_Maps = False ; Holds all maps
 
 
 __storageGO_Startup()
 __storageAL_Startup()
 __storageAO_Startup()
 __storageML_Startup()
-;~ __storageS_AntiCE_Startup() ; experimental
+__storageS_AntiCE_Startup()
 
 
+; ===============================================================================================================================
+; ===============================================================================================================================
+; Data storage methods
 
 #Region _storageG 		Assign / Eval Method
 ; ===============================================================================================================================
 ; ===============================================================================================================================
+#cs
+	_storageG Description
+
+	Fastest Data storage.
+
+	If you constantly create new storages and remove old in a script ment for a long runtime then this method is not for you.
+	Each no longer used storage (even if overwritten with False or Null) stays present in memory. Therefore this method
+	leaks to memory. Nothing can be done about it.
+
+	If your script however uses the same storages then thats ok.
+
+	Once storages exist they get much faster.
+
+	Works on top of Global variables. Variables seem to profit from Copy on Write in Autoit. Meaning that
+	storages with the exact same data are often only put once into memory. Resulting in not just less memory being used
+	but the writes being also faster.
+#ce
 ; #FUNCTION# ====================================================================================================================
 ; Name ..........: _storageG_Overwrite
 ; Description ...: Writes data to the Elementname of the Element group
@@ -124,7 +144,8 @@ EndFunc
 ;                  $bSave				- True / False. If True will store the result.
 ; Return values .: The Result of the Operation
 ;                : ""					= if the operation failed
-;                : False				= If the Element is unknown
+;                : False				= If the Element is unknown or when error
+; Errors ........: 1					= $Operation String is blacklisted
 ; Modified ......:
 ; Remarks .......: CODE EXECUTION VULNERABLE (CE). Please ensure the input and storage data is no code.
 ;                :
@@ -137,6 +158,8 @@ Func _storageG_Execute($vElementGroup, $sElementName, $Operation, $bSave = True)
 	Local $sVarName = "__storageS_" & $vElementGroup & $sElementName
 
 	If Not IsDeclared($sVarName) Then Return False
+
+	If _storageS_AntiCECheck($Operation) Then Return SetError(1, 0, False)
 
 	Local $vCalc = Execute($Operation & "(" & Eval($sVarName) & ")")
 
@@ -247,6 +270,16 @@ EndFunc
 #Region _storageGO		Reuse Assign / Eval Method
 ; ===============================================================================================================================
 ; ===============================================================================================================================
+#cs
+	_storageGO describtion
+
+	You can use GO if you are constantly creating new storages and remove old. Each new storage reuses a old. Entirely new
+	storages are only created when no old are available.
+
+	Works on top of Global variables. Variables seem to profit from Copy on Write in Autoit. Meaning that
+	storages with the exact same data are often only put once into memory. Resulting in not just less memory being used
+	but the writes being also faster.
+#ce
 ; #FUNCTION# ====================================================================================================================
 ; Name ..........: _storageGO_CreateGroup
 ; Description ...: Creates the Group. Needs to be called.
@@ -602,6 +635,20 @@ EndFunc
 #Region _storageAO		Reuse Array method
 ; ===============================================================================================================================
 ; ===============================================================================================================================
+#cs
+	_storageAO describtion
+
+	Fastest Large Data write (>= 3MB) method
+
+	If you either dislike the usage of Globals as a storage (G, GO) or want to write large data sets to a storage in the fastest way
+	then this method is good.
+
+	Use _storageAO_ReDim() to already rezize the storage array to the expected size.
+	You can use _storageAO_Shorten() to reduce the storage array size, for when the storage array is only big in peak moments.
+	(Usually you dont need to)
+
+	The storage array does not profit from CoW.
+#ce
 ; #FUNCTION# ====================================================================================================================
 ; Name ..........: _storageAO_CreateGroup
 ; Description ...: Creates a group
@@ -1049,6 +1096,11 @@ EndFunc
 #Region _storageO		DictObj method
 ; ===============================================================================================================================
 ; ===============================================================================================================================
+#cs
+	_storageO describtion
+
+	Needs optimization
+#ce
 ; #FUNCTION# ====================================================================================================================
 ; Name ..........: _storageO_CreateGroup
 ; Description ...: Initializes a Storage for the Object variant. Needs to be called for each Element Group
@@ -1244,10 +1296,19 @@ Func _storageO_GetGroupVars($vElementGroup)
 EndFunc
 #EndRegion
 
+; ===============================================================================================================================
+; ===============================================================================================================================
+; Listing storage methods
 
 #Region _storageOL		DictObj List method
 ; ===============================================================================================================================
 ; ===============================================================================================================================
+#cs
+	_storageOL describtion
+
+	Fastest Add and Remove Element method (not counting ALRapid or GLx)
+	Very good allrounder and usually the goto for all sorts of element lists.
+#ce
 ; #FUNCTION# ====================================================================================================================
 ; Name ..........: _storageOL_CreateGroup
 ; Description ...: Creates a dictobj list under the given groupname
@@ -1419,6 +1480,15 @@ EndFunc
 #Region _storageML 		Map List Method
 ; ===============================================================================================================================
 ; ===============================================================================================================================
+#cs
+	_storageML describtion
+
+	Fastest Element Exists method.
+	Gets exceptionally slow on large lists. Adding 10.000 Elements take 90 seconds.
+
+	If your lists are never of that size and you need to check very often if a element in that, somewhat static, list exists
+	then this is your goto.
+#ce
 ; #FUNCTION# ====================================================================================================================
 ; Name ..........: _storageML_CreateGroup
 ; Description ...: Creates a group with the given group name
@@ -1560,6 +1630,14 @@ EndFunc
 #Region _storageAL		Array List method
 ; ===============================================================================================================================
 ; ===============================================================================================================================
+#cs
+	_storageAL describtion
+
+	Fastest GetElements method.
+	This is an Array list, stored in GO. Good for when you often need to iterate through lists.
+
+	Very slow when adding elements without the help of ALRapid.
+#ce
 ; #FUNCTION# ====================================================================================================================
 ; Name ..........: _storageAL_CreateGroup
 ; Description ...: Creates a Element Group
@@ -1714,6 +1792,15 @@ EndFunc
 #Region _storageALR		Array List Rapid Add
 ; ===============================================================================================================================
 ; ===============================================================================================================================
+#cs
+	_storageALR (ALRapid) describtion
+
+	This is an extention for _storageAL, which is made to fasten the element additions.
+	Fastest Add Elements method (faster then GLx).
+
+	The ALRapid array needs to be destroyed after it got converted to an AL array.
+	This isnt happening byitself, duo to you maybe wanting to create multiple AL storages with the same elements.
+#ce
 ; #FUNCTION# ====================================================================================================================
 ; Name ..........: _storageALR_AddElement
 ; Description ...: Adds a Element
@@ -1781,6 +1868,12 @@ EndFunc
 #Region _storageGL		Assign/Eval List
 ; ===============================================================================================================================
 ; ===============================================================================================================================
+#cs
+	_storageGL describtion
+
+	Works on top of _storageG. Has the same drawbacks. Aka it leaks every remove element to memory.
+	Very fast element adds, removes and exists checks.
+#ce
 ; #FUNCTION# ====================================================================================================================
 ; Name ..........: _storageGL_AddElement
 ; Description ...: Adds an Element to the List
@@ -1869,6 +1962,14 @@ EndFunc
 #Region _storageGLx		Assign/Eval List X
 ; ===============================================================================================================================
 ; ===============================================================================================================================
+#cs
+	_storageGLx describtion
+
+	A method for a very specific use. For huge or static lists where its necessary to check if a element exists.
+	You cannot get the elements in the list.
+
+	Works on top of Globals. Therefore each removed element leaks to memory.
+#ce
 ; #FUNCTION# ====================================================================================================================
 ; Name ..........: _storageGLx_AddElement
 ; Description ...: Adds an Element to the List
@@ -1918,10 +2019,20 @@ Func _storageGLx_RemoveElement($vElementGroup, $sElementName)
 EndFunc
 #EndRegion
 
+; ===============================================================================================================================
+; ===============================================================================================================================
+; Ring Buffer methods
 
 #Region _storageRBr		Multi Return Ring Buffer (lossy)
 ; ===============================================================================================================================
 ; ===============================================================================================================================
+#cs
+	_storageRBr describtion
+
+	https://en.wikipedia.org/wiki/Circular_buffer
+
+	Does not store the buffer, but instead returns it.
+#ce
 ; #FUNCTION# ====================================================================================================================
 ; Name ..........: _storageRBr_CreateGroup
 ; Description ...: Creates a Ring buffer and returns it
@@ -2008,6 +2119,13 @@ EndFunc
 #Region _storageRBx		Single Storage Ring Buffer (lossy)
 ; ===============================================================================================================================
 ; ===============================================================================================================================
+#cs
+	_storageRBx describtion
+
+	https://en.wikipedia.org/wiki/Circular_buffer
+
+	Single Ring buffer. The ring buffer is stored in a single global.
+#ce
 ; #FUNCTION# ====================================================================================================================
 ; Name ..........: _storageRBx_Init
 ; Description ...: Initializes the Single Ring Buffer
@@ -2167,15 +2285,50 @@ Func _storageS_GetVarSize($vData)
 
 	EndSwitch
 EndFunc
+
+
+; #FUNCTION# ====================================================================================================================
+; Name ..........: _storageS_AntiCECheck
+; Description ...: Checks for if the given string is blacklisted for the Execute() functions
+; Syntax ........: _storageS_AntiCECheck($sCheck)
+; Parameters ....: $sCheck              - a string value.
+; Return values .: True / False			= Is blacklisted / Is not
+; Modified ......:
+; Remarks .......: Is automatically used by the execute functions.
+; Example .......: No
+; ===============================================================================================================================
+Func _storageS_AntiCECheck($sCheck)
+	Return _storageGLx_Exists("ANTICE", StringUpper($sCheck))
+EndFunc
+
+
+; #FUNCTION# ====================================================================================================================
+; Name ..........: _storageS_AntiCEAdd
+; Description ...: Adds your own Blacklist items to the default
+; Syntax ........: _storageS_AntiCEAdd($sCheck)
+; Parameters ....: $sCheck              - a string value.
+; Return values .: None
+; Modified ......:
+; Remarks .......:
+; Example .......: No
+; ===============================================================================================================================
+Func _storageS_AntiCEAdd($sCheck)
+	_storageGLx_AddElement("ANTICE", StringUpper($sCheck))
+EndFunc
 #EndRegion
 
 
-; New Methods that require testing and optimization
+; New Methods that require testing and/or optimization
 ; ===============================================================================================================================
 ; ===============================================================================================================================
 ; ===============================================================================================================================
 
 #Region _storageRBs		WIP Multi Storage Ring Buffer (lossy) (needs optimization)
+#cs
+	_storageRBs describtion
+
+	Do not use.
+#ce
 Func _storageRBs_CreateGroup($sRingName, $nRingElementCount)
 
 	$sRingName = '_storageRBs' & $sRingName
@@ -2275,10 +2428,21 @@ Func __storageML_Startup()
 
 	Return False
 EndFunc
+
+; uses GLx, sine the blacklist stays persistent for the whole runtime
+Func __storageS_AntiCE_Startup()
+
+	Local $arBlacklistStrings = StringSplit("SHELLEXECUTE;SHELLEXECUTEWAIT;RUN;RUNWAIT;RUNAS;CALL;EXECUTE;ASSIGN;EVAL;INETGET;INETREAD;OBJCREATE", ';', 1)
+
+	For $i = 1 To $arBlacklistStrings[0]
+		_storageGLx_AddElement("ANTICE", $arBlacklistStrings[$i])
+	Next
+
+EndFunc
 #EndRegion
 
 #Region Group Vars
-; the add group var functions cannot be map based. That would render them incompatible with the Autoit Stable.
+; the add group var functions cannot be map based. That would limit their size duo to Maps becoming slower the larger they are.
 Func __storageG_AddGroupVar($vElementGroup, $sElementName)
 	Local $oGroupVars = Eval("StorageS" & $vElementGroup)
 	If IsObj($oGroupVars) == 0 Then
@@ -2309,20 +2473,3 @@ EndFunc
 #EndRegion
 
 
-
-; uses GLx
-Func __storageS_AntiCE_Startup()
-
-	Local $arBlacklistStrings = StringSplit("SHELLEXECUTE;SHELLEXECUTEWAIT;RUN;RUNWAIT;RUNAS;CALL;EXECUTE;ASSIGN;EVAL;INETGET;INETREAD;OBJCREATE", ';', 1)
-
-	For $i = 1 To $arBlacklistStrings[0]
-		_storageGLx_AddElement("ANTICE", $arBlacklistStrings[$i])
-	Next
-
-EndFunc
-
-; uses GLx
-Func __storageS_AntiCE($sCheck)
-	$sCheck = StringUpper($sCheck)
-	Return _storageGLx_Exists("ANTICE", $sCheck)
-EndFunc
