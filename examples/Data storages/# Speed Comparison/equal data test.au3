@@ -60,7 +60,7 @@ ConsoleWrite("AO         " & @TAB & "Single Byte Read Test" & @TAB & "took: " & 
 ConsoleWrite(@CRLF)
 
 $nTime = _Test_Write_DictObj_Method("1", 1e5)
-ConsoleWrite("DictObj  " & @TAB & "Single Byte Write Test" & @TAB & "took: " & @extended & " ms (" & $nTime & " ms/avg)" & @CRLF)
+ConsoleWrite("DictObj  " & @TAB & "Single Byte Write Test" & @TAB & "took: " & @extended & " ms (" & $nTime & " ms/avg)" & @TAB & "(Fastest when creating new)" & @CRLF)
 
 $nTime = _Test_Read_DictObj_Method(1e5)
 ConsoleWrite("DictObj  " & @TAB & "Single Byte Read Test" & @TAB & "took: " & @extended & " ms (" & $nTime & " ms/avg)" & @CRLF)
@@ -99,7 +99,7 @@ _storageAO_TidyGroupVars(123)
 ConsoleWrite(@CRLF)
 
 $nTime = _Test_Write_DictObj_Method("1", 1e5)
-ConsoleWrite("DictObj  " & @TAB & "Single Byte Write Test" & @TAB & "took: " & @extended & " ms (" & $nTime & " ms/avg)"& @TAB & "(Not true for the DictObj)" & @CRLF)
+ConsoleWrite("DictObj  " & @TAB & "Single Byte Write Test" & @TAB & "took: " & @extended & " ms (" & $nTime & " ms/avg)"& @TAB & "(Speed keeps the same)" & @CRLF)
 
 $nTime = _Test_Read_DictObj_Method(1e5)
 ConsoleWrite("DictObj  " & @TAB & "Single Byte Read Test" & @TAB & "took: " & @extended & " ms (" & $nTime & " ms/avg)" & @CRLF)
