@@ -1,0 +1,26 @@
+ML Add took: 84560.2579 ms (8.45602579 ms/avg)
+OL Add took: 161.0625 ms (0.01610625 ms/avg)
+AL Add took: 11638.4055 ms (1.16384055 ms/avg)
+GL Add took: 191.3226 ms (0.01913226 ms/avg)
+GLx Add took: 42.3826 ms (0.00423826 ms/avg)
+
+ALRapid Add took: 25.0321 ms (0.00250321 ms/avg)
+ALRapid to AL Conversion took: 2.2425 ms
+
+ML Exists took: 30.9541 ms (0.00309541 ms/avg)
+OL Exists took: 119.9736 ms (0.01199736 ms/avg)
+AL Exists took: 36131.8298 ms (3.61318298 ms/avg)
+GL Exists took: 68.4786 ms (0.00684786 ms/avg)
+GLx Exists took: 35.4566 ms (0.00354566 ms/avg)
+
+ML GetElements took: 13756.551 ms (1.3756551 ms/avg)
+OL GetElements took: 149829.7882 ms (14.98297882 ms/avg)
+AL GetElements took: 102.0729 ms (0.01020729 ms/avg)
+GL GetElements took: 174125.3245 ms (17.41253245 ms/avg)
+GLx GetElements not available
+
+ML Remove took: 84400.7236 ms (8.44007236 ms/avg)
+OL Remove took: 181.2002 ms (0.01812002 ms/avg)
+AL Remove took: 34474.7171 ms (3.44747171 ms/avg)
+GL Remove took: 92.3488 ms (0.00923488 ms/avg)
+GLx Remove took: 40.1328 ms (0.00401328 ms/avg)
