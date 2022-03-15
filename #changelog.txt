@@ -1,3 +1,21 @@
+15.03.2022 (DD/MM/YYYY) 0.2
+
+	Added
+		- A experimental data storage method named _storageGM
+	
+		- A experimental listing method named _storageOLx, which is a derivation of GM and OL and that uses experimental
+		technics, with the idea of providing a method for highly dynamic lists with solid times in each field.
+		
+		- Another experimental listing method named _storageMLx which is a derivation of GM and ML and even faster then
+		OLx.
+		
+		- _storageOL and ML can now be set to return the dict or map directly instead of converting it to an array, in the
+		GetElements() function.
+		
+	Changed
+		- The order of the UDF
+
+
 14.03.2022 (DD/MM/YYYY) 0.1.5.4
 
 	Added

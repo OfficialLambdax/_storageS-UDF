@@ -28,6 +28,7 @@ _storageAO_ReDim(1e5)
 _storageGO_CreateGroup(123)
 _storageAO_CreateGroup(123)
 _storageO_CreateGroup(123)
+_storageGM_CreateGroup(123)
 
 
 ; ===============================================================================================================================
@@ -56,6 +57,14 @@ ConsoleWrite("AO         " & @TAB & "Single Byte Write Test" & @TAB & "took: " &
 
 $nTime = _Test_Read_AO_Method(1e5)
 ConsoleWrite("AO         " & @TAB & "Single Byte Read Test" & @TAB & "took: " & @extended & " ms (" & $nTime & " ms/avg)" & @CRLF)
+
+ConsoleWrite(@CRLF)
+
+$nTime = _Test_Write_GM_Method("1", 1e5)
+ConsoleWrite("GM         " & @TAB & "Single Byte Write Test" & @TAB & "took: " & @extended & " ms (" & $nTime & " ms/avg)" & @CRLF)
+
+$nTime = _Test_Read_GM_Method(1e5)
+ConsoleWrite("GM         " & @TAB & "Single Byte Read Test" & @TAB & "took: " & @extended & " ms (" & $nTime & " ms/avg)" & @CRLF)
 
 ConsoleWrite(@CRLF)
 
@@ -95,6 +104,15 @@ ConsoleWrite("AO         " & @TAB & "Single Byte Write Test" & @TAB & "took: " &
 $nTime = _Test_Read_AO_Method(1e5)
 ConsoleWrite("AO         " & @TAB & "Single Byte Read Test" & @TAB & "took: " & @extended & " ms (" & $nTime & " ms/avg)" & @CRLF)
 _storageAO_TidyGroupVars(123)
+
+ConsoleWrite(@CRLF)
+
+$nTime = _Test_Write_GM_Method("1", 1e5)
+ConsoleWrite("GM         " & @TAB & "Single Byte Write Test" & @TAB & "took: " & @extended & " ms (" & $nTime & " ms/avg)" & @TAB & "(Faster once variables already exist)" & @CRLF)
+
+$nTime = _Test_Read_GM_Method(1e5)
+ConsoleWrite("GM         " & @TAB & "Single Byte Read Test" & @TAB & "took: " & @extended & " ms (" & $nTime & " ms/avg)" & @CRLF)
+_storageGM_TidyGroupVars(123)
 
 ConsoleWrite(@CRLF)
 
@@ -298,6 +316,26 @@ Func _Test_Read_AO_Method($nTestIterations)
 	$hTimer = TimerInit()
 	For $i = 1 To $nTestIterations
 		_storageAO_Read(123, $i)
+	Next
+	$nTime = TimerDiff($hTimer)
+	Return SetExtended($nTime, $nTime / $nTestIterations)
+EndFunc
+
+Func _Test_Write_GM_Method($sData, $nTestIterations)
+	Local $hTimer = 0, $nTime = 0
+	$hTimer = TimerInit()
+	For $i = 1 To $nTestIterations
+		_storageGM_Overwrite(123, $i, $sData)
+	Next
+	$nTime = TimerDiff($hTimer)
+	Return SetExtended($nTime, $nTime / $nTestIterations)
+EndFunc
+
+Func _Test_Read_GM_Method($nTestIterations)
+	Local $hTimer = 0, $nTime = 0
+	$hTimer = TimerInit()
+	For $i = 1 To $nTestIterations
+		_storageGM_Read(123, $i)
 	Next
 	$nTime = TimerDiff($hTimer)
 	Return SetExtended($nTime, $nTime / $nTestIterations)
