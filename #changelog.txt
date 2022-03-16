@@ -1,3 +1,20 @@
+16.03.2022 (DD/MM/YYYY) 0.2.1
+	
+	Changed
+		- Renamed _storageOLx to _storageOLi
+		
+	Added
+		- Another experimental listing method named _storageOLx, which is a OLi derivation
+		that is slower but that supports larger lists.
+		
+		- A experimental data storage named _storageGi.
+		
+		- _storageS-Scrapyard.au3 which contains old methods.
+		
+	Removed
+		- removed _storageGL from the main UDF and moved into the scrapyard
+
+
 15.03.2022 (DD/MM/YYYY) 0.2
 
 	Added
