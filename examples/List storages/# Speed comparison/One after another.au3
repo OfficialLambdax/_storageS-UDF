@@ -52,6 +52,46 @@ ConsoleWrite(@CRLF)
 
 $hTimer = TimerInit()
 For $i = 1 To $nIterations
+	_storageOLi_AddElement(123, $i)
+Next
+$nTime = TimerDiff($hTimer)
+ConsoleWrite("OLi Add took: " & $nTime & " ms (" & $nTime / $nIterations & " ms/avg)" & @CRLF)
+
+$hTimer = TimerInit()
+For $i = 1 To $nIterations
+	_storageOLi_Exists(123, $i)
+Next
+$nTime = TimerDiff($hTimer)
+ConsoleWrite("OLi Exists took: " & $nTime & " ms (" & $nTime / $nIterations & " ms/avg)" & @CRLF)
+
+$hTimer = TimerInit()
+For $i = 1 To $nIterations
+	_storageOLi_GetElements(123)
+Next
+$nTime = TimerDiff($hTimer)
+ConsoleWrite("OLi GetElements took: " & $nTime & " ms (" & $nTime / $nIterations & " ms/avg)" & @CRLF)
+
+$hTimer = TimerInit()
+For $i = 1 To $nIterations
+	_storageOLi_RemoveElement(123, $i)
+Next
+$nTime = TimerDiff($hTimer)
+ConsoleWrite("OLi Remove took: " & $nTime & " ms (" & $nTime / $nIterations & " ms/avg)" & @CRLF)
+
+$hTimer = TimerInit()
+For $i = 1 To $nIterations
+	_storageOLiRapid_AddElement(123, $i)
+Next
+$nTime = TimerDiff($hTimer)
+ConsoleWrite("OLi Rapid Add took: " & $nTime & " ms (" & $nTime / $nIterations & " ms/avg)" & @CRLF)
+_storageOLi_DestroyGroup(123)
+
+
+ConsoleWrite(@CRLF)
+
+
+$hTimer = TimerInit()
+For $i = 1 To $nIterations
 	_storageOLx_AddElement(123, $i)
 Next
 $nTime = TimerDiff($hTimer)
@@ -220,38 +260,6 @@ _storageALR_ConvertToAL(456)
 $nTime = TimerDiff($hTimer)
 ConsoleWrite("ALRapid to AL Conversion took: " & $nTime & " ms" & @CRLF)
 _storageAL_DestroyGroup(456)
-
-
-ConsoleWrite(@CRLF)
-
-
-$hTimer = TimerInit()
-For $i = 1 To $nIterations
-	_storageGL_AddElement(123, $i)
-Next
-$nTime = TimerDiff($hTimer)
-ConsoleWrite("GL Add took: " & $nTime & " ms (" & $nTime / $nIterations & " ms/avg)" & @CRLF)
-
-$hTimer = TimerInit()
-For $i = 1 To $nIterations
-	_storageGL_Exists(123, $i)
-Next
-$nTime = TimerDiff($hTimer)
-ConsoleWrite("GL Exists took: " & $nTime & " ms (" & $nTime / $nIterations & " ms/avg)" & @CRLF)
-
-$hTimer = TimerInit()
-For $i = 1 To $nIterations
-	_storageGL_GetElements(123)
-Next
-$nTime = TimerDiff($hTimer)
-ConsoleWrite("GL GetElements took: " & $nTime & " ms (" & $nTime / $nIterations & " ms/avg)" & @CRLF)
-
-$hTimer = TimerInit()
-For $i = 1 To $nIterations
-	_storageGL_RemoveElement(123, $i)
-Next
-$nTime = TimerDiff($hTimer)
-ConsoleWrite("GL Remove took: " & $nTime & " ms (" & $nTime / $nIterations & " ms/avg)" & @CRLF)
 
 
 ConsoleWrite(@CRLF)
