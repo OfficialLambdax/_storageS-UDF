@@ -2,7 +2,7 @@
 #include <Array.au3> ; for development of this UDF
 
 #Region Init
-Global Const $__storageS_sVersion = "0.2.1"
+Global Const $__storageS_sVersion = "0.2.2"
 Global $__storageS_O_Dictionaries = ObjCreate("Scripting.Dictionary") ; holds all storages
 Global $__storageS_OL_Dictionaries = ObjCreate("Scripting.Dictionary") ; holds all lists
 Global $__storageS_ALR_Array[1e6] ; ALRapid works on a single array
@@ -46,6 +46,7 @@ __storageS_AntiCE_Startup()
 
 		Experimental
 			_storageGM_CreateGroup()
+			_storageGi_CreateGroup()
 
 
 	Standard List
@@ -2700,16 +2701,26 @@ Func _storageOLi_DestroyGroup($vElementGroup)
 	If $nPos == "" Then ; scrap storage
 
 		Assign('__storageGM_' & $nPos, Null)
-		Return Assign('__storageGM_' & $nPos & 'A', Null)
+		Return Assign('__storageGM_' & $__storageS_GM_PosMap[$vElementGroup & 'A'], Null)
 
 	Else
 
 		; tidy
 		Assign('__storageGM_' & $nPos, Null)
-		Assign('__storageGM_' & $nPos & 'A', Null)
 
 		; free
 		MapRemove($__storageS_GM_PosMap, $vElementGroup)
+
+		; add to index
+		$__storageS_GM_IndexMap[$nPos] = Null
+
+		$nPos = $__storageS_GM_PosMap[$vElementGroup & 'A']
+
+		; tidy
+		Assign('__storageGM_', $nPos, Null)
+
+		; free
+		MapRemove($__storageS_GM_PosMap, $vElementGroup & 'A')
 
 		; add to index
 		$__storageS_GM_IndexMap[$nPos] = Null
@@ -2810,19 +2821,30 @@ Func _storageOLx_DestroyGroup($vElementGroup)
 	If $nPos == "" Then ; scrap storage
 
 		Assign('__storageGO_' & $nPos, Null)
-		Return Assign('__storageGO_' & $nPos & 'A', Null)
+		Return Assign('__storageGO_' & $__storageS_GO_PosObject($vElementGroup & 'A'), Null)
 
 	Else
 
 		; tidy
 		Assign('__storageGO_' & $nPos, Null)
-		Assign('__storageGO_' & $nPos & 'A', Null)
 
 		; free
 		$__storageS_GO_PosObject.Remove($vElementGroup)
 
 		; add to index
 		$__storageS_GO_IndexObject($nPos)
+
+		$nPos = $__storageS_GO_PosObject($vElementGroup & 'A')
+
+		; tidy
+		Assign('__storageGO_' & $nPos, Null)
+
+		; free
+		$__storageS_GO_PosObject.Remove($vElementGroup & 'A')
+
+		; add to index
+		$__storageS_GO_IndexObject($nPos)
+
 
 		Return True
 
@@ -2904,16 +2926,26 @@ Func _storageMLx_DestroyGroup($vElementGroup)
 	If $nPos == "" Then ; scrap storage
 
 		Assign('__storageGM_' & $nPos, Null)
-		Return Assign('__storageGM_' & $nPos & 'A', Null)
+		Return Assign('__storageGM_' & $__storageS_GM_PosMap[$vElementGroup & 'A'], Null)
 
 	Else
 
 		; tidy
 		Assign('__storageGM_' & $nPos, Null)
-		Assign('__storageGM_' & $nPos & 'A', Null)
 
 		; free
 		MapRemove($__storageS_GM_PosMap, $vElementGroup)
+
+		; add to index
+		$__storageS_GM_IndexMap[$nPos] = Null
+
+		$nPos = $__storageS_GM_PosMap[$vElementGroup & 'A']
+
+		; tidy
+		Assign('__storageGM_', $nPos, Null)
+
+		; free
+		MapRemove($__storageS_GM_PosMap, $vElementGroup & 'A')
 
 		; add to index
 		$__storageS_GM_IndexMap[$nPos] = Null
