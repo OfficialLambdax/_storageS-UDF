@@ -1,3 +1,27 @@
+17.08.2022 (DD/MM/YYYY) 0.2.3
+
+	Changed
+		- Renamed _storageMLx to _storageMLi
+		
+		- The order of the UDF again
+		
+		- The Examples order for better visibility
+		
+		- _storageGi got further developed with a similiar syntax and feature set to GO and GM
+	
+	Added
+		- Added a MLi derivation called MLx which allows for additional but optional data storage
+		
+		- Added a new UDF sub for setting storages, which are ment to read/write small sets of data of/to a group
+		
+		- Added _storageMS and _storageOS to the setting storages
+		
+		- Added the MSGBOX keyword to the __storageS_AntiCE_Startup() function
+		
+		- Added a experimental data storage _storageGx
+		
+
+
 16.03.2022 (DD/MM/YYYY) 0.2.2
 
 	Fixed
