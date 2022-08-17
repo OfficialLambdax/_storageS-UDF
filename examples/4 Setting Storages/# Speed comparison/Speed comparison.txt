@@ -1,0 +1,20 @@
+OS Create Setting took: 136.9899 ms (0.01369899 ms/avg)
+MS Create Setting took: 78.4185 ms (0.00784185 ms/avg)
+
+OS Setting Change took: 139.4212 ms (0.01394212 ms/avg)
+MS Setting Change took: 73.7795 ms (0.00737795 ms/avg)
+
+OS Get Setting took: 87.5422 ms (0.00875422 ms/avg)
+MS Get Setting took: 36.0089 ms (0.00360089 ms/avg)
+
+OS Creating 10000 Groups took: 160.5994 ms (0.01605994 ms/avg)
+MS Creating 10000 Groups took: 104.4265 ms (0.01044265 ms/avg)
+
+OS Destroying 10000 Groups took: 160.3386 ms (0.01603386 ms/avg)
+MS Destroying 10000 Groups took: 145.4168 ms (0.01454168 ms/avg)
+
+OS Creating 100000 Groups took: 1934.4035 ms (0.019344035 ms/avg)
+MS Creating 100000 Groups took: 8840.3496 ms (0.088403496 ms/avg)
+
+OS Destroying 100000 Groups took: 2106.6935 ms (0.021066935 ms/avg)
+MS Destroying 100000 Groups took: 12243.9064 ms (0.122439064 ms/avg)

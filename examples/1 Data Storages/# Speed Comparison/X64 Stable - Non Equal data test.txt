@@ -1,0 +1,347 @@
+Single Byte Test Start __________________________________________
+Creating 1e4 Storages
+
+G          	Single Byte Write Test	took: 154 ms (0.01542693 ms/avg)
+G          	Single Byte Read Test	took: 41 ms (0.00410249 ms/avg)
+
+Gi         	Single Byte Write Test	took: 142 ms (0.01422968 ms/avg)
+Gi         	Single Byte Read Test	took: 37 ms (0.00376187 ms/avg)
+
+Gx         	Single Byte Write Test	took: 54 ms (0.00543061 ms/avg)
+Gx         	Single Byte Read Test	took: 35 ms (0.00355049 ms/avg)
+
+GO         	Single Byte Write Test	took: 307 ms (0.03070622 ms/avg)
+GO         	Single Byte Read Test	took: 99 ms (0.00998414 ms/avg)
+
+AO         	Single Byte Write Test	took: 618 ms (0.06188931 ms/avg)
+AO         	Single Byte Read Test	took: 124 ms (0.01244585 ms/avg)
+
+GM         	Single Byte Write Test	took: 197 ms (0.01972239 ms/avg)	(Has issues with large storage counts per group)
+GM         	Single Byte Read Test	took: 54 ms (0.00540283 ms/avg)
+
+O          	Single Byte Write Test	took: 109 ms (0.0109276 ms/avg)	(Fastest when creating new)
+O          	Single Byte Read Test	took: 91 ms (0.00919311 ms/avg)
+
+Single Byte Test Start __________________________________________
+Writing and Reading to and from all 1e4 Storages
+
+G          	Single Byte Write Test	took: 57 ms (0.00572874 ms/avg)	(Faster once variables already exist)
+G          	Single Byte Read Test	took: 41 ms (0.00411939 ms/avg)
+
+Gi          	Single Byte Write Test	took: 65 ms (0.00659004 ms/avg)	(Faster once variables already exist)
+Gi          	Single Byte Read Test	took: 37 ms (0.00370492 ms/avg)
+
+Gx         	Single Byte Write Test	took: 49 ms (0.00499856 ms/avg)
+Gx         	Single Byte Read Test	took: 35 ms (0.00358464 ms/avg)
+
+GO         	Single Byte Write Test	took: 112 ms (0.01124069 ms/avg)	(Faster once variables already exist)
+GO         	Single Byte Read Test	took: 92 ms (0.00926451 ms/avg)
+
+AO         	Single Byte Write Test	took: 153 ms (0.01531981 ms/avg)	(Faster once variables already exist)
+AO         	Single Byte Read Test	took: 123 ms (0.01235742 ms/avg)
+
+GM         	Single Byte Write Test	took: 70 ms (0.0070296 ms/avg)	(Faster once variables already exist)
+GM         	Single Byte Read Test	took: 53 ms (0.00537497 ms/avg)
+
+O          	Single Byte Write Test	took: 107 ms (0.01077103 ms/avg)	(Speed keeps the same)
+O          	Single Byte Read Test	took: 91 ms (0.00914345 ms/avg)
+
+Kilo Byte Test Start __________________________________________
+Writing to 1e4 Storages
+
+G          	10 KB  Write Test	took: 125 ms	(0.01253974 ms/avg)
+G          	10 KB  Read Test 	took: 41 ms	(0.00416785 ms/avg)
+
+Gi          	10 KB  Write Test	took: 137 ms	(0.01375279 ms/avg)
+Gi          	10 KB  Read Test 	took: 37 ms	(0.00373585 ms/avg)
+
+Gx         	10 KB  Write Test	took: 125 ms (0.01257899 ms/avg)
+Gx         	10 KB  Write Test	took: 35 ms (0.00357967 ms/avg)
+
+GO         	10 KB  Write Test	took: 190 ms	(0.01904666 ms/avg)
+GO         	10 KB  Read Test 	took: 94 ms	(0.00949549 ms/avg)
+
+AO         	10 KB  Write Test	took: 231 ms	(0.02317604 ms/avg)
+AO         	10 KB  Read Test 	took: 126 ms	(0.01265775 ms/avg)
+
+GM         	10 KB  Write Test	took: 145 ms	(0.01453361 ms/avg)
+GM         	10 KB  Read Test 	took: 55 ms	(0.00553766 ms/avg)
+
+O          	10 KB  Write Test	took: 241 ms	(0.02417207 ms/avg)
+O          	10 KB  Read Test 	took: 141 ms	(0.01419837 ms/avg)
+
+G          	20 KB  Write Test	took: 188 ms	(0.01883521 ms/avg)
+G          	20 KB  Read Test 	took: 42 ms	(0.00424826 ms/avg)
+
+Gi          	20 KB  Write Test	took: 202 ms	(0.02026193 ms/avg)
+Gi          	20 KB  Read Test 	took: 38 ms	(0.00383877 ms/avg)
+
+Gx         	20 KB  Write Test	took: 164 ms (0.0164388 ms/avg)
+Gx         	20 KB  Write Test	took: 35 ms (0.00352754 ms/avg)
+
+GO         	20 KB  Write Test	took: 253 ms	(0.02539674 ms/avg)
+GO         	20 KB  Read Test 	took: 93 ms	(0.00932672 ms/avg)
+
+AO         	20 KB  Write Test	took: 299 ms	(0.02999878 ms/avg)
+AO         	20 KB  Read Test 	took: 126 ms	(0.01263783 ms/avg)
+
+GM         	20 KB  Write Test	took: 217 ms	(0.02173593 ms/avg)
+GM         	20 KB  Read Test 	took: 55 ms	(0.00552662 ms/avg)
+
+O          	20 KB  Write Test	took: 396 ms	(0.03969265 ms/avg)
+O          	20 KB  Read Test 	took: 239 ms	(0.0239203 ms/avg)
+
+G          	30 KB  Write Test	took: 254 ms	(0.02546469 ms/avg)
+G          	30 KB  Read Test 	took: 41 ms	(0.00415848 ms/avg)
+
+Gi          	30 KB  Write Test	took: 276 ms	(0.02766021 ms/avg)
+Gi          	30 KB  Read Test 	took: 37 ms	(0.00377657 ms/avg)
+
+Gx         	30 KB  Write Test	took: 214 ms (0.02146392 ms/avg)
+Gx         	30 KB  Write Test	took: 36 ms (0.00360218 ms/avg)
+
+GO         	30 KB  Write Test	took: 327 ms	(0.03270244 ms/avg)
+GO         	30 KB  Read Test 	took: 92 ms	(0.00921397 ms/avg)
+
+AO         	30 KB  Write Test	took: 371 ms	(0.03715187 ms/avg)
+AO         	30 KB  Read Test 	took: 122 ms	(0.01223703 ms/avg)
+
+GM         	30 KB  Write Test	took: 283 ms	(0.02839294 ms/avg)
+GM         	30 KB  Read Test 	took: 53 ms	(0.00532529 ms/avg)
+
+O          	30 KB  Write Test	took: 561 ms	(0.05618372 ms/avg)
+O          	30 KB  Read Test 	took: 326 ms	(0.03266857 ms/avg)
+
+G          	40 KB  Write Test	took: 316 ms	(0.03161448 ms/avg)
+G          	40 KB  Read Test 	took: 42 ms	(0.00422787 ms/avg)
+
+Gi          	40 KB  Write Test	took: 348 ms	(0.03488366 ms/avg)
+Gi          	40 KB  Read Test 	took: 37 ms	(0.00377548 ms/avg)
+
+Gx         	40 KB  Write Test	took: 308 ms (0.0308886 ms/avg)
+Gx         	40 KB  Write Test	took: 36 ms (0.00363279 ms/avg)
+
+GO         	40 KB  Write Test	took: 417 ms	(0.0417966 ms/avg)
+GO         	40 KB  Read Test 	took: 91 ms	(0.00917421 ms/avg)
+
+AO         	40 KB  Write Test	took: 469 ms	(0.04691517 ms/avg)
+AO         	40 KB  Read Test 	took: 122 ms	(0.01229605 ms/avg)
+
+GM         	40 KB  Write Test	took: 382 ms	(0.0382575 ms/avg)
+GM         	40 KB  Read Test 	took: 55 ms	(0.00551507 ms/avg)
+
+O          	40 KB  Write Test	took: 917 ms	(0.09176187 ms/avg)
+O          	40 KB  Read Test 	took: 507 ms	(0.05073316 ms/avg)
+
+G          	50 KB  Write Test	took: 398 ms	(0.0398233 ms/avg)
+G          	50 KB  Read Test 	took: 42 ms	(0.00421216 ms/avg)
+
+Gi          	50 KB  Write Test	took: 471 ms	(0.04717486 ms/avg)
+Gi          	50 KB  Read Test 	took: 38 ms	(0.00385782 ms/avg)
+
+Gx         	50 KB  Write Test	took: 450 ms (0.04502476 ms/avg)
+Gx         	50 KB  Write Test	took: 35 ms (0.00359729 ms/avg)
+
+GO         	50 KB  Write Test	took: 495 ms	(0.04953575 ms/avg)
+GO         	50 KB  Read Test 	took: 92 ms	(0.00920628 ms/avg)
+
+AO         	50 KB  Write Test	took: 573 ms	(0.05733863 ms/avg)
+AO         	50 KB  Read Test 	took: 124 ms	(0.01247327 ms/avg)
+
+GM         	50 KB  Write Test	took: 486 ms	(0.04866706 ms/avg)
+GM         	50 KB  Read Test 	took: 54 ms	(0.0054305 ms/avg)
+
+O          	50 KB  Write Test	took: 1250 ms	(0.12504103 ms/avg)
+O          	50 KB  Read Test 	took: 649 ms	(0.06490562 ms/avg)
+
+G          	60 KB  Write Test	took: 469 ms	(0.04691797 ms/avg)
+G          	60 KB  Read Test 	took: 43 ms	(0.00439301 ms/avg)
+
+Gi          	60 KB  Write Test	took: 574 ms	(0.05743132 ms/avg)
+Gi          	60 KB  Read Test 	took: 37 ms	(0.00377665 ms/avg)
+
+Gx         	60 KB  Write Test	took: 704 ms (0.07045447 ms/avg)
+Gx         	60 KB  Write Test	took: 35 ms (0.00357523 ms/avg)
+
+GO         	60 KB  Write Test	took: 588 ms	(0.05881683 ms/avg)
+GO         	60 KB  Read Test 	took: 92 ms	(0.0092684 ms/avg)
+
+AO         	60 KB  Write Test	took: 683 ms	(0.06832733 ms/avg)
+AO         	60 KB  Read Test 	took: 123 ms	(0.01236455 ms/avg)
+
+GM         	60 KB  Write Test	took: 599 ms	(0.05996193 ms/avg)
+GM         	60 KB  Read Test 	took: 55 ms	(0.00557143 ms/avg)
+
+O          	60 KB  Write Test	took: 1903 ms	(0.19032312 ms/avg)
+O          	60 KB  Read Test 	took: 1039 ms	(0.10398218 ms/avg)
+
+G          	70 KB  Write Test	took: 671 ms	(0.06713395 ms/avg)
+G          	70 KB  Read Test 	took: 43 ms	(0.00432554 ms/avg)
+
+Gi          	70 KB  Write Test	took: 635 ms	(0.063583 ms/avg)
+Gi          	70 KB  Read Test 	took: 38 ms	(0.00384743 ms/avg)
+
+Gx         	70 KB  Write Test	took: 1066 ms (0.10663374 ms/avg)
+Gx         	70 KB  Write Test	took: 35 ms (0.00354181 ms/avg)
+
+GO         	70 KB  Write Test	took: 669 ms	(0.06698703 ms/avg)
+GO         	70 KB  Read Test 	took: 92 ms	(0.00922857 ms/avg)
+
+AO         	70 KB  Write Test	took: 788 ms	(0.07880334 ms/avg)
+AO         	70 KB  Read Test 	took: 122 ms	(0.01226218 ms/avg)
+
+GM         	70 KB  Write Test	took: 724 ms	(0.07240715 ms/avg)
+GM         	70 KB  Read Test 	took: 56 ms	(0.00562848 ms/avg)
+
+O          	70 KB  Write Test	took: 3048 ms	(0.30487174 ms/avg)
+O          	70 KB  Read Test 	took: 1477 ms	(0.14776384 ms/avg)
+
+G          	80 KB  Write Test	took: 654 ms	(0.06540575 ms/avg)
+G          	80 KB  Read Test 	took: 41 ms	(0.00418915 ms/avg)
+
+Gi          	80 KB  Write Test	took: 857 ms	(0.0857358 ms/avg)
+Gi          	80 KB  Read Test 	took: 37 ms	(0.00373672 ms/avg)
+
+Gx         	80 KB  Write Test	took: 1416 ms (0.14163738 ms/avg)
+Gx         	80 KB  Write Test	took: 35 ms (0.00358896 ms/avg)
+
+GO         	80 KB  Write Test	took: 794 ms	(0.07942832 ms/avg)
+GO         	80 KB  Read Test 	took: 93 ms	(0.0093286 ms/avg)
+
+AO         	80 KB  Write Test	took: 1026 ms	(0.10263825 ms/avg)
+AO         	80 KB  Read Test 	took: 164 ms	(0.01645469 ms/avg)
+
+GM         	80 KB  Write Test	took: 809 ms	(0.08092317 ms/avg)
+GM         	80 KB  Read Test 	took: 56 ms	(0.00569789 ms/avg)
+
+O          	80 KB  Write Test	took: 3981 ms	(0.39813949 ms/avg)
+O          	80 KB  Read Test 	took: 1912 ms	(0.19123882 ms/avg)
+
+G          	90 KB  Write Test	took: 781 ms	(0.0781842 ms/avg)
+G          	90 KB  Read Test 	took: 42 ms	(0.00422354 ms/avg)
+
+Gi          	90 KB  Write Test	took: 920 ms	(0.09201746 ms/avg)
+Gi          	90 KB  Read Test 	took: 38 ms	(0.00380753 ms/avg)
+
+Gx         	90 KB  Write Test	took: 1955 ms (0.19557159 ms/avg)
+Gx         	90 KB  Write Test	took: 35 ms (0.00350546 ms/avg)
+
+GO         	90 KB  Write Test	took: 882 ms	(0.08823555 ms/avg)
+GO         	90 KB  Read Test 	took: 92 ms	(0.00923917 ms/avg)
+
+AO         	90 KB  Write Test	took: 983 ms	(0.09838174 ms/avg)
+AO         	90 KB  Read Test 	took: 123 ms	(0.01232349 ms/avg)
+
+GM         	90 KB  Write Test	took: 924 ms	(0.0924987 ms/avg)
+GM         	90 KB  Read Test 	took: 52 ms	(0.00529139 ms/avg)
+
+O          	90 KB  Write Test	took: 5665 ms	(0.56655235 ms/avg)
+O          	90 KB  Read Test 	took: 2582 ms	(0.25829182 ms/avg)
+
+G          	100 KB  Write Test	took: 860 ms	(0.08600265 ms/avg)
+G          	100 KB  Read Test 	took: 42 ms	(0.0042886 ms/avg)
+
+Gi          	100 KB  Write Test	took: 997 ms	(0.0997512 ms/avg)
+Gi          	100 KB  Read Test 	took: 38 ms	(0.00386211 ms/avg)
+
+Gx         	100 KB  Write Test	took: 2215 ms (0.22159894 ms/avg)
+Gx         	100 KB  Write Test	took: 34 ms (0.00347169 ms/avg)
+
+GO         	100 KB  Write Test	took: 931 ms	(0.09314989 ms/avg)
+GO         	100 KB  Read Test 	took: 94 ms	(0.00946977 ms/avg)
+
+AO         	100 KB  Write Test	took: 1004 ms	(0.10048051 ms/avg)
+AO         	100 KB  Read Test 	took: 125 ms	(0.01251618 ms/avg)
+
+GM         	100 KB  Write Test	took: 979 ms	(0.09794562 ms/avg)
+GM         	100 KB  Read Test 	took: 53 ms	(0.00538773 ms/avg)
+
+O          	100 KB  Write Test	took: 6232 ms	(0.62325541 ms/avg)
+O          	100 KB  Read Test 	took: 2873 ms	(0.28731556 ms/avg)
+
+Mega Byte Test Start __________________________________________
+Writing to 1000 Storages
+
+G          	1 MB  Write Test	took: 378 ms	(0.378044 ms/avg)
+G          	1 MB  Read Test 	took: 4 ms	(0.0044295 ms/avg)
+
+Gi          	1 MB  Write Test	took: 422 ms	(0.4222208 ms/avg)
+Gi          	1 MB  Read Test 	took: 3 ms	(0.0038462 ms/avg)
+
+Gx         	1 MB  Write Test	took: 1380 ms (1.3804437 ms/avg)
+Gx         	1 MB  Write Test	took: 3 ms (0.0036686 ms/avg)
+
+GO         	1 MB  Write Test	took: 465 ms	(0.4657197 ms/avg)
+GO         	1 MB  Read Test 	took: 9 ms	(0.0095032 ms/avg)
+
+AO         	1 MB  Write Test	took: 512 ms	(0.5123844 ms/avg)
+AO         	1 MB  Read Test 	took: 13 ms	(0.0130894 ms/avg)
+
+GM         	1 MB  Write Test	took: 489 ms	(0.4894317 ms/avg)
+GM         	1 MB  Read Test 	took: 5 ms	(0.0053428 ms/avg)
+
+O          	1 MB  Write Test	took: 3359 ms	(3.3591597 ms/avg)
+O          	1 MB  Read Test 	took: 1621 ms	(1.6215766 ms/avg)
+
+G          	2 MB  Write Test	took: 937 ms	(0.9379173 ms/avg)
+G          	2 MB  Read Test 	took: 4 ms	(0.0046949 ms/avg)
+
+Gi          	2 MB  Write Test	took: 1246 ms	(1.2462966 ms/avg)
+Gi          	2 MB  Read Test 	took: 3 ms	(0.0038869 ms/avg)
+
+Gx         	2 MB  Write Test	took: 2674 ms (2.6745374 ms/avg)
+Gx         	2 MB  Write Test	took: 3 ms (0.0034606 ms/avg)
+
+GO         	2 MB  Write Test	took: 1261 ms	(1.2615905 ms/avg)
+GO         	2 MB  Read Test 	took: 10 ms	(0.0105665 ms/avg)
+
+AO         	2 MB  Write Test	took: 1231 ms	(1.231904 ms/avg)
+AO         	2 MB  Read Test 	took: 12 ms	(0.0125726 ms/avg)
+
+GM         	2 MB  Write Test	took: 1113 ms	(1.1134223 ms/avg)
+GM         	2 MB  Read Test 	took: 5 ms	(0.0052897 ms/avg)
+
+O          	2 MB  Write Test	took: 7061 ms	(7.0610218 ms/avg)
+O          	2 MB  Read Test 	took: 3014 ms	(3.0145002 ms/avg)
+
+G          	3 MB  Write Test	took: 2605 ms	(2.6056396 ms/avg)
+G          	3 MB  Read Test 	took: 4 ms	(0.0047884 ms/avg)
+
+Gi          	3 MB  Write Test	took: 2067 ms	(2.0673471 ms/avg)
+Gi          	3 MB  Read Test 	took: 3 ms	(0.0037061 ms/avg)
+
+Gx         	3 MB  Write Test	took: 4000 ms (4.0004957 ms/avg)
+Gx         	3 MB  Write Test	took: 3 ms (0.0034715 ms/avg)
+
+GO         	3 MB  Write Test	took: 3181 ms	(3.1819399 ms/avg)
+GO         	3 MB  Read Test 	took: 14 ms	(0.0146983 ms/avg)
+
+AO         	3 MB  Write Test	took: 2009 ms	(2.0099024 ms/avg)
+AO         	3 MB  Read Test 	took: 12 ms	(0.0124305 ms/avg)
+
+GM         	3 MB  Write Test	took: 1847 ms	(1.8472383 ms/avg)
+GM         	3 MB  Read Test 	took: 5 ms	(0.0057976 ms/avg)
+
+O          	3 MB  Write Test	took: 10305 ms	(10.3050126 ms/avg)
+O          	3 MB  Read Test 	took: 4403 ms	(4.403066 ms/avg)
+
+G          	4 MB  Write Test	took: 2124 ms	(2.1241091 ms/avg)
+G          	4 MB  Read Test 	took: 4 ms	(0.0042902 ms/avg)
+
+Gi          	4 MB  Write Test	took: 2491 ms	(2.4912072 ms/avg)
+Gi          	4 MB  Read Test 	took: 3 ms	(0.0039424 ms/avg)
+
+Gx         	4 MB  Write Test	took: 5405 ms (5.4056413 ms/avg)
+Gx         	4 MB  Write Test	took: 3 ms (0.0036701 ms/avg)
+
+GO         	4 MB  Write Test	took: 12143 ms	(12.1434082 ms/avg)
+GO         	4 MB  Read Test 	took: 14 ms	(0.0140639 ms/avg)
+
+AO         	4 MB  Write Test	took: 2799 ms	(2.7991369 ms/avg)
+AO         	4 MB  Read Test 	took: 13 ms	(0.0131821 ms/avg)
+
+GM         	4 MB  Write Test	took: 2532 ms	(2.5324021 ms/avg)
+GM         	4 MB  Read Test 	took: 5 ms	(0.0056312 ms/avg)
+
+O          	4 MB  Write Test	took: 15032 ms	(15.0323787 ms/avg)
+O          	4 MB  Read Test 	took: 6719 ms	(6.7198801 ms/avg)

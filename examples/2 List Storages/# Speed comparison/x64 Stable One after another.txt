@@ -1,0 +1,50 @@
+OL Add took: 160.8671 ms (0.01608671 ms/avg)
+OL Exists took: 118.1222 ms (0.01181222 ms/avg)
+OL Dict GetElements took: 85.1565 ms (0.00851565 ms/avg)
+OL Array GetElements took: 151858.0985 ms (15.18580985 ms/avg)
+OL Remove took: 192.4833 ms (0.01924833 ms/avg)
+
+OLi Add took: 63.8465 ms (0.00638465 ms/avg)
+OLi Exists took: 70.1167 ms (0.00701167 ms/avg)
+OLi GetElements took: 64.1942 ms (0.00641942 ms/avg)
+OLi Remove took: 89.2079 ms (0.00892079 ms/avg)
+OLi Rapid Add took: 47.6686 ms (0.00476686 ms/avg)
+
+OLx Add took: 128.5684 ms (0.01285684 ms/avg)
+OLx Exists took: 111.4312 ms (0.01114312 ms/avg)
+OLx GetElements took: 111.8831 ms (0.01118831 ms/avg)
+OLx Remove took: 150.6188 ms (0.01506188 ms/avg)
+OLx Rapid Add took: 91.8934 ms (0.00918934 ms/avg)
+
+ML Add took: 84670.3638 ms (8.46703638 ms/avg)
+ML Exists took: 29.7918 ms (0.00297918 ms/avg)
+ML Map GetElements took: 29.8858 ms (0.00298858 ms/avg)
+ML Array GetElements took: 13570.8528 ms (1.35708528 ms/avg)
+ML Remove took: 85108.9943 ms (8.51089943 ms/avg)
+
+MLi Add took: 75.0657 ms (0.00750657 ms/avg)
+MLi Exists took: 31.0337 ms (0.00310337 ms/avg)
+MLi Map GetElements took: 24.1298 ms (0.00241298 ms/avg)
+MLi Array GetElements took: 23.7289 ms (0.00237289 ms/avg)
+MLi Remove took: 64.8621 ms (0.00648621 ms/avg)
+MLi Rapid Add took: 54.2258 ms (0.00542258 ms/avg)
+
+MLx Add took: 82.3553 ms (0.00823553 ms/avg)
+MLx Exists took: 30.9873 ms (0.00309873 ms/avg)
+MLx Map GetElements took: 27.2882 ms (0.00272882 ms/avg)
+MLx Array GetElements took: 25.8588 ms (0.00258588 ms/avg)
+MLx Remove took: 65.6433 ms (0.00656433 ms/avg)
+MLx Rapid Add took: 62.7698 ms (0.00627698 ms/avg)
+
+AL Add took: 11710.0977 ms (1.17100977 ms/avg)
+AL Exists took: 35815.0735 ms (3.58150735 ms/avg)
+AL GetElements took: 100.044 ms (0.0100044 ms/avg)
+AL Remove took: 35261.4663 ms (3.52614663 ms/avg)
+
+ALRapid Add took: 25.8039 ms (0.00258039 ms/avg)
+ALRapid to AL Conversion took: 2.2224 ms
+
+GLx Add took: 42.0905 ms (0.00420905 ms/avg)
+GLx Exists took: 35.1584 ms (0.00351584 ms/avg)
+GLx GetElements not available
+GLx Remove took: 39.8486 ms (0.00398486 ms/avg)
