@@ -1,22 +1,56 @@
 # _storageS-UDF
-_storageSimpel is a UDF meant for fast data read's and write's.
+_storageSimpel is a UDF meant to provide fast memory databases for different kind of usages.
 
-The UDF aims to provide multiple methods to make access to data and lists easy and AS FAST AS POSSIBLE for different kinds of usages.
 Support for X32/64 Latest Autoit Stable/Beta. Windows XP to 10. 11 and Wine not tested.
 
-As of Version 0.2.1 there are five data storage methods, eight listing storage methods and three ring buffer methods.
+Latest Version: 0.2.3 17.08.2022 (DD.MM.YYYY)
 
 ============================== Intro ==============================
 
-Storages are Memory allocations of your given data or lists. When it comes to optimization of your scripts you might find that alot of time gets often lost because data is send through alot of functions that dont even need that data. Think of a IP black/whitelist. You dont need the ip list anywhere but in the function that checks if a given ip is black/whitelisted. It would be resource intensive to bring these lists everywhere. Thats why such a list is stored in memory and taken from there when required. Often it is enough to just have a single global that contains the data or the list. But, based on the what your script does, that might not work.
+_storageS provides Data storages, listing storages, ring buffers and setting storages.
 
-Within _netcode (a TCP libary) each socket has its own settings, rules and data sets, like the bytes per second that it receives or sends or its own events. All of that needs to be stored somewhere, a few globals on top of the script dont fit it.
+All 4 variants come with a similiar syntax and are in most cases interchangable.
 
-Thats what this UDF is trying to solve, to make it possible to write and read data to memory easiely and fast.
+_storageGO_CreateGroup($sElementGroup)
+Lets you create a GO data storage. GO in this case means Global Object. The data is stored in dynamic globals and managed with a dictionary object.
 
-_storageS comes with a vast amount of storage types. Those that are standartiest work well in many cases, but some more specialised are better in specific cases. You will, for example, likely not iterate through a IP Black/Whitelist, because thats slow, no you want to use associative array's to make an Exist check quick, so the listing storage type doesnt need to support a high dynamic but rather a fast "exist x element" check time. Or maybe you are looking to create a huge, drillion sized, list and none of the availabe data types or objects, you know of, in autoit can hold such a huge list. _storageGLx can do that. _storageS is ment to offer different variants to archive such different needs. Thats the idea of all of this.
+_storageGO_Overwrite($sElementGroup, $sElementname, $vElementData)
+Will write data to that element in the group. Think of a object
+$oObject("Element") = $vElementData
+but instead of storing the data in a object, map, array etc. and carying it everywhere, the data is stored to memory and kept there until needed or changed.
 
-Im literraly bending autoit in any possible way, that comes up in my mind, to squeeze every ms out thats possible. So you might discover some weird solutions and ask yourself, if what i did there could be considered an insult.
+_storageGO_Read($sElementGroup, $sElementName)
+Will Return the data in the storage
+
+_storageGO_DestroyGroup($sElementGroup)
+Will destroy the storage and everything what was stored in it.
+
+
+_storageMLi_CreateGroup($sElementGroup)
+Lets you create a MLi listing storage. MLi in this case means Map Listing improved. The elements are stored in a map. i means that this method is a improvement to a earlier method called ML.
+
+_storageMLi_AddElement($sElementGroup, $sElementName)
+Adds a Element to this elementgroup
+
+_storageMLi_RemoveElement($sElementGroup, $sElementName)
+Will remove that element from the group
+
+_storageMLi_Exists($sElementGroup, $sElementName)
+Will check if that element in the list exists
+
+_storageMLi_GetElements($sElementGroup)
+Will return all Elements of that Group in a 1D Array.
+
+_storageMLi_DestroyGroup($sElementGroup)
+Will destroy the storage and everything what was stored in it.
+
+
+
+If a group does not exists, then data can not be written and read from it (Not true for all methods). _storageS provides a solid amount of methods for each storage type. The idea is to have a storage method available for any kind of need. _storageGLx for example is specificly made to provide the ability to make insanely large static lists. Lists that can be so big as the ram has space, while not loosing time when checking if a Element in it exists. The data storage _storageGx comes with a similiar aim.
+
+_storageX_ByRef()
+Might fixes your performance issues with _storageS if you are manipulating stored data, like arrays, objects, maps..
+
 
 ============================== Wiki ===============================
 
