@@ -1,0 +1,12 @@
+Array Manipulation test took: 280.9365 ms (0.02809365 ms/avg)
+ByRef Array Manipulation test took: 164.1772 ms (0.01641772 ms/avg)	(FASTER)
+
+String append test took: 205.0644 ms (0.02050644 ms/avg)
+Append String append test took: 124.6862 ms (0.01246862 ms/avg)
+ByRef String append test took: 152.9153 ms (0.01529153 ms/avg)	(SLOWER)
+
+Random Number Overwrite test took: 111.997 ms (0.0111997 ms/avg)
+ByRef Random Number Overwrite test took: 155.2063 ms (0.01552063 ms/avg)	(SLOWER)
+
+Add 1 test took: 190.5149 ms (0.01905149 ms/avg)
+ByRef Add 1 test took: 145.5004 ms (0.01455004 ms/avg)	(FASTER)
