@@ -4,7 +4,7 @@
 ; Repo: https://github.com/OfficialLambdax/_storageS-UDF
 
 #Region Init
-Global Const $__storageS_sVersion = "0.2.3"
+Global Const $__storageS_sVersion = "0.2.5"
 Global $__storageS_O_Dictionaries = ObjCreate("Scripting.Dictionary") ; holds all storages
 Global $__storageS_OL_Dictionaries = ObjCreate("Scripting.Dictionary") ; holds all lists
 Global $__storageS_ALR_Array[1e6] ; ALRapid works on a single array
@@ -1607,8 +1607,8 @@ EndFunc
 ; Example .......: _storageG_Overwrite(123, 'testdata', "hello world")
 ; ===============================================================================================================================
 Func _storageGi_Overwrite($vElementGroup, $sElementName, $vElementData)
-	If Not MapExists(Eval("StorageGi" & $vElementGroup), $sElementName) Then
-		If Not __storageGi_AddGroupVar($vElementGroup, $sElementName) Then Return SetError(1, 0, False)
+	If Not MapExists(Eval("StorageGi" & $vElementGroup), String($sElementName)) Then
+		If Not __storageGi_AddGroupVar($vElementGroup, String($sElementName)) Then Return SetError(1, 0, False)
 	EndIf
 
 	Return Assign("__storageGi_" & $vElementGroup & $sElementName, $vElementData, 2)
@@ -2917,10 +2917,10 @@ Func _storageMLx_AddElement($vElementGroup, $sElementName, $sData = Null)
 	; execute trick. Lets us edit the map storage directly instead of copying it into a local first.
 ;~ 	Execute('__storageS_AssignMap($__storageGM_' & $__storageS_GM_PosMap[$vElementGroup] & ', $sElementName, $sData)')
 
-	if $sData Then
-		Execute('__storageS_AssignMapData($__storageGM_' & $__storageS_GM_PosMap[$vElementGroup] & ', $sElementName, $sData)')
-	Else
+	if $sData == Null Then
 		Execute('__storageS_AssignMap($__storageGM_' & $__storageS_GM_PosMap[$vElementGroup] & ', $sElementName)')
+	Else
+		Execute('__storageS_AssignMapData($__storageGM_' & $__storageS_GM_PosMap[$vElementGroup] & ', $sElementName, $sData)')
 	EndIf
 
 	Return Assign('__storageGM_' & $__storageS_GM_PosMap[$vElementGroup & 'A'], False)
@@ -2933,10 +2933,10 @@ Func _storageMLxRapid_AddElement($vElementGroup, $sElementName, $sData = Null, $
 	; backup
 ;~ 	Execute('__storageS_AssignMap($__storageGM_' & $__storageS_GM_PosMap[$vElementGroup] & ', $sElementName, $sData)')
 
-	if $sData Then
-		Execute('__storageS_AssignMapData($__storageGM_' & $__storageS_GM_PosMap[$vElementGroup] & ', $sElementName, $sData)')
-	Else
+	if $sData == Null Then
 		Execute('__storageS_AssignMap($__storageGM_' & $__storageS_GM_PosMap[$vElementGroup] & ', $sElementName)')
+	Else
+		Execute('__storageS_AssignMapData($__storageGM_' & $__storageS_GM_PosMap[$vElementGroup] & ', $sElementName, $sData)')
 	EndIf
 
 	If $bLast Then Return Assign('__storageGM_' & $__storageS_GM_PosMap[$vElementGroup & 'A'], False)
